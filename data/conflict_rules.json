@@ -1,0 +1,907 @@
+{
+  "schemaVersion": 1,
+  "origin": "reconstructed_not_original",
+  "rules": [
+    {
+      "id": "REC-CR-001",
+      "type": "exclusive",
+      "tagIds": [
+        "REC-LIN-025",
+        "REC-LIN-004"
+      ],
+      "tagPrompts": [
+        "no lineart",
+        "thick lineart"
+      ],
+      "reason_JA": "同一対象・同一領域での指定が論理的に衝突しやすい。",
+      "recommended_ui_action": "show_strong_warning_request_user_choice",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-002",
+      "type": "exclusive",
+      "tagIds": [
+        "REC-LIN-025",
+        "REC-LIN-002"
+      ],
+      "tagPrompts": [
+        "no lineart",
+        "clean lineart"
+      ],
+      "reason_JA": "同一対象・同一領域での指定が論理的に衝突しやすい。",
+      "recommended_ui_action": "show_strong_warning_request_user_choice",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-003",
+      "type": "exclusive",
+      "tagIds": [
+        "REC-LIN-025",
+        "REC-LIN-003"
+      ],
+      "tagPrompts": [
+        "no lineart",
+        "thin lineart"
+      ],
+      "reason_JA": "同一対象・同一領域での指定が論理的に衝突しやすい。",
+      "recommended_ui_action": "show_strong_warning_request_user_choice",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-004",
+      "type": "exclusive",
+      "tagIds": [
+        "REC-LIN-026",
+        "REC-LIN-006"
+      ],
+      "tagPrompts": [
+        "lineless illustration",
+        "bold outlines"
+      ],
+      "reason_JA": "同一対象・同一領域での指定が論理的に衝突しやすい。",
+      "recommended_ui_action": "show_strong_warning_request_user_choice",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-005",
+      "type": "exclusive",
+      "tagIds": [
+        "REC-LIN-026",
+        "REC-LIN-022"
+      ],
+      "tagPrompts": [
+        "lineless illustration",
+        "strong contour lines"
+      ],
+      "reason_JA": "同一対象・同一領域での指定が論理的に衝突しやすい。",
+      "recommended_ui_action": "show_strong_warning_request_user_choice",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-006",
+      "type": "exclusive",
+      "tagIds": [
+        "REC-SHA-009",
+        "REC-SHA-010"
+      ],
+      "tagPrompts": [
+        "high contrast",
+        "low contrast"
+      ],
+      "reason_JA": "同一対象・同一領域での指定が論理的に衝突しやすい。",
+      "recommended_ui_action": "show_strong_warning_request_user_choice",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-007",
+      "type": "conflict",
+      "tagIds": [
+        "REC-PAL-005",
+        "REC-PAL-003"
+      ],
+      "tagPrompts": [
+        "monochrome",
+        "vibrant colors"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-008",
+      "type": "conflict",
+      "tagIds": [
+        "REC-PAL-005",
+        "REC-PAL-017"
+      ],
+      "tagPrompts": [
+        "monochrome",
+        "neon palette"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-009",
+      "type": "conflict",
+      "tagIds": [
+        "REC-PAL-006",
+        "REC-PAL-010"
+      ],
+      "tagPrompts": [
+        "greyscale",
+        "complementary colors"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-010",
+      "type": "conflict",
+      "tagIds": [
+        "REC-PAL-021",
+        "REC-PAL-024"
+      ],
+      "tagPrompts": [
+        "black and white",
+        "high saturation"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-011",
+      "type": "conditional",
+      "tagIds": [
+        "REC-PAL-007",
+        "REC-PAL-003"
+      ],
+      "tagPrompts": [
+        "limited palette",
+        "vibrant colors"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-012",
+      "type": "conflict",
+      "tagIds": [
+        "REC-COL-005",
+        "REC-COL-006"
+      ],
+      "tagPrompts": [
+        "flat color",
+        "gradient shading"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-013",
+      "type": "conflict",
+      "tagIds": [
+        "REC-COL-037",
+        "REC-COL-004"
+      ],
+      "tagPrompts": [
+        "unshaded flat art",
+        "painterly shading"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-014",
+      "type": "conditional",
+      "tagIds": [
+        "REC-COL-001",
+        "REC-COL-004"
+      ],
+      "tagPrompts": [
+        "cel shading",
+        "painterly shading"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-015",
+      "type": "synergy",
+      "tagIds": [
+        "REC-COL-001",
+        "REC-COL-033"
+      ],
+      "tagPrompts": [
+        "cel shading",
+        "soft cel shading"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-016",
+      "type": "conditional",
+      "tagIds": [
+        "REC-LIT-015",
+        "REC-LIT-013"
+      ],
+      "tagPrompts": [
+        "hard lighting",
+        "soft lighting"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-017",
+      "type": "conditional",
+      "tagIds": [
+        "REC-LIT-015",
+        "REC-LIT-014"
+      ],
+      "tagPrompts": [
+        "hard lighting",
+        "diffused lighting"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-018",
+      "type": "conditional",
+      "tagIds": [
+        "REC-LIT-033",
+        "REC-LIT-034"
+      ],
+      "tagPrompts": [
+        "warm lighting",
+        "cool lighting"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-019",
+      "type": "conflict",
+      "tagIds": [
+        "REC-LIT-031",
+        "REC-LIT-032"
+      ],
+      "tagPrompts": [
+        "high-key lighting",
+        "low-key lighting"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-020",
+      "type": "conditional",
+      "tagIds": [
+        "REC-SHA-015",
+        "REC-SHA-016"
+      ],
+      "tagPrompts": [
+        "sharp shadow edges",
+        "feathered shadows"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-021",
+      "type": "conditional",
+      "tagIds": [
+        "REC-SHA-003",
+        "REC-SHA-002"
+      ],
+      "tagPrompts": [
+        "hard shadows",
+        "soft shadows"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-022",
+      "type": "conflict",
+      "tagIds": [
+        "REC-STY-005",
+        "REC-STY-014"
+      ],
+      "tagPrompts": [
+        "photorealistic",
+        "pixel art"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-023",
+      "type": "conflict",
+      "tagIds": [
+        "REC-STY-013",
+        "REC-STY-016"
+      ],
+      "tagPrompts": [
+        "3D rendering",
+        "flat illustration"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-024",
+      "type": "conflict",
+      "tagIds": [
+        "REC-STY-014",
+        "REC-OPT-009"
+      ],
+      "tagPrompts": [
+        "pixel art",
+        "soft focus"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-025",
+      "type": "conditional",
+      "tagIds": [
+        "REC-STY-014",
+        "REC-OPT-005"
+      ],
+      "tagPrompts": [
+        "pixel art",
+        "film grain"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-026",
+      "type": "conflict",
+      "tagIds": [
+        "REC-LIN-003",
+        "REC-LIN-004"
+      ],
+      "tagPrompts": [
+        "thin lineart",
+        "thick lineart"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-027",
+      "type": "conflict",
+      "tagIds": [
+        "REC-LIN-016",
+        "REC-LIN-017"
+      ],
+      "tagPrompts": [
+        "variable line weight",
+        "uniform line weight"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-028",
+      "type": "conditional",
+      "tagIds": [
+        "REC-LIN-020",
+        "REC-LIN-021"
+      ],
+      "tagPrompts": [
+        "black outlines",
+        "white outlines"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-029",
+      "type": "conditional",
+      "tagIds": [
+        "REC-TEX-022",
+        "REC-TEX-023"
+      ],
+      "tagPrompts": [
+        "rough texture",
+        "smooth texture"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-030",
+      "type": "conditional",
+      "tagIds": [
+        "REC-TEX-024",
+        "REC-TEX-025"
+      ],
+      "tagPrompts": [
+        "matte finish",
+        "glossy finish"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-031",
+      "type": "conditional",
+      "tagIds": [
+        "REC-LIN-010",
+        "REC-LIN-011"
+      ],
+      "tagPrompts": [
+        "sharp lineart",
+        "soft linework"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-032",
+      "type": "conflict",
+      "tagIds": [
+        "REC-OPT-025",
+        "REC-OPT-026"
+      ],
+      "tagPrompts": [
+        "overexposure",
+        "underexposure"
+      ],
+      "reason_JA": "同時指定が作用の相殺・曖昧化を招く可能性がある。",
+      "recommended_ui_action": "show_warning_keep_both",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-033",
+      "type": "exclusive",
+      "tagIds": [
+        "REC-OPT-007",
+        "REC-OPT-008"
+      ],
+      "tagPrompts": [
+        "shallow depth of field",
+        "deep depth of field"
+      ],
+      "reason_JA": "同一対象・同一領域での指定が論理的に衝突しやすい。",
+      "recommended_ui_action": "show_strong_warning_request_user_choice",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-034",
+      "type": "conditional",
+      "tagIds": [
+        "REC-OPT-009",
+        "REC-LIN-010"
+      ],
+      "tagPrompts": [
+        "soft focus",
+        "sharp lineart"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-035",
+      "type": "synergy",
+      "tagIds": [
+        "REC-OPT-001",
+        "REC-OPT-010"
+      ],
+      "tagPrompts": [
+        "bloom",
+        "glow"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-036",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIT-001",
+        "REC-LIT-002"
+      ],
+      "tagPrompts": [
+        "backlighting",
+        "rim lighting"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-037",
+      "type": "synergy",
+      "tagIds": [
+        "REC-COL-012",
+        "REC-TEX-001"
+      ],
+      "tagPrompts": [
+        "watercolor wash",
+        "paper texture"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-038",
+      "type": "synergy",
+      "tagIds": [
+        "REC-COL-019",
+        "REC-TEX-002"
+      ],
+      "tagPrompts": [
+        "oil painting",
+        "canvas texture"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-039",
+      "type": "synergy",
+      "tagIds": [
+        "REC-COL-018",
+        "REC-TEX-024"
+      ],
+      "tagPrompts": [
+        "gouache painting",
+        "matte finish"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-040",
+      "type": "conditional",
+      "tagIds": [
+        "REC-STY-014",
+        "REC-ATM-009"
+      ],
+      "tagPrompts": [
+        "pixel art",
+        "halftone"
+      ],
+      "reason_JA": "部位・時間・光源・表現領域を分けるなら共存し得る。",
+      "recommended_ui_action": "show_scope_disambiguation_hint",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-041",
+      "type": "synergy",
+      "tagIds": [
+        "REC-STY-014",
+        "REC-ATM-015"
+      ],
+      "tagPrompts": [
+        "pixel art",
+        "dot shading"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-042",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIT-017",
+        "REC-OPT-005"
+      ],
+      "tagPrompts": [
+        "cinematic lighting",
+        "film grain"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-043",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIT-022",
+        "REC-PAL-008"
+      ],
+      "tagPrompts": [
+        "golden hour lighting",
+        "warm color palette"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-044",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIT-024",
+        "REC-PAL-009"
+      ],
+      "tagPrompts": [
+        "moonlight",
+        "cool color palette"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-045",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIT-021",
+        "REC-SHA-004"
+      ],
+      "tagPrompts": [
+        "dappled sunlight",
+        "cast shadows"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-046",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIN-032",
+        "REC-LIN-027"
+      ],
+      "tagPrompts": [
+        "cross-hatching",
+        "ink drawing"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-047",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIN-034",
+        "REC-LIN-042"
+      ],
+      "tagPrompts": [
+        "dense cross-hatching",
+        "intricate lineart"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-048",
+      "type": "synergy",
+      "tagIds": [
+        "REC-STY-036",
+        "REC-LIN-002"
+      ],
+      "tagPrompts": [
+        "ligne claire",
+        "clean lineart"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-049",
+      "type": "synergy",
+      "tagIds": [
+        "REC-ATM-010",
+        "REC-ATM-011"
+      ],
+      "tagPrompts": [
+        "risograph print",
+        "misregistration"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-050",
+      "type": "synergy",
+      "tagIds": [
+        "REC-ATM-013",
+        "REC-PAL-007"
+      ],
+      "tagPrompts": [
+        "screen printing",
+        "limited palette"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-051",
+      "type": "synergy",
+      "tagIds": [
+        "REC-STY-019",
+        "REC-ATM-017"
+      ],
+      "tagPrompts": [
+        "vintage illustration",
+        "faded ink print"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-052",
+      "type": "synergy",
+      "tagIds": [
+        "REC-SHA-007",
+        "REC-SHA-012"
+      ],
+      "tagPrompts": [
+        "chiaroscuro",
+        "dramatic shadows"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-CR-053",
+      "type": "synergy",
+      "tagIds": [
+        "REC-LIT-018",
+        "REC-SHA-002"
+      ],
+      "tagPrompts": [
+        "ambient lighting",
+        "soft shadows"
+      ],
+      "reason_JA": "技法上の組み合わせとして相互補完が見込まれる。",
+      "recommended_ui_action": "suggest_optional_pair",
+      "evidence": "design_hypothesis_not_image_validated",
+      "source_url": "",
+      "origin": "reconstructed_not_original"
+    }
+  ]
+}

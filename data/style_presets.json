@@ -1,0 +1,1150 @@
+{
+  "schemaVersion": 1,
+  "origin": "reconstructed_not_original",
+  "presets": [
+    {
+      "id": "REC-PRESET-01",
+      "name_ja": "王道アニメ塗り",
+      "name_en": "Classic Anime Cel",
+      "description_ja": "王道アニメ塗りの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-001",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIN-002",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-COL-001",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-COL-002",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "王道アニメ塗りの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-02",
+      "name_ja": "現代美麗イラスト",
+      "name_en": "Modern Polished Illustration",
+      "description_ja": "現代美麗イラストの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-003",
+          "strength": 0.9
+        },
+        {
+          "tagId": "REC-LIN-005",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-COL-003",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-LIT-013",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "現代美麗イラストの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-03",
+      "name_ja": "淡彩水彩",
+      "name_en": "Light Watercolor",
+      "description_ja": "淡彩水彩の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-COL-012",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-PAL-025",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-TEX-001",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-LIN-003",
+          "strength": 0.6
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "淡彩水彩の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-04",
+      "name_ja": "セミリアル厚塗り",
+      "name_en": "Semi-real Painterly",
+      "description_ja": "セミリアル厚塗りの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-003",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-COL-004",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-TEX-017",
+          "strength": 0.9
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "セミリアル厚塗りの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-05",
+      "name_ja": "精緻な漫画線画",
+      "name_en": "Intricate Manga Ink",
+      "description_ja": "精緻な漫画線画の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-002",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIN-042",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-LIN-032",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-SHA-009",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "精緻な漫画線画の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-06",
+      "name_ja": "モノクロ細密ペン画",
+      "name_en": "Detailed Monochrome Pen",
+      "description_ja": "モノクロ細密ペン画の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-LIN-034",
+          "strength": 1.3
+        },
+        {
+          "tagId": "REC-LIN-027",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-PAL-005",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-TEX-001",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "モノクロ細密ペン画の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-07",
+      "name_ja": "柔らかなパステル画",
+      "name_en": "Soft Pastel",
+      "description_ja": "柔らかなパステル画の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-COL-021",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-PAL-004",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-SHA-002",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "柔らかなパステル画の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-08",
+      "name_ja": "油彩風イラスト",
+      "name_en": "Oil Painting Look",
+      "description_ja": "油彩風イラストの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-COL-019",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-TEX-002",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-TEX-017",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "油彩風イラストの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-09",
+      "name_ja": "映画的な強い陰影",
+      "name_en": "Dramatic Cinematic Contrast",
+      "description_ja": "映画的な強い陰影の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-LIT-017",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-SHA-007",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-SHA-001",
+          "strength": 1.1
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "映画的な強い陰影の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-10",
+      "name_ja": "幻想的な逆光",
+      "name_en": "Dreamy Backlight",
+      "description_ja": "幻想的な逆光の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-LIT-001",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-LIT-002",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-OPT-001",
+          "strength": 0.9
+        },
+        {
+          "tagId": "REC-OPT-009",
+          "strength": 0.6
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "幻想的な逆光の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-11",
+      "name_ja": "低彩度アンニュイ",
+      "name_en": "Muted Melancholy",
+      "description_ja": "低彩度アンニュイの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-PAL-002",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-LIT-013",
+          "strength": 0.9
+        },
+        {
+          "tagId": "REC-TEX-021",
+          "strength": 0.6
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "低彩度アンニュイの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-12",
+      "name_ja": "鮮やかなゲームCG調",
+      "name_en": "Vivid Game CG",
+      "description_ja": "鮮やかなゲームCG調の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-PAL-003",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-COL-006",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIT-002",
+          "strength": 0.9
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "鮮やかなゲームCG調の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-13",
+      "name_ja": "レトロセルアニメ",
+      "name_en": "Retro Cel Anime",
+      "description_ja": "レトロセルアニメの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-018",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-COL-001",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-PAL-007",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-OPT-005",
+          "strength": 0.7
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "レトロセルアニメの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-14",
+      "name_ja": "ネオン夜景",
+      "name_en": "Neon Night",
+      "description_ja": "ネオン夜景の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-PAL-017",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-LIT-035",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-OPT-001",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "ネオン夜景の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-15",
+      "name_ja": "リーニュ・クレール",
+      "name_en": "Ligne Claire",
+      "description_ja": "リーニュ・クレールの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-036",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIN-002",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-COL-005",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "リーニュ・クレールの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-16",
+      "name_ja": "木版画",
+      "name_en": "Woodblock Print",
+      "description_ja": "木版画の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-039",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-PAL-007",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-TEX-004",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "木版画の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-17",
+      "name_ja": "浮世絵",
+      "name_en": "Ukiyo-e Style",
+      "description_ja": "浮世絵の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-037",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-COL-005",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-PAL-007",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "浮世絵の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-18",
+      "name_ja": "リソグラフ",
+      "name_en": "Risograph Print",
+      "description_ja": "リソグラフの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-ATM-010",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-ATM-011",
+          "strength": 0.8
+        },
+        {
+          "tagId": "REC-TEX-041",
+          "strength": 0.9
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "リソグラフの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-19",
+      "name_ja": "色鉛筆画",
+      "name_en": "Colored Pencil",
+      "description_ja": "色鉛筆画の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-COL-023",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-TEX-001",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIN-005",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "色鉛筆画の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-20",
+      "name_ja": "ガッシュ絵本",
+      "name_en": "Gouache Storybook",
+      "description_ja": "ガッシュ絵本の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-009",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-COL-018",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-TEX-024",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "ガッシュ絵本の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-21",
+      "name_ja": "淡墨ウォッシュ",
+      "name_en": "Ink Wash",
+      "description_ja": "淡墨ウォッシュの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-COL-025",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-SHA-002",
+          "strength": 0.8
+        },
+        {
+          "tagId": "REC-TEX-004",
+          "strength": 0.7
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "淡墨ウォッシュの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-22",
+      "name_ja": "ノワール",
+      "name_en": "Noir",
+      "description_ja": "ノワールの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-030",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-SHA-009",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-SHA-001",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "ノワールの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-23",
+      "name_ja": "ゴールデンアワー",
+      "name_en": "Golden Hour",
+      "description_ja": "ゴールデンアワーの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-LIT-022",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-PAL-008",
+          "strength": 0.9
+        },
+        {
+          "tagId": "REC-SHA-002",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "ゴールデンアワーの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-24",
+      "name_ja": "月光ブルー",
+      "name_en": "Blue Moonlight",
+      "description_ja": "月光ブルーの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-LIT-024",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-PAL-009",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIT-013",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "月光ブルーの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-25",
+      "name_ja": "ピクセルとディザ",
+      "name_en": "Pixel and Dots",
+      "description_ja": "ピクセルとディザの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-014",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-ATM-015",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-PAL-007",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "ピクセルとディザの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-26",
+      "name_ja": "エッチング版画",
+      "name_en": "Etching",
+      "description_ja": "エッチング版画の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-ATM-018",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-LIN-027",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIN-032",
+          "strength": 1.1
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "エッチング版画の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-27",
+      "name_ja": "チャコールスケッチ",
+      "name_en": "Charcoal Sketch",
+      "description_ja": "チャコールスケッチの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-LIN-031",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-TEX-004",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIN-007",
+          "strength": 0.9
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "チャコールスケッチの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-28",
+      "name_ja": "フラットポスター",
+      "name_en": "Flat Poster",
+      "description_ja": "フラットポスターの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-016",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-COL-005",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-LIN-006",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "フラットポスターの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-29",
+      "name_ja": "幻想的な霧",
+      "name_en": "Ethereal Fog",
+      "description_ja": "幻想的な霧の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-ATM-003",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-LIT-016",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-OPT-009",
+          "strength": 0.7
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "幻想的な霧の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-30",
+      "name_ja": "グラフィックノベル",
+      "name_en": "Graphic Novel",
+      "description_ja": "グラフィックノベルの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-010",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-LIN-006",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-SHA-009",
+          "strength": 0.9
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "グラフィックノベルの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-31",
+      "name_ja": "透明感のある淡色",
+      "name_en": "Airy Translucent",
+      "description_ja": "透明感のある淡色の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-COL-031",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-PAL-027",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-LIT-014",
+          "strength": 1.0
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "透明感のある淡色の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-32",
+      "name_ja": "印象派タッチ",
+      "name_en": "Impressionist Brushwork",
+      "description_ja": "印象派タッチの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-023",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-TEX-017",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-LIT-013",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "印象派タッチの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-33",
+      "name_ja": "白黒リノカット",
+      "name_en": "Black White Linocut",
+      "description_ja": "白黒リノカットの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-STY-042",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-PAL-021",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-SHA-009",
+          "strength": 1.1
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "白黒リノカットの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-34",
+      "name_ja": "ペーパーコラージュ",
+      "name_en": "Papercut Collage",
+      "description_ja": "ペーパーコラージュの描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-ATM-024",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-COL-005",
+          "strength": 1.0
+        },
+        {
+          "tagId": "REC-PAL-007",
+          "strength": 0.9
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "ペーパーコラージュの画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-35",
+      "name_ja": "青写真",
+      "name_en": "Cyanotype Print",
+      "description_ja": "青写真の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-ATM-022",
+          "strength": 1.2
+        },
+        {
+          "tagId": "REC-PAL-038",
+          "strength": 0.9
+        },
+        {
+          "tagId": "REC-TEX-041",
+          "strength": 0.8
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "青写真の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    },
+    {
+      "id": "REC-PRESET-36",
+      "name_ja": "華やかな玉虫色",
+      "name_en": "Iridescent Sheen",
+      "description_ja": "華やかな玉虫色の描画表現を調整する再構築プリセット。",
+      "items": [
+        {
+          "tagId": "REC-PAL-040",
+          "strength": 1.1
+        },
+        {
+          "tagId": "REC-TEX-025",
+          "strength": 0.9
+        },
+        {
+          "tagId": "REC-LIT-019",
+          "strength": 0.9
+        }
+      ],
+      "recommended_profiles": [
+        "pixai_sdxl",
+        "pixai_tsubaki2",
+        "pixai_tsubaki3",
+        "nai_v5",
+        "nai_v45",
+        "nai_v4"
+      ],
+      "expected_effect_ja": "華やかな玉虫色の画風を目指す（画像実測なし）",
+      "cautions_ja": "各モデルで効き方と顔立ちへの影響は未検証。強度は初期値であり最適値ではない。",
+      "origin": "reconstructed_not_original"
+    }
+  ]
+}

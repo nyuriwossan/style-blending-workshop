@@ -1,0 +1,44 @@
+{
+  "bundle_type": "RECONSTRUCTION_NOT_ORIGINAL",
+  "source_original_files_found": false,
+  "original_report_found": true,
+  "created_for_this_conversation": "2026-10-24",
+  "counts": {
+    "style_tags": 329,
+    "conflict_rules": 53,
+    "style_presets": 36,
+    "validation_matrix_rows": 486,
+    "mvp_core": 72
+  },
+  "category_counts": {
+    "style_genre": 43,
+    "linework": 43,
+    "coloring_shading": 40,
+    "lighting": 44,
+    "shadow_contrast": 23,
+    "color_palette": 41,
+    "medium_texture": 43,
+    "optical_effects": 28,
+    "atmosphere_print": 24
+  },
+  "priority_counts": {
+    "S": 41,
+    "A": 128,
+    "B": 66,
+    "C": 94
+  },
+  "original_ids_preserved": false,
+  "image_validation_performed": false,
+  "file_sha256": {
+    "conflict_rules.json": "6f846d1a41ea4347ac445e83828bdd46da28f6ebe622b855ca8d04d67f48c6fc",
+    "implementation_notes.md": "dd0f6fbf234fd4f20642e851972b126d7a24db0ea59f0dc16ac15b6593498bee",
+    "model_output_rules.json": "8b374a85a35394bac05236e182d1916726cf5953f0212ffaf2a4fc38bc8e3388",
+    "research_report.md": "90d81b331167c4231b544e5a74dbd438f9aa69049eae870889af9f5ef0250d9c",
+    "source_deep_research_report.md": "70513c1535aa527f3c81e7cd8765c113daf04bed2a4dbadd193b09e15816ae42",
+    "sources.md": "24dd4a2afefe7518c4029fe9c6a430e731ff3675684c9d489e1a03cfb4110440",
+    "style_presets.json": "c966ac102a8bf042fb3d8bf9fe97b57fac80156f9a8c7566244764910f598482",
+    "style_tags.csv": "a6bb084145ec07eef000ede8d324685d8c00754eb6257d9adcd2887ade196570",
+    "style_tags.json": "a0239446a7bbf1eb88ce0e052bc42433e1809146ce35eadf08d4311e3fa2696e",
+    "validation_matrix.csv": "02b7b88771ca6ec4f8b94db8e22fe954e80a5cc16a99568c591a81ec509cb740"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "note": "表示用の補助データ（アプリ側で追加）。style_tags.json 等の辞書レコードは改変していない。",
+  "categories": [
+    { "key": "style_genre", "label": "基本画風", "short": "画風", "color": "#7a6a9a" },
+    { "key": "linework", "label": "描線・線画", "short": "線画", "color": "#3f5a78" },
+    { "key": "coloring_shading", "label": "塗り・彩色", "short": "塗り", "color": "#b0614a" },
+    { "key": "lighting", "label": "光・ライティング", "short": "光", "color": "#c49a3a" },
+    { "key": "shadow_contrast", "label": "陰影・コントラスト", "short": "陰影", "color": "#4d4a52" },
+    { "key": "color_palette", "label": "色彩・パレット", "short": "色彩", "color": "#b5577a" },
+    { "key": "medium_texture", "label": "画材・質感", "short": "質感", "color": "#7d6a4c" },
+    { "key": "optical_effects", "label": "光学効果", "short": "光学", "color": "#3f8a8a" },
+    { "key": "atmosphere_print", "label": "大気感・印刷表現", "short": "大気", "color": "#6a8a5a" }
+  ],
+  "subcategories": {
+    "general_aesthetic": "全体の絵柄",
+    "illustration_print_genre": "挿絵・版画ジャンル",
+    "historical_movement": "美術運動",
+    "contours_and_weight": "輪郭と線幅",
+    "stroke_character": "線の性格",
+    "line_medium_and_pattern": "線の画材・パターン",
+    "shading_mode": "陰影の方式",
+    "layering_and_application": "塗り重ね・塗布",
+    "paint_medium_technique": "画材技法",
+    "light_direction_pattern": "光の方向",
+    "light_quality": "光の質",
+    "lighting_environment": "光の環境",
+    "light_color_and_atmospheric": "光の色・大気光",
+    "shadow_type": "影の種類",
+    "shadow_edge_and_tone": "影の縁と階調",
+    "contrast_distribution": "明暗の配分",
+    "palette_basic": "基本パレット",
+    "saturation_and_brightness": "彩度・明度",
+    "color_harmony": "配色理論",
+    "palette_tones": "トーン",
+    "specific_palettes": "特定の配色",
+    "substrate": "支持体",
+    "material_texture": "画材の質感",
+    "stroke_and_finish": "筆致・仕上げ",
+    "surface_pattern": "表面の模様",
+    "lens_effect": "レンズ効果",
+    "light_postprocess": "光の後処理",
+    "optical_artifact": "光学的な乱れ",
+    "atmosphere": "大気感",
+    "printing_texture": "印刷の質感",
+    "printmaking_technique": "版画技法"
+  },
+  "evidenceLevels": {
+    "reported_official_exact": { "label": "公式資料に同一文字列", "detail": "元調査報告書によれば、公式資料にこの文字列が例示されている。画像での効果は未検証。" },
+    "reported_official_related_expression": { "label": "公式資料に近縁表現", "detail": "元調査報告書によれば、公式資料に近い表現がある（完全一致は未確認）。画像での効果は未検証。" },
+    "reconstructed_unverified_candidate": { "label": "候補（未検証）", "detail": "再構築版で追加された候補。公式資料での裏付けも画像での効果検証もない。" },
+    "user_defined": { "label": "ユーザー定義", "detail": "あなたが追加したタグ。辞書外で、効果は未検証。" }
+  },
+  "relationTypes": {
+    "synonym": { "label": "同義", "level": "info" },
+    "similar": { "label": "類似", "level": "info" },
+    "complement": { "label": "補完", "level": "suggest" },
+    "synergy": { "label": "相乗", "level": "suggest" },
+    "conflict": { "label": "競合", "level": "warn" },
+    "exclusive": { "label": "排他的", "level": "strong" },
+    "conditional": { "label": "条件付き", "level": "info" }
+  },
+  "profiles": [
+    { "id": "pixai_sdxl", "label": "PIXAI SDXL系", "short": "SDXL", "family": "pixai", "statusKey": "pixai_sdxl" },
+    { "id": "pixai_tsubaki2", "label": "PIXAI Tsubaki.2", "short": "Tsubaki.2", "family": "pixai", "statusKey": "tsubaki2" },
+    { "id": "pixai_tsubaki3", "label": "PIXAI Tsubaki.3", "short": "Tsubaki.3", "family": "pixai", "statusKey": "tsubaki3" },
+    { "id": "nai_v4", "label": "NovelAI V4", "short": "NAI V4", "family": "nai", "statusKey": "nai" },
+    { "id": "nai_v45", "label": "NovelAI V4.5", "short": "NAI V4.5", "family": "nai", "statusKey": "nai" },
+    { "id": "nai_v5", "label": "NovelAI V5", "short": "NAI V5", "family": "nai", "statusKey": "nai" },
+    { "id": "nai_v3", "label": "NovelAI V3（実験的）", "short": "NAI V3", "family": "nai", "statusKey": "nai", "experimental": true }
+  ],
+  "tsubakiModifiers": {
+    "note": "model_output_rules.json の binRanges のラベル語を接頭語として使う。PixAI公式の数値換算ではなく、アプリ側のUX案。",
+    "subtle": "subtle {p}",
+    "gentle": "gentle {p}",
+    "plain": "{p}",
+    "pronounced": "pronounced {p}",
+    "intense": "intense {p}"
+  },
+  "pixaiBannedSubstrings": ["adult", "bust"]
+}
