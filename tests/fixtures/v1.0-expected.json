@@ -1,0 +1,5 @@
+{
+  "note": "v1.0の実ビルドで、レシピ読み込み直後に NAI V4.5 で表示された出力",
+  "profile": "nai_v45",
+  "prompt": "0.6::thin lineart ::, sketch, 1.3::delicate thin lineart ::, 0.7::thick lineart ::, 1.2::watercolor wash ::, backlighting, soft colors, 1.1::paper texture ::"
+}

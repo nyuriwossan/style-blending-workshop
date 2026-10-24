@@ -1,0 +1,1140 @@
+{
+ "schemaVersion": 1,
+ "checkedAt": "2026-10-24",
+ "sources": [
+  {
+   "title": "NovelAI Docs – Prompting for Unique Artstyles",
+   "url": "https://docs.novelai.net/en/image/tutorial-artstyles/"
+  },
+  {
+   "title": "NovelAI Docs – Unique Artstyles（日本語版）",
+   "url": "https://docs.novelai.net/ja/image/tutorial-artstyles/"
+  },
+  {
+   "title": "NovelAI Docs – Tagging",
+   "url": "https://docs.novelai.net/en/image/tags/"
+  },
+  {
+   "title": "NovelAI Docs – Strengthening & Weakening",
+   "url": "https://docs.novelai.net/en/image/strengthening-weakening/"
+  }
+ ],
+ "note": "公式資料に掲載されていることと、画像生成で期待どおりの効果が確認されたことは別の情報。このファイルは前者のみを扱う。",
+ "officialExactExistingIds": [
+  "REC-ATM-009",
+  "REC-COL-002",
+  "REC-COL-005",
+  "REC-LIN-001",
+  "REC-LIN-025",
+  "REC-LIT-001",
+  "REC-OPT-001",
+  "REC-OPT-002",
+  "REC-OPT-003",
+  "REC-OPT-004",
+  "REC-OPT-006",
+  "REC-OPT-009",
+  "REC-OPT-014",
+  "REC-OPT-022",
+  "REC-PAL-004",
+  "REC-PAL-005",
+  "REC-PAL-006",
+  "REC-PAL-007",
+  "REC-SHA-009",
+  "REC-STY-005",
+  "REC-STY-014",
+  "REC-STY-021",
+  "REC-STY-023",
+  "REC-STY-036",
+  "REC-STY-037",
+  "REC-STY-038"
+ ],
+ "complexity": {
+  "tags": [
+   "low complexity",
+   "medium complexity",
+   "high complexity",
+   "ultra complexity"
+  ],
+  "url": "https://docs.novelai.net/en/image/tags/",
+  "checkedAt": "2026-10-24",
+  "supportedProfiles": [
+   "nai_v5"
+  ],
+  "officialNoteJA": "複雑度タグはV5モデルでのみ利用可能。通常は high complexity、様式化した絵では ultra や low が合うこともあるので試して調整、という案内。"
+ },
+ "year": {
+  "format": "year {YYYY}",
+  "url": "https://docs.novelai.net/en/image/tags/",
+  "urlArt": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+  "checkedAt": "2026-10-24",
+  "officialNoteJA": "year XXXX 形式で、その年の絵柄の傾向に寄せる。どの年でも使えるはずだが結果はまちまち、と案内されている。"
+ },
+ "entries": [
+  {
+   "officialTag": "traditional media",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-001",
+   "similarExisting": [
+    "REC-TEX-043"
+   ]
+  },
+  {
+   "officialTag": "faux traditional media",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-002",
+   "similarExisting": [
+    "REC-TEX-043"
+   ]
+  },
+  {
+   "officialTag": "mixed media",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-003",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "unconventional media",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-004",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "acrylic paint (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-005",
+   "similarExisting": [
+    "REC-COL-020",
+    "REC-TEX-013"
+   ]
+  },
+  {
+   "officialTag": "ballpoint pen (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-006",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "calligraphy brush (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-007",
+   "similarExisting": [
+    "REC-LIN-040",
+    "REC-LIN-028"
+   ]
+  },
+  {
+   "officialTag": "colored pencil (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-008",
+   "similarExisting": [
+    "REC-COL-023"
+   ]
+  },
+  {
+   "officialTag": "graphite (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-009",
+   "similarExisting": [
+    "REC-TEX-009",
+    "REC-LIN-030"
+   ]
+  },
+  {
+   "officialTag": "ink (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-010",
+   "similarExisting": [
+    "REC-LIN-027",
+    "REC-TEX-015"
+   ]
+  },
+  {
+   "officialTag": "marker (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-011",
+   "similarExisting": [
+    "REC-COL-024",
+    "REC-TEX-029"
+   ]
+  },
+  {
+   "officialTag": "millipen (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-012",
+   "similarExisting": [
+    "REC-LIN-029"
+   ]
+  },
+  {
+   "officialTag": "nib pen (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-013",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "oil painting (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-014",
+   "similarExisting": [
+    "REC-COL-019",
+    "REC-TEX-012"
+   ]
+  },
+  {
+   "officialTag": "painting (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-015",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "pastel (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-016",
+   "similarExisting": [
+    "REC-COL-021",
+    "REC-TEX-011"
+   ]
+  },
+  {
+   "officialTag": "pen (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-017",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "watercolor (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-018",
+   "similarExisting": [
+    "REC-COL-012",
+    "REC-TEX-030"
+   ]
+  },
+  {
+   "officialTag": "watercolor pencil (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-TEX-019",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "3d",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-STY-001",
+   "similarExisting": [
+    "REC-STY-013"
+   ]
+  },
+  {
+   "officialTag": "blender (medium)",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-STY-002",
+   "similarExisting": [
+    "REC-STY-013"
+   ]
+  },
+  {
+   "officialTag": "ai-generated",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "excluded",
+   "reason": "制作手段（AIによる生成）を示すメタ情報で、描画表現を指定するタグではないため。"
+  },
+  {
+   "officialTag": "ai-assisted",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "excluded",
+   "reason": "制作手段（AIによる支援）を示すメタ情報で、描画表現を指定するタグではないため。"
+  },
+  {
+   "officialTag": "anime screencap",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-STY-003",
+   "similarExisting": [
+    "REC-STY-001"
+   ]
+  },
+  {
+   "officialTag": "pixel art",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "exact",
+   "existingId": "REC-STY-014"
+  },
+  {
+   "officialTag": "dithering",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Medium",
+   "status": "added",
+   "newId": "NAI-ATM-004",
+   "similarExisting": [
+    "REC-ATM-015"
+   ]
+  },
+  {
+   "officialTag": "abstract",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-004",
+   "similarExisting": [
+    "REC-STY-026"
+   ]
+  },
+  {
+   "officialTag": "surreal",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-005",
+   "similarExisting": [
+    "REC-STY-025"
+   ]
+  },
+  {
+   "officialTag": "art nouveau",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-STY-021"
+  },
+  {
+   "officialTag": "impressionism",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-STY-023"
+  },
+  {
+   "officialTag": "ligne claire",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-STY-036"
+  },
+  {
+   "officialTag": "nihonga",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-STY-038"
+  },
+  {
+   "officialTag": "ukiyo-e",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-STY-037"
+  },
+  {
+   "officialTag": "realistic",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-006",
+   "similarExisting": [
+    "REC-STY-004",
+    "REC-STY-005"
+   ]
+  },
+  {
+   "officialTag": "photorealistic",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-STY-005"
+  },
+  {
+   "officialTag": "retro artstyle",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-007",
+   "similarExisting": [
+    "REC-STY-018"
+   ]
+  },
+  {
+   "officialTag": "painterly",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-008",
+   "similarExisting": [
+    "REC-STY-006",
+    "REC-COL-004"
+   ]
+  },
+  {
+   "officialTag": "sketch",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-LIN-001",
+   "similarExisting": [
+    "REC-LIN-007"
+   ]
+  },
+  {
+   "officialTag": "lineart",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-LIN-001"
+  },
+  {
+   "officialTag": "no lineart",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "exact",
+   "existingId": "REC-LIN-025"
+  },
+  {
+   "officialTag": "jaggy lines",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-LIN-002",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "outline",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-LIN-003",
+   "similarExisting": [
+    "REC-LIN-006",
+    "REC-LIN-022"
+   ]
+  },
+  {
+   "officialTag": "vector trace",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-LIN-004",
+   "similarExisting": [
+    "REC-STY-015"
+   ]
+  },
+  {
+   "officialTag": "color trace",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-LIN-005",
+   "similarExisting": [
+    "REC-LIN-018"
+   ]
+  },
+  {
+   "officialTag": "production art",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-011",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "animation paper",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-TEX-021",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "game cg",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-009",
+   "similarExisting": [
+    "REC-STY-008"
+   ]
+  },
+  {
+   "officialTag": "official art",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-STY-010",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "shikishi",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-TEX-020",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "oekaki",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-LIN-006",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "tegaki",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "added",
+   "newId": "NAI-LIN-007",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "year XXXX",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Art style",
+   "status": "special_ui",
+   "ui": "year",
+   "note": "年タグ専用の設定欄で扱う（year 2024 形式）。"
+  },
+  {
+   "officialTag": "anime coloring",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "exact",
+   "existingId": "REC-COL-002"
+  },
+  {
+   "officialTag": "colorful",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-001",
+   "similarExisting": [
+    "REC-PAL-003"
+   ]
+  },
+  {
+   "officialTag": "dark",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-002",
+   "similarExisting": [
+    "REC-PAL-028"
+   ]
+  },
+  {
+   "officialTag": "limited palette",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "exact",
+   "existingId": "REC-PAL-007"
+  },
+  {
+   "officialTag": "partially colored",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-003",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "spot color",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-004",
+   "similarExisting": [
+    "REC-PAL-022"
+   ]
+  },
+  {
+   "officialTag": "monochrome",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "exact",
+   "existingId": "REC-PAL-005"
+  },
+  {
+   "officialTag": "greyscale",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "exact",
+   "existingId": "REC-PAL-006"
+  },
+  {
+   "officialTag": "muted color",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-005",
+   "similarExisting": [
+    "REC-PAL-001"
+   ]
+  },
+  {
+   "officialTag": "pale color",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-006",
+   "similarExisting": [
+    "REC-PAL-027",
+    "REC-PAL-004"
+   ]
+  },
+  {
+   "officialTag": "pastel colors",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "exact",
+   "existingId": "REC-PAL-004"
+  },
+  {
+   "officialTag": "flat color",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "exact",
+   "existingId": "REC-COL-005"
+  },
+  {
+   "officialTag": "high contrast",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "exact",
+   "existingId": "REC-SHA-009"
+  },
+  {
+   "officialTag": "sepia",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-007",
+   "similarExisting": [
+    "REC-PAL-018"
+   ]
+  },
+  {
+   "officialTag": "aqua theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-101",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "black theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-102",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "blue theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-103",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "brown theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-104",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "green theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-105",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "grey theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-106",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "orange theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-107",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "pink theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-108",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "purple theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-109",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "red theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-110",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "white theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-111",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "yellow theme",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Coloring",
+   "status": "added",
+   "newId": "NAI-PAL-112",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "backlighting",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-LIT-001"
+  },
+  {
+   "officialTag": "bloom",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-001"
+  },
+  {
+   "officialTag": "bokeh",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-002"
+  },
+  {
+   "officialTag": "chromatic aberration",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-004"
+  },
+  {
+   "officialTag": "depth of field",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-006"
+  },
+  {
+   "officialTag": "diffraction spikes",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-022"
+  },
+  {
+   "officialTag": "dithering",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "duplicate_listing",
+   "note": "同じページの別の節にも掲載。照合は最初の節で実施。"
+  },
+  {
+   "officialTag": "drop shadow",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "added",
+   "newId": "NAI-SHA-001",
+   "similarExisting": [
+    "REC-SHA-004"
+   ]
+  },
+  {
+   "officialTag": "emphasis lines",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "added",
+   "newId": "NAI-ATM-001",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "speed lines",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "added",
+   "newId": "NAI-ATM-002",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "motion lines",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "added",
+   "newId": "NAI-ATM-003",
+   "similarExisting": [
+    "REC-OPT-014"
+   ]
+  },
+  {
+   "officialTag": "glitch",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "added",
+   "newId": "NAI-OPT-001",
+   "similarExisting": [
+    "REC-OPT-004"
+   ]
+  },
+  {
+   "officialTag": "halftone",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-ATM-009"
+  },
+  {
+   "officialTag": "lens flare",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-003"
+  },
+  {
+   "officialTag": "motion blur",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-014"
+  },
+  {
+   "officialTag": "soft focus",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "Special effects",
+   "status": "exact",
+   "existingId": "REC-OPT-009"
+  },
+  {
+   "officialTag": "very aesthetic",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "(introduction)",
+   "status": "excluded",
+   "reason": "美的評価タグ。今回は品質・美的タグを主な収集対象にしない方針。公式は画風タグと併用する際に [] で弱めることを勧めている。"
+  },
+  {
+   "officialTag": "aesthetic",
+   "page": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "section": "(introduction)",
+   "status": "excluded",
+   "reason": "同上（美的評価タグ）。"
+  },
+  {
+   "officialTag": "best quality",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Quality Tags",
+   "status": "excluded",
+   "reason": "品質タグ。画風（描画表現）ではなく出来の良し悪しを指定するため、今回は収録しない。"
+  },
+  {
+   "officialTag": "amazing quality",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Quality Tags",
+   "status": "excluded",
+   "reason": "品質タグ。画風（描画表現）ではなく出来の良し悪しを指定するため、今回は収録しない。"
+  },
+  {
+   "officialTag": "great quality",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Quality Tags",
+   "status": "excluded",
+   "reason": "品質タグ。画風（描画表現）ではなく出来の良し悪しを指定するため、今回は収録しない。"
+  },
+  {
+   "officialTag": "normal quality",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Quality Tags",
+   "status": "excluded",
+   "reason": "品質タグ。画風（描画表現）ではなく出来の良し悪しを指定するため、今回は収録しない。"
+  },
+  {
+   "officialTag": "bad quality",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Quality Tags",
+   "status": "excluded",
+   "reason": "品質タグ。画風（描画表現）ではなく出来の良し悪しを指定するため、今回は収録しない。"
+  },
+  {
+   "officialTag": "worst quality",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Quality Tags",
+   "status": "excluded",
+   "reason": "品質タグ。画風（描画表現）ではなく出来の良し悪しを指定するため、今回は収録しない。"
+  },
+  {
+   "officialTag": "masterpiece",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Aesthetic Tags",
+   "status": "excluded",
+   "reason": "美的評価タグ。品質系と同じ理由で今回は収録しない（masterpiece は V4.5以上、top aesthetic は V4以上と公式に記載）。"
+  },
+  {
+   "officialTag": "top aesthetic",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Aesthetic Tags",
+   "status": "excluded",
+   "reason": "美的評価タグ。品質系と同じ理由で今回は収録しない（masterpiece は V4.5以上、top aesthetic は V4以上と公式に記載）。"
+  },
+  {
+   "officialTag": "very aesthetic",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Aesthetic Tags",
+   "status": "excluded",
+   "reason": "美的評価タグ。品質系と同じ理由で今回は収録しない（masterpiece は V4.5以上、top aesthetic は V4以上と公式に記載）。"
+  },
+  {
+   "officialTag": "aesthetic",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Aesthetic Tags",
+   "status": "excluded",
+   "reason": "美的評価タグ。品質系と同じ理由で今回は収録しない（masterpiece は V4.5以上、top aesthetic は V4以上と公式に記載）。"
+  },
+  {
+   "officialTag": "displeasing",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Aesthetic Tags",
+   "status": "excluded",
+   "reason": "美的評価タグ。品質系と同じ理由で今回は収録しない（masterpiece は V4.5以上、top aesthetic は V4以上と公式に記載）。"
+  },
+  {
+   "officialTag": "very displeasing",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Aesthetic Tags",
+   "status": "excluded",
+   "reason": "美的評価タグ。品質系と同じ理由で今回は収録しない（masterpiece は V4.5以上、top aesthetic は V4以上と公式に記載）。"
+  },
+  {
+   "officialTag": "low complexity",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Complexity Tags",
+   "status": "special_ui",
+   "ui": "complexity",
+   "note": "複雑度の専用設定（排他選択）で扱う。V5専用と公式に記載。"
+  },
+  {
+   "officialTag": "medium complexity",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Complexity Tags",
+   "status": "special_ui",
+   "ui": "complexity",
+   "note": "複雑度の専用設定（排他選択）で扱う。V5専用と公式に記載。"
+  },
+  {
+   "officialTag": "high complexity",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Complexity Tags",
+   "status": "special_ui",
+   "ui": "complexity",
+   "note": "複雑度の専用設定（排他選択）で扱う。V5専用と公式に記載。"
+  },
+  {
+   "officialTag": "ultra complexity",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Complexity Tags",
+   "status": "special_ui",
+   "ui": "complexity",
+   "note": "複雑度の専用設定（排他選択）で扱う。V5専用と公式に記載。"
+  },
+  {
+   "officialTag": "year XXXX",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Year Tags",
+   "status": "special_ui",
+   "ui": "year",
+   "note": "年タグ専用の設定欄で扱う。"
+  },
+  {
+   "officialTag": "fur dataset",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Dataset Tags",
+   "status": "excluded",
+   "reason": "学習データの区分を切り替えるタグで、題材（獣人・背景）が主体になるため。"
+  },
+  {
+   "officialTag": "background dataset",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Dataset Tags",
+   "status": "excluded",
+   "reason": "学習データの区分を切り替えるタグで、題材（獣人・背景）が主体になるため。"
+  },
+  {
+   "officialTag": "transparent background",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Alpha Transparency Tags",
+   "status": "excluded",
+   "reason": "背景の透過という出力形式の指定で、画風ではないため。V5専用と公式に記載。"
+  },
+  {
+   "officialTag": "has alpha",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Alpha Transparency Tags",
+   "status": "excluded",
+   "reason": "背景の透過という出力形式の指定で、画風ではないため。V5専用と公式に記載。"
+  },
+  {
+   "officialTag": "alpha transparency",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Alpha Transparency Tags",
+   "status": "excluded",
+   "reason": "背景の透過という出力形式の指定で、画風ではないため。V5専用と公式に記載。"
+  },
+  {
+   "officialTag": "location",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "excluded",
+   "reason": "場所（屋内・屋外）の指定で、画風ではないため。"
+  },
+  {
+   "officialTag": "attractive male",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "excluded",
+   "reason": "人物の容姿の指定で、アプリの方針（人物を指定しない）に反するため。V5専用。"
+  },
+  {
+   "officialTag": "visual novel bg",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "excluded",
+   "reason": "人物のいない背景画像という題材・構図の指定が主体のため。V5専用。"
+  },
+  {
+   "officialTag": "visual novel sprite",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "excluded",
+   "reason": "立ち絵という構図・人物配置の指定が主体のため。V5専用。"
+  },
+  {
+   "officialTag": "visual novel chibi",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "excluded",
+   "reason": "ちびキャラという人物の頭身の指定が主体のため。V5専用。"
+  },
+  {
+   "officialTag": "depthness",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "added",
+   "newId": "NAI-SHA-101",
+   "similarExisting": [
+    "REC-SHA-001"
+   ]
+  },
+  {
+   "officialTag": "meta:novel era",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "added",
+   "newId": "NAI-STY-101",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "meta:golden era",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "added",
+   "newId": "NAI-STY-102",
+   "similarExisting": []
+  },
+  {
+   "officialTag": "visual novel art",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "added",
+   "newId": "NAI-STY-103",
+   "similarExisting": [
+    "REC-STY-008"
+   ]
+  },
+  {
+   "officialTag": "visual novel cg",
+   "page": "https://docs.novelai.net/en/image/tags/",
+   "section": "Other Tags",
+   "status": "added",
+   "newId": "NAI-STY-104",
+   "similarExisting": [
+    "REC-STY-008"
+   ]
+  },
+  {
+   "officialTag": "simple illustration",
+   "page": "https://docs.novelai.net/en/image/strengthening-weakening/",
+   "section": "Negative Numerical Emphasis",
+   "status": "excluded",
+   "reason": "強調構文の説明用の例（負の強調）として出てくるだけで、画風タグとしての説明がないため。このアプリは負の強調を出力しない。"
+  }
+ ]
+}

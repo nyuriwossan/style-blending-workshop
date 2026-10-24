@@ -2,15 +2,60 @@
   "schemaVersion": 1,
   "note": "表示用の補助データ（アプリ側で追加）。style_tags.json 等の辞書レコードは改変していない。",
   "categories": [
-    { "key": "style_genre", "label": "基本画風", "short": "画風", "color": "#7a6a9a" },
-    { "key": "linework", "label": "描線・線画", "short": "線画", "color": "#3f5a78" },
-    { "key": "coloring_shading", "label": "塗り・彩色", "short": "塗り", "color": "#b0614a" },
-    { "key": "lighting", "label": "光・ライティング", "short": "光", "color": "#c49a3a" },
-    { "key": "shadow_contrast", "label": "陰影・コントラスト", "short": "陰影", "color": "#4d4a52" },
-    { "key": "color_palette", "label": "色彩・パレット", "short": "色彩", "color": "#b5577a" },
-    { "key": "medium_texture", "label": "画材・質感", "short": "質感", "color": "#7d6a4c" },
-    { "key": "optical_effects", "label": "光学効果", "short": "光学", "color": "#3f8a8a" },
-    { "key": "atmosphere_print", "label": "大気感・印刷表現", "short": "大気", "color": "#6a8a5a" }
+    {
+      "key": "style_genre",
+      "label": "基本画風",
+      "short": "画風",
+      "color": "#7a6a9a"
+    },
+    {
+      "key": "linework",
+      "label": "描線・線画",
+      "short": "線画",
+      "color": "#3f5a78"
+    },
+    {
+      "key": "coloring_shading",
+      "label": "塗り・彩色",
+      "short": "塗り",
+      "color": "#b0614a"
+    },
+    {
+      "key": "lighting",
+      "label": "光・ライティング",
+      "short": "光",
+      "color": "#c49a3a"
+    },
+    {
+      "key": "shadow_contrast",
+      "label": "陰影・コントラスト",
+      "short": "陰影",
+      "color": "#4d4a52"
+    },
+    {
+      "key": "color_palette",
+      "label": "色彩・パレット",
+      "short": "色彩",
+      "color": "#b5577a"
+    },
+    {
+      "key": "medium_texture",
+      "label": "画材・質感",
+      "short": "質感",
+      "color": "#7d6a4c"
+    },
+    {
+      "key": "optical_effects",
+      "label": "光学効果",
+      "short": "光学",
+      "color": "#3f8a8a"
+    },
+    {
+      "key": "atmosphere_print",
+      "label": "大気感・印刷表現",
+      "short": "大気",
+      "color": "#6a8a5a"
+    }
   ],
   "subcategories": {
     "general_aesthetic": "全体の絵柄",
@@ -43,31 +88,118 @@
     "optical_artifact": "光学的な乱れ",
     "atmosphere": "大気感",
     "printing_texture": "印刷の質感",
-    "printmaking_technique": "版画技法"
+    "printmaking_technique": "版画技法",
+    "media_type": "メディア区分",
+    "medium_tag": "制作媒体（medium）",
+    "digital_medium": "デジタル媒体",
+    "color_theme": "色テーマ",
+    "manga_effect": "漫画的効果",
+    "era": "年代傾向",
+    "user_defined": "ユーザー定義"
   },
   "evidenceLevels": {
-    "reported_official_exact": { "label": "公式資料に同一文字列", "detail": "元調査報告書によれば、公式資料にこの文字列が例示されている。画像での効果は未検証。" },
-    "reported_official_related_expression": { "label": "公式資料に近縁表現", "detail": "元調査報告書によれば、公式資料に近い表現がある（完全一致は未確認）。画像での効果は未検証。" },
-    "reconstructed_unverified_candidate": { "label": "候補（未検証）", "detail": "再構築版で追加された候補。公式資料での裏付けも画像での効果検証もない。" },
-    "user_defined": { "label": "ユーザー定義", "detail": "あなたが追加したタグ。辞書外で、効果は未検証。" }
+    "reported_official_exact": {
+      "label": "公式資料に同一文字列",
+      "detail": "元調査報告書によれば、公式資料にこの文字列が例示されている。画像での効果は未検証。"
+    },
+    "reported_official_related_expression": {
+      "label": "公式資料に近縁表現",
+      "detail": "元調査報告書によれば、公式資料に近い表現がある（完全一致は未確認）。画像での効果は未検証。"
+    },
+    "reconstructed_unverified_candidate": {
+      "label": "候補（未検証）",
+      "detail": "再構築版で追加された候補。公式資料での裏付けも画像での効果検証もない。"
+    },
+    "user_defined": {
+      "label": "ユーザー定義",
+      "detail": "あなたが追加したタグ。辞書外で、効果は未検証。"
+    },
+    "nai_official_listed": {
+      "label": "NovelAI公式に掲載",
+      "detail": "NovelAI公式ドキュメントに同じ文字列のタグが掲載されている（照合日は詳細に表示）。掲載は効果の保証ではなく、画像での効果は未検証。"
+    }
   },
   "relationTypes": {
-    "synonym": { "label": "同義", "level": "info" },
-    "similar": { "label": "類似", "level": "info" },
-    "complement": { "label": "補完", "level": "suggest" },
-    "synergy": { "label": "相乗", "level": "suggest" },
-    "conflict": { "label": "競合", "level": "warn" },
-    "exclusive": { "label": "排他的", "level": "strong" },
-    "conditional": { "label": "条件付き", "level": "info" }
+    "synonym": {
+      "label": "同義",
+      "level": "info"
+    },
+    "similar": {
+      "label": "類似",
+      "level": "info"
+    },
+    "complement": {
+      "label": "補完",
+      "level": "suggest"
+    },
+    "synergy": {
+      "label": "相乗",
+      "level": "suggest"
+    },
+    "conflict": {
+      "label": "競合",
+      "level": "warn"
+    },
+    "exclusive": {
+      "label": "排他的",
+      "level": "strong"
+    },
+    "conditional": {
+      "label": "条件付き",
+      "level": "info"
+    }
   },
   "profiles": [
-    { "id": "pixai_sdxl", "label": "PIXAI SDXL系", "short": "SDXL", "family": "pixai", "statusKey": "pixai_sdxl" },
-    { "id": "pixai_tsubaki2", "label": "PIXAI Tsubaki.2", "short": "Tsubaki.2", "family": "pixai", "statusKey": "tsubaki2" },
-    { "id": "pixai_tsubaki3", "label": "PIXAI Tsubaki.3", "short": "Tsubaki.3", "family": "pixai", "statusKey": "tsubaki3" },
-    { "id": "nai_v4", "label": "NovelAI V4", "short": "NAI V4", "family": "nai", "statusKey": "nai" },
-    { "id": "nai_v45", "label": "NovelAI V4.5", "short": "NAI V4.5", "family": "nai", "statusKey": "nai" },
-    { "id": "nai_v5", "label": "NovelAI V5", "short": "NAI V5", "family": "nai", "statusKey": "nai" },
-    { "id": "nai_v3", "label": "NovelAI V3（実験的）", "short": "NAI V3", "family": "nai", "statusKey": "nai", "experimental": true }
+    {
+      "id": "pixai_sdxl",
+      "label": "PIXAI SDXL系",
+      "short": "SDXL",
+      "family": "pixai",
+      "statusKey": "pixai_sdxl"
+    },
+    {
+      "id": "pixai_tsubaki2",
+      "label": "PIXAI Tsubaki.2",
+      "short": "Tsubaki.2",
+      "family": "pixai",
+      "statusKey": "tsubaki2"
+    },
+    {
+      "id": "pixai_tsubaki3",
+      "label": "PIXAI Tsubaki.3",
+      "short": "Tsubaki.3",
+      "family": "pixai",
+      "statusKey": "tsubaki3"
+    },
+    {
+      "id": "nai_v4",
+      "label": "NovelAI V4",
+      "short": "NAI V4",
+      "family": "nai",
+      "statusKey": "nai"
+    },
+    {
+      "id": "nai_v45",
+      "label": "NovelAI V4.5",
+      "short": "NAI V4.5",
+      "family": "nai",
+      "statusKey": "nai"
+    },
+    {
+      "id": "nai_v5",
+      "label": "NovelAI V5",
+      "short": "NAI V5",
+      "family": "nai",
+      "statusKey": "nai"
+    },
+    {
+      "id": "nai_v3",
+      "label": "NovelAI V3（実験的）",
+      "short": "NAI V3",
+      "family": "nai",
+      "statusKey": "nai",
+      "experimental": true
+    }
   ],
   "tsubakiModifiers": {
     "note": "model_output_rules.json の binRanges のラベル語を接頭語として使う。PixAI公式の数値換算ではなく、アプリ側のUX案。",
@@ -77,5 +209,46 @@
     "pronounced": "pronounced {p}",
     "intense": "intense {p}"
   },
-  "pixaiBannedSubstrings": ["adult", "bust"]
+  "pixaiBannedSubstrings": [
+    "adult",
+    "bust"
+  ],
+  "basicViewExtraIds": {
+    "note": "既存329件のうち、v1.1で基本表示に加えるもの（MVP_Coreの値は変更しない）",
+    "ids": [
+      "REC-STY-036"
+    ]
+  },
+  "complexityLevels": [
+    {
+      "key": "low",
+      "label": "低",
+      "tag": "low complexity"
+    },
+    {
+      "key": "medium",
+      "label": "中",
+      "tag": "medium complexity"
+    },
+    {
+      "key": "high",
+      "label": "高",
+      "tag": "high complexity"
+    },
+    {
+      "key": "ultra",
+      "label": "最高",
+      "tag": "ultra complexity"
+    }
+  ],
+  "yearRange": {
+    "min": 1900,
+    "max": 2099,
+    "maxItems": 10
+  },
+  "supportLabels": {
+    "official": "公式に掲載",
+    "unsupported": "公式に別モデル専用と明記（出力しない）",
+    "unverified": "公式の記載なし・未検証"
+  }
 }

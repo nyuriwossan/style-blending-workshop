@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   DICTIONARY_TAGS,
+  ORIGINAL_RULES,
   PRESETS,
+  RAW_TAGS,
   RULES,
   buildIndex,
   normalizeForSearch,
@@ -27,6 +29,7 @@ import { CATEGORY_KEYS, PROFILE_IDS, type ProfileId, type Workspace } from '../s
 const index = buildIndex([]);
 const S = (profile: ProfileId, extra: Partial<typeof DEFAULT_SETTINGS> = {}) => ({ ...DEFAULT_SETTINGS, profile, ...extra });
 const idOf = (prompt: string) => DICTIONARY_TAGS.find((t) => t.prompt === prompt)!.id;
+const ORIGINAL = DICTIONARY_TAGS.filter((t) => t.id.startsWith('REC-'));
 
 function ws(...pairs: [string, number][]): Workspace {
   let w = emptyWorkspace();
@@ -37,17 +40,19 @@ function ws(...pairs: [string, number][]): Workspace {
 const out = (w: Workspace, profile: ProfileId, extra = {}) => renderPrompt(effectiveItems(w, index), S(profile, extra));
 
 describe('1. 辞書の読み込み', () => {
-  it('329件・9カテゴリ・ID一意', () => {
-    expect(DICTIONARY_TAGS).toHaveLength(329);
-    expect(new Set(DICTIONARY_TAGS.map((t) => t.id)).size).toBe(329);
-    const counts = Object.fromEntries(CATEGORY_KEYS.map((c) => [c, DICTIONARY_TAGS.filter((t) => t.category === c).length]));
+  it('元の329件・9カテゴリ・ID一意（v1.1で追加分があっても欠けない）', () => {
+    expect(RAW_TAGS).toHaveLength(329);
+    expect(ORIGINAL).toHaveLength(329);
+    expect(new Set(DICTIONARY_TAGS.map((t) => t.id)).size).toBe(DICTIONARY_TAGS.length);
+    const counts = Object.fromEntries(CATEGORY_KEYS.map((c) => [c, ORIGINAL.filter((t) => t.category === c).length]));
     expect(counts).toEqual({
       style_genre: 43, linework: 43, coloring_shading: 40, lighting: 44, shadow_contrast: 23,
       color_palette: 41, medium_texture: 43, optical_effects: 28, atmosphere_print: 24,
     });
   });
-  it('全IDが REC-* を維持', () => {
-    expect(DICTIONARY_TAGS.every((t) => /^REC-[A-Z]{3}-\d{3}$/.test(t.id))).toBe(true);
+  it('元の329件は REC-* を維持し、追加分は NAI-* で衝突しない', () => {
+    expect(RAW_TAGS.every((t) => /^REC-[A-Z]{3}-\d{3}$/.test(t.ID))).toBe(true);
+    expect(DICTIONARY_TAGS.filter((t) => !t.id.startsWith('REC-')).every((t) => /^NAI-[A-Z]{3}-\d{3}$/.test(t.id))).toBe(true);
   });
 });
 
@@ -154,9 +159,10 @@ describe('強度の境界', () => {
 });
 
 describe('7. 関係（競合警告）', () => {
-  it('データの型は4種のみ。同義・類似・補完は0件（推定しない）', () => {
-    expect(relationCounts()).toMatchObject({ exclusive: 7, conflict: 13, conditional: 14, synergy: 19, synonym: 0, similar: 0, complement: 0 });
-    expect(RULES).toHaveLength(53);
+  it('元データの関係は4種・53件のまま。v1.1は公式資料に根拠のある関係だけを追加', () => {
+    expect(relationCounts(ORIGINAL_RULES)).toMatchObject({ exclusive: 7, conflict: 13, conditional: 14, synergy: 19, synonym: 0, similar: 0, complement: 0 });
+    expect(ORIGINAL_RULES).toHaveLength(53);
+    expect(relationCounts(RULES)).toMatchObject({ exclusive: 7, conflict: 13, conditional: 14, synergy: 22, synonym: 5, similar: 1, complement: 0 });
   });
   it('排他的：no lineart × thick lineart は強い警告、選択は残る', () => {
     const w = ws(['no lineart', 1], ['thick lineart', 1]);

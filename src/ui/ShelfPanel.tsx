@@ -1,7 +1,7 @@
 // 保存棚：レシピ・グループ・自作タグ・バックアップ
 import { useRef, useState } from 'react';
 import { META, buildIndex, categoryMeta, profileMeta } from '../core/dictionary';
-import { addGroup, countActive, dedupeWithin, isActive, newId, referencedTagIds } from '../core/mix';
+import { addGroup, countActive, dedupeWithin, isActive, isMixEmpty, newId, referencedTagIds } from '../core/mix';
 import {
   exportBackup,
   exportGroup,
@@ -16,7 +16,7 @@ import { loadPrevious, stashPrevious } from '../storage/persist';
 import type { DialogApi } from './Dialog';
 import type { Store } from './store';
 
-const cloneGroups = (gs: MixGroup[]): MixGroup[] => gs.map((g) => ({ ...g, items: g.items.map((i) => ({ ...i })) }));
+const cloneGroups = (gs: MixGroup[]): MixGroup[] => gs.map((g) => ({ ...g, id: newId('grp'), items: g.items.map((i) => ({ ...i })) }));
 const fmtDate = (iso: string) => {
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? '' : `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -26,14 +26,17 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
   const { state } = store;
   const ws = state.workspace;
   const editing = ws.sourceRecipeId ? state.recipes.find((r) => r.id === ws.sourceRecipeId) : undefined;
-  const wsEmpty = countActive(ws) === 0 && ws.groups.every((g) => g.items.length === 0);
+  const wsEmpty = countActive(ws) === 0 && isMixEmpty(ws);
 
   // ── レシピ ──
   const saveNew = async () => {
     const name = await dialog.promptText('レシピとして保存', editing ? `${editing.name}（別版）` : '新しい画風レシピ', '保存');
     if (!name) return;
     const now = new Date().toISOString();
-    const r: Recipe = { id: newId('rcp'), name, note: '', createdAt: now, updatedAt: now, groups: cloneGroups(ws.groups), dedupeRule: ws.dedupeRule, profile: state.settings.profile };
+    const r: Recipe = {
+      id: newId('rcp'), name, note: '', createdAt: now, updatedAt: now, groups: cloneGroups(ws.groups), dedupeRule: ws.dedupeRule, profile: state.settings.profile,
+      years: ws.years.map((y) => ({ ...y })), complexity: ws.complexity,
+    };
     store.update((s) => ({ ...s, recipes: [r, ...s.recipes], workspace: { ...s.workspace, sourceRecipeId: r.id } }));
     store.toast(`「${name}」を保存しました`);
   };
@@ -43,14 +46,18 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
     const now = new Date().toISOString();
     store.update((s) => ({
       ...s,
-      recipes: s.recipes.map((r) => (r.id === editing.id ? { ...r, groups: cloneGroups(ws.groups), dedupeRule: ws.dedupeRule, profile: s.settings.profile, updatedAt: now } : r)),
+      recipes: s.recipes.map((r) =>
+        r.id === editing.id
+          ? { ...r, groups: cloneGroups(ws.groups), dedupeRule: ws.dedupeRule, profile: s.settings.profile, years: ws.years.map((y) => ({ ...y })), complexity: ws.complexity, updatedAt: now }
+          : r,
+      ),
     }));
     store.toast(`「${editing.name}」を上書き保存しました`);
   };
   const loadRecipe = async (r: Recipe) => {
     if (!wsEmpty && !(await dialog.confirm('レシピを読み込む', `今の調合を「${r.name}」に入れ替えます。直後なら「元に戻す」で戻せます。`, '読み込む'))) return;
     const groups = cloneGroups(r.groups.length ? r.groups : [{ id: newId('grp'), name: '調合グループ1', enabled: true, items: [] }]);
-    store.updateWorkspace(() => ({ groups, activeGroupId: groups[0].id, dedupeRule: r.dedupeRule, sourceRecipeId: r.id }));
+    store.updateWorkspace(() => ({ groups, activeGroupId: groups[0].id, dedupeRule: r.dedupeRule, sourceRecipeId: r.id, years: r.years.map((y) => ({ ...y })), complexity: r.complexity }));
     if (r.profile !== state.settings.profile) store.setSettings({ profile: r.profile });
     const idx = buildIndex(state.customTags);
     const unknown = new Set(r.groups.flatMap((g) => g.items.filter((i) => !idx.byId.has(i.tagId)).map((i) => i.tagId)));

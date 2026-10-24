@@ -10,6 +10,7 @@ export interface Toast {
   id: number;
   text: string;
   tone: 'ok' | 'warn';
+  action?: { label: string; onClick: () => void };
 }
 
 export function useAppStore() {
@@ -30,11 +31,12 @@ export function useAppStore() {
     void requestPersist();
   }, []);
 
-  const toast = useCallback((text: string, tone: Toast['tone'] = 'ok') => {
+  const dismissToast = useCallback((id: number) => setToasts((ts) => ts.filter((x) => x.id !== id)), []);
+  const toast = useCallback((text: string, tone: Toast['tone'] = 'ok', action?: Toast['action']) => {
     const id = Date.now() + Math.random();
-    setToasts((ts) => [...ts.slice(-1), { id, text, tone }]);
-    setTimeout(() => setToasts((ts) => ts.filter((x) => x.id !== id)), tone === 'warn' ? 5200 : 2600);
-  }, []);
+    setToasts((ts) => [...ts.slice(-1), { id, text, tone, action }]);
+    setTimeout(() => dismissToast(id), action ? 7000 : tone === 'warn' ? 5200 : 2600);
+  }, [dismissToast]);
 
   /** ワークスペースを変更（取り消し可能） */
   const updateWorkspace = useCallback((fn: (ws: Workspace) => Workspace) => {
@@ -59,7 +61,7 @@ export function useAppStore() {
 
   const index = useMemo(() => buildIndex(state.customTags), [state.customTags]);
 
-  return { state, index, update, updateWorkspace, undo, undoCount, setSettings, toasts, toast, bootWarnings, storageOk };
+  return { state, index, update, updateWorkspace, undo, undoCount, setSettings, toasts, toast, dismissToast, bootWarnings, storageOk };
 }
 
 export type Store = ReturnType<typeof useAppStore>;

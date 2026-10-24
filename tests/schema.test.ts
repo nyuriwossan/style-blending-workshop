@@ -24,7 +24,7 @@ function sampleState(): AppState {
   w = setItem(w, w.activeGroupId, 'USR-abc', { strength: 1.2 });
   const recipe: Recipe = {
     id: 'rcp-1', name: '繊細な茶色の線画', note: 'メモ', createdAt: '2026-10-24T00:00:00.000Z', updatedAt: '2026-10-24T00:00:00.000Z',
-    groups: w.groups, dedupeRule: 'max', profile: 'nai_v45',
+    groups: w.groups, dedupeRule: 'max', profile: 'nai_v45', years: [], complexity: null,
   };
   return {
     ...s,
@@ -42,8 +42,8 @@ describe('9. 保存・復元（状態の往復）', () => {
     expect(m.warnings).toEqual([]);
     expect(m.state).toEqual(s);
   });
-  it('schemaVersion を持つ', () => {
-    expect(JSON.parse(JSON.stringify(sampleState())).schemaVersion).toBe(1);
+  it('schemaVersion を持つ（v1.1 は 2）', () => {
+    expect(JSON.parse(JSON.stringify(sampleState())).schemaVersion).toBe(2);
   });
   it('新しい版のデータは読み込まず、その旨を返す（上書き防止）', () => {
     const m = migrateState({ ...sampleState(), schemaVersion: 99 });
@@ -120,6 +120,8 @@ describe('10. JSONエクスポート・インポート', () => {
     const r = importIntoState(initialState(), JSON.stringify(e), known);
     expect(r.state.recipes[0].profile).toBe('nai_v5');
     expect(r.state.recipes[0].groups[0].items).toEqual([{ tagId: 'REC-COL-012', strength: 1.2, on: true }]);
+    expect(r.state.recipes[0].years).toEqual([]);
+    expect(r.state.recipes[0].complexity).toBeNull();
   });
   it('完全復元', () => {
     const s = sampleState();

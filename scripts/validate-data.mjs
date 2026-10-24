@@ -7,18 +7,26 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 const load = (f) => JSON.parse(readFileSync(join(root, f), 'utf8'));
 const tagsFile = load('style_tags.json');
+const naiFile = load('style_tags_nai_official.json');
+const recon = load('nai_official_reconciliation.json');
+const naiRules = load('relation_rules_nai.json').rules;
 const presets = load('style_presets.json').presets;
-const rules = load('conflict_rules.json').rules;
+const originalRules = load('conflict_rules.json').rules;
+const rules = [...originalRules, ...naiRules];
 const meta = load('app_meta.json');
 const modelRules = load('model_output_rules.json');
 
 const errors = [];
 const warn = [];
-const tags = tagsFile.tags;
+const originalTags = tagsFile.tags;
+const tags = [...originalTags, ...naiFile.tags];
 const byId = new Map();
 const cats = new Set(meta.categories.map((c) => c.key));
-const ID_RE = /^REC-[A-Z]{3}-\d{3}$/;
+const ID_RE = /^(REC|NAI)-[A-Z]{3}-\d{3}$/;
 const FORBIDDEN = /[(){}[\]:\\<>\n\r\t]/;
+// NovelAI公式表記の例外：末尾の「 (medium)」、V5専用の「meta:」接頭辞だけを許す
+const OFFICIAL_PAREN = /^[a-z0-9 \-]+ \(medium\)$/;
+const OFFICIAL_META = /^meta:[a-z ]+$/;
 const REQUIRED = ['ID', 'Category', 'Subcategory', 'Name_JA', 'Name_EN', 'Prompt', 'Evidence_Level', 'MVP_Core', 'Validation_Status'];
 
 for (const t of tags) {
@@ -27,7 +35,15 @@ for (const t of tags) {
   if (byId.has(t.ID)) errors.push(`${t.ID}: ID重複`);
   byId.set(t.ID, t);
   if (!cats.has(t.Category)) errors.push(`${t.ID}: 未知のカテゴリ ${t.Category}`);
-  if (FORBIDDEN.test(t.Prompt)) errors.push(`${t.ID}: Prompt に構文記号を含む「${t.Prompt}」`);
+  const officialException = t.Official && t.Official.tag === t.Prompt && (OFFICIAL_PAREN.test(t.Prompt) || (OFFICIAL_META.test(t.Prompt) && t.V5_Only));
+  if (FORBIDDEN.test(t.Prompt) && !officialException) errors.push(`${t.ID}: Prompt に構文記号を含む「${t.Prompt}」`);
+  if (t.ID.startsWith('NAI-')) {
+    if (!t.Official?.url || !t.Official?.checkedAt) errors.push(`${t.ID}: 公式タグに出典URL・照合日がない`);
+    if (!t.Model_Support) errors.push(`${t.ID}: Model_Support がない`);
+    if (!/未実施/.test(t.Validation_Status)) errors.push(`${t.ID}: 画像検証の状態は「未実施」であること（公式掲載と検証は別）`);
+    if (t.V5_Only && ['nai_v4', 'nai_v45', 'nai_v3', 'pixai_sdxl'].some((p) => t.Model_Support[p] !== 'unsupported')) errors.push(`${t.ID}: V5専用なのに他モデルが非対応になっていない`);
+    if (!t.Description_JA || t.Description_JA.length < 30) errors.push(`${t.ID}: 個別の説明文が短すぎる`);
+  }
   if (/adult|bust/i.test(t.Prompt)) errors.push(`${t.ID}: Prompt に PIXAI 禁止語を含む`);
   if (!meta.evidenceLevels[t.Evidence_Level]) errors.push(`${t.ID}: 未知の Evidence_Level ${t.Evidence_Level}`);
   if (/検証済|確認済/.test(t.Validation_Status) && !/未/.test(t.Validation_Status))
@@ -64,16 +80,32 @@ for (const r of rules) {
   pairSeen.add(key);
 }
 
-const mvp = tags.filter((t) => t.MVP_Core).length;
-const exp = tagsFile.claimedHistoricalAggregates;
-if (exp) {
-  if (tags.length !== exp.tags) warn.push(`タグ件数 ${tags.length}（報告値 ${exp.tags}）`);
-  if (mvp !== exp.mvp) warn.push(`MVP件数 ${mvp}（報告値 ${exp.mvp}）`);
-  if (presets.length !== exp.presets) warn.push(`プリセット件数 ${presets.length}（報告値 ${exp.presets}）`);
-  if (rules.length !== exp.conflicts) warn.push(`ルール件数 ${rules.length}（報告値 ${exp.conflicts}）`);
+// 既存329件・プリセット・元ルールが欠けていないこと
+if (originalTags.length !== 329) errors.push(`元辞書の件数が ${originalTags.length}（329件であること）`);
+if (originalRules.length !== 53) errors.push(`元ルールの件数が ${originalRules.length}（53件であること）`);
+// 照合結果：追加・一致とされたIDが辞書に実在すること
+for (const e of recon.entries) {
+  if (e.status === 'exact' && (!byId.has(e.existingId) || byId.get(e.existingId).Prompt.toLowerCase() !== e.officialTag.toLowerCase())) errors.push(`照合：${e.officialTag} の一致先 ${e.existingId} が不正`);
+  if (e.status === 'added' && (!byId.has(e.newId) || byId.get(e.newId).Prompt !== e.officialTag)) errors.push(`照合：${e.officialTag} の追加先 ${e.newId} が不正`);
+  if (e.status === 'excluded' && !e.reason) errors.push(`照合：${e.officialTag} の除外理由がない`);
+}
+for (const t of naiFile.tags) if (!recon.entries.some((e) => e.newId === t.ID)) errors.push(`${t.ID}: 照合結果に記載がない`);
+const desc = new Map();
+for (const t of naiFile.tags) {
+  if (desc.has(t.Description_JA)) errors.push(`${t.ID}: 説明文が ${desc.get(t.Description_JA)} と同一（使い回し）`);
+  desc.set(t.Description_JA, t.ID);
 }
 
-console.log(`tags=${tags.length} mvp=${mvp} presets=${presets.length} rules=${rules.length}`);
+const mvp = originalTags.filter((t) => t.MVP_Core).length;
+const exp = tagsFile.claimedHistoricalAggregates;
+if (exp) {
+  if (originalTags.length !== exp.tags) warn.push(`タグ件数 ${originalTags.length}（報告値 ${exp.tags}）`);
+  if (mvp !== exp.mvp) warn.push(`MVP件数 ${mvp}（報告値 ${exp.mvp}）`);
+  if (presets.length !== exp.presets) warn.push(`プリセット件数 ${presets.length}（報告値 ${exp.presets}）`);
+  if (originalRules.length !== exp.conflicts) warn.push(`ルール件数 ${originalRules.length}（報告値 ${exp.conflicts}）`);
+}
+
+console.log(`tags=${tags.length} (original ${originalTags.length} + NAI official ${naiFile.tags.length}) mvp=${mvp} presets=${presets.length} rules=${rules.length} recon=${recon.entries.length}`);
 for (const w of warn) console.warn('WARN', w);
 if (errors.length) {
   for (const e of errors) console.error('ERROR', e);

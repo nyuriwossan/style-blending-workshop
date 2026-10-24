@@ -37,7 +37,10 @@ export default function App() {
 
   const effective = useMemo(() => effectiveItems(state.workspace, index, state.settings.order), [state.workspace, index, state.settings.order]);
   const relations = useMemo(() => evaluateRelations(new Set(effective.filter((e) => e.tag).map((e) => e.tagId))), [effective]);
-  const result = useMemo(() => renderPrompt(effective, state.settings), [effective, state.settings]);
+  const result = useMemo(
+    () => renderPrompt(effective, state.settings, { years: state.workspace.years, complexity: state.workspace.complexity }),
+    [effective, state.settings, state.workspace.years, state.workspace.complexity],
+  );
   const unknownIds = useMemo(() => unknownTagIds(state.workspace, index), [state.workspace, index]);
   const activeCount = countActive(state.workspace);
   const copy = useCopy(store);
@@ -49,7 +52,7 @@ export default function App() {
   // 広い画面では出力を右側に常設するので、出力タブは調合へ
   const shownTab = wide && tab === 'output' ? 'mix' : tab;
 
-  const output = <OutputPanel store={store} dialog={dialog} result={result} activeCount={activeCount} />;
+  const output = <OutputPanel store={store} dialog={dialog} result={result} />;
 
   return (
     <div className={`app ${wide ? 'is-wide' : ''}`}>
@@ -77,7 +80,7 @@ export default function App() {
 
       <div className="layout">
         <main className="main">
-          {shownTab === 'mix' && <MixPanel store={store} dialog={dialog} effective={effective} relations={relations} unknownIds={unknownIds} />}
+          {shownTab === 'mix' && <MixPanel store={store} dialog={dialog} effective={effective} relations={relations} unknownIds={unknownIds} result={result} />}
           {shownTab === 'presets' && <PresetsPanel store={store} dialog={dialog} onApplied={() => go('mix')} />}
           {shownTab === 'shelf' && <ShelfPanel store={store} dialog={dialog} onLoaded={() => go('mix')} />}
           {shownTab === 'output' && output}
@@ -105,7 +108,20 @@ export default function App() {
 
       <div className="toasts" aria-live="polite">
         {store.toasts.map((t) => (
-          <div key={t.id} className={`toast toast-${t.tone}`}>{t.text}</div>
+          <div key={t.id} className={`toast toast-${t.tone}`}>
+            <span>{t.text}</span>
+            {t.action && (
+              <button
+                className="toast-action"
+                onClick={() => {
+                  t.action!.onClick();
+                  store.dismissToast(t.id);
+                }}
+              >
+                {t.action.label}
+              </button>
+            )}
+          </div>
         ))}
       </div>
       {dialog.element}

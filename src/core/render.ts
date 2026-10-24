@@ -3,8 +3,8 @@
 // 根拠：data/model_output_rules.json と NovelAI公式「Strengthening & Weakening」
 // 強度の見た目上の等価性はモデル間で保証しない。
 // ───────────────────────────────────────────────
-import { CATEGORY_KEYS, type CategoryKey, type ProfileId, type Settings } from './types';
-import { META, MODEL_RULES, profileMeta } from './dictionary';
+import { CATEGORY_KEYS, type CategoryKey, type Complexity, type ProfileId, type Settings, type YearItem } from './types';
+import { META, MODEL_RULES, isSupported, profileMeta } from './dictionary';
 import type { EffectiveItem } from './mix';
 
 export const SDXL_MAX = Number((MODEL_RULES.profiles.pixai_sdxl as { defaultMax?: number }).defaultMax ?? 1.5);
@@ -43,6 +43,11 @@ export function naiV3Layers(w: number): number {
   return Math.round(Math.abs(Math.log(w) / Math.log(NAI_V3_FACTOR)));
 }
 
+/** SD系の重み構文で ( ) が強調として解釈されないよう、タグ内の括弧をエスケープする（例：watercolor \\(medium\\)） */
+export function escapeParens(p: string): string {
+  return p.replace(/([()])/g, '\\$1');
+}
+
 export interface RenderOptions {
   sdxlClamp: boolean;
   tsubakiNumeric: boolean;
@@ -79,12 +84,14 @@ export function renderTag(prompt: string, w: number, profile: ProfileId, opt: Re
         notes.push(`${fmt(w)} は上限 ${fmt(SDXL_MAX)} に丸めました`);
         v = SDXL_MAX;
       }
-      return { text: isStandard(v) ? p : `(${p}:${fmt(v)})`, notes };
+      const e = escapeParens(p);
+      return { text: isStandard(v) ? e : `(${e}:${fmt(v)})`, notes };
     }
     case 'pixai_tsubaki2':
     case 'pixai_tsubaki3': {
       if (opt.tsubakiNumeric) {
-        return { text: isStandard(w) ? p : `(${p}:${fmt(w)})`, notes };
+        const e = escapeParens(p);
+        return { text: isStandard(w) ? e : `(${e}:${fmt(w)})`, notes };
       }
       const bin = tsubakiBin(w, profile);
       return { text: META.tsubakiModifiers[bin].replace('{p}', p), notes };
@@ -110,16 +117,36 @@ export interface RenderResult {
   style: string;
   /** 人物プロンプトと結合したもの（未入力ならstyleと同じ） */
   full: string;
-  byCategory: { category: CategoryKey | 'unknown'; text: string; count: number }[];
+  byCategory: { category: CategoryKey | 'special'; text: string; count: number }[];
   tags: RenderedTag[];
   warnings: string[];
+  /** 現在の出力先では出力しなかった項目（設定は保持） */
+  unsupported: { tagIds: string[]; years: number; complexity: boolean };
+}
+
+export interface RenderExtras {
+  years?: YearItem[];
+  complexity?: Complexity | null;
+}
+
+export function complexityTag(c: Complexity): string {
+  return `${c} complexity`;
+}
+export function yearTag(y: number): string {
+  return `year ${y}`;
 }
 
 export const JOINER = ', ';
 
 /** 実効リスト全体を変換する */
-export function renderPrompt(items: EffectiveItem[], settings: Pick<Settings, 'profile' | 'sdxlClamp' | 'tsubakiNumeric' | 'personPrompt' | 'personPosition'>): RenderResult {
+export function renderPrompt(
+  items: EffectiveItem[],
+  settings: Pick<Settings, 'profile' | 'sdxlClamp' | 'tsubakiNumeric' | 'personPrompt' | 'personPosition'> & { pixaiYears?: boolean },
+  extras: RenderExtras = {},
+): RenderResult {
   const profile = settings.profile;
+  const unsupported: RenderResult['unsupported'] = { tagIds: [], years: 0, complexity: false };
+  let parenNoted = false;
   const opt: RenderOptions = { sdxlClamp: settings.sdxlClamp, tsubakiNumeric: settings.tsubakiNumeric };
   const warnings: string[] = [];
   const tags: RenderedTag[] = [];
@@ -132,6 +159,15 @@ export function renderPrompt(items: EffectiveItem[], settings: Pick<Settings, 'p
       unknown++;
       tags.push({ tagId: it.tagId, text: '', excluded: true, notes: ['辞書にないタグIDのため出力しません'] });
       continue;
+    }
+    if (!isSupported(it.tag, profile)) {
+      unsupported.tagIds.push(it.tagId);
+      tags.push({ tagId: it.tagId, text: '', excluded: true, notes: ['この出力先には非対応（公式にV5専用と記載）。設定は保持'] });
+      continue;
+    }
+    if (isPixai(profile) && !parenNoted && /[()]/.test(it.tag.prompt)) {
+      parenNoted = true;
+      warnings.push('（medium）など括弧を含むNovelAI表記のタグがあります。PIXAIでの解釈は未確認です' + (profile === 'pixai_sdxl' || settings.tsubakiNumeric ? '（重み構文と衝突しないよう括弧を \\( \\) にしています）' : ''));
     }
     if (isPixai(profile)) {
       const hit = containsBanned(it.tag.prompt);
@@ -149,13 +185,45 @@ export function renderPrompt(items: EffectiveItem[], settings: Pick<Settings, 'p
     perCat.set(it.tag.category, arr);
   }
   if (unknown) warnings.push(`辞書にないタグが ${unknown} 件あり、出力から外しています（データは保持）`);
+  if (unsupported.tagIds.length)
+    warnings.push(`V5専用のタグ ${unsupported.tagIds.length} 件は、この出力先では出力していません（選択は保持。V5に戻すと出力されます）`);
 
-  const style = tags.filter((t) => !t.excluded).map((t) => t.text).join(JOINER);
-  const byCategory = CATEGORY_KEYS.filter((c) => perCat.has(c)).map((c) => ({
+  // ── 年タグ・複雑度（スタイル部分の末尾） ──
+  const special: string[] = [];
+  const years = (extras.years ?? []).filter((y) => y.on && y.strength > 0);
+  if (years.length) {
+    if (isPixai(profile) && !settings.pixaiYears) {
+      unsupported.years = years.length;
+      warnings.push(`年タグ ${years.length} 件は PIXAI 向けには出力していません（NovelAI公式のタグ。「出力の設定」で実験的に出力できます）`);
+    } else {
+      if (isPixai(profile)) warnings.push('【実験的】年タグを PIXAI 向けに出力しています。NovelAIと同じ効果になるかは未確認です');
+      for (const y of years) {
+        if (isTsubaki(profile) && !settings.tsubakiNumeric) {
+          special.push(yearTag(y.year));
+          if (!isStandard(y.strength)) warnings.push(`${yearTag(y.year)}：Tsubaki の自然言語方式では年タグの強度を表現しないため、強度なしで出力しています`);
+        } else {
+          const r = renderTag(yearTag(y.year), y.strength, profile, { sdxlClamp: settings.sdxlClamp, tsubakiNumeric: settings.tsubakiNumeric });
+          special.push(r.text);
+          for (const n of r.notes) warnings.push(`${yearTag(y.year)}：${n}`);
+        }
+      }
+    }
+  }
+  if (extras.complexity) {
+    if (profile === 'nai_v5') special.push(complexityTag(extras.complexity));
+    else {
+      unsupported.complexity = true;
+      warnings.push(`複雑度（${complexityTag(extras.complexity)}）は NovelAI V5 専用のため出力していません（設定は保持）`);
+    }
+  }
+
+  const style = [...tags.filter((t) => !t.excluded).map((t) => t.text), ...special].join(JOINER);
+  const byCategory: RenderResult['byCategory'] = CATEGORY_KEYS.filter((c) => perCat.has(c)).map((c) => ({
     category: c,
     text: perCat.get(c)!.join(JOINER),
     count: perCat.get(c)!.length,
   }));
+  if (special.length) byCategory.push({ category: 'special', text: special.join(JOINER), count: special.length });
 
   const person = settings.personPrompt.trim().replace(/[,\s]+$/, '').replace(/^[,\s]+/, '');
   if (person && isPixai(profile)) {
@@ -168,7 +236,7 @@ export function renderPrompt(items: EffectiveItem[], settings: Pick<Settings, 'p
     if (!style) full = person;
     else full = settings.personPosition === 'before' ? `${person}${JOINER}${style}` : `${style}${JOINER}${person}`;
   }
-  return { style, full, byCategory, tags, warnings };
+  return { style, full, byCategory, tags, warnings, unsupported };
 }
 
 /** 出力形式の説明（UI表示用） */

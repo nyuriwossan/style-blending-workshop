@@ -51,7 +51,7 @@ export function PresetsPanel({ store, dialog, onApplied }: { store: Store; dialo
       }
     }
     if (mode === 'replace' && hasMix) {
-      const ok = await dialog.confirm('今の調合を置き換えます', '現在のグループとタグはすべてこのプリセットに入れ替わります。直後なら「元に戻す」で戻せます。', '置き換える');
+      const ok = await dialog.confirm('今の調合を置き換えます', '現在のグループとタグはすべてこのプリセットに入れ替わります（年タグ・複雑度はそのまま残ります）。直後なら「元に戻す」で戻せます。', '置き換える');
       if (!ok) return;
     }
     store.updateWorkspace((w) => applyPreset(w, p, mode, policy));

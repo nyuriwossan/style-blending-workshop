@@ -1,6 +1,7 @@
 // プロンプト出力：モデル切替・プレビュー・コピー・カテゴリ別コピー・リセット
 import { META, categoryMeta, profileMeta } from '../core/dictionary';
-import { DEDUPE_RULE_LABEL, emptyWorkspace } from '../core/mix';
+import { DEDUPE_RULE_LABEL, isMixEmpty } from '../core/mix';
+import { useResetMix } from './reset';
 import { isPixai, isTsubaki, syntaxDescription, type RenderResult } from '../core/render';
 import type { DedupeRule, ProfileId } from '../core/types';
 import { copyText } from '../storage/files';
@@ -40,9 +41,10 @@ export function useCopy(store: Store) {
   };
 }
 
-export function OutputPanel({ store, dialog, result, activeCount }: { store: Store; dialog: DialogApi; result: RenderResult; activeCount: number }) {
+export function OutputPanel({ store, dialog, result }: { store: Store; dialog: DialogApi; result: RenderResult }) {
   const { settings, workspace } = store.state;
   const copy = useCopy(store);
+  const reset = useResetMix(store, dialog);
   const pm = profileMeta(settings.profile);
   const hasPerson = settings.personPrompt.trim().length > 0;
 
@@ -83,14 +85,15 @@ export function OutputPanel({ store, dialog, result, activeCount }: { store: Sto
           <h3>カテゴリ別</h3>
           <ul>
             {result.byCategory.map((c) => {
-              const m = c.category === 'unknown' ? null : categoryMeta(c.category);
+              const m = c.category === 'special' ? null : categoryMeta(c.category);
+              const label = m?.label ?? '年代・複雑度';
               return (
-                <li key={c.category} style={{ ['--cat' as string]: m?.color ?? '#999' }}>
+                <li key={c.category} style={{ ['--cat' as string]: m?.color ?? 'var(--ink-2)' }}>
                   <div className="by-cat-head">
                     <span className="cat-swatch" aria-hidden />
-                    <b>{m?.label}</b>
+                    <b>{label}</b>
                     <span className="muted small">{c.count}</span>
-                    <button className="btn btn-small" onClick={() => copy(c.text, m?.label ?? 'カテゴリ')}>コピー</button>
+                    <button className="btn btn-small" onClick={() => copy(c.text, label)}>コピー</button>
                   </div>
                   <code>{c.text}</code>
                 </li>
@@ -153,6 +156,12 @@ export function OutputPanel({ store, dialog, result, activeCount }: { store: Sto
             実験：数値ウェイトで出力する（公式の構文仕様・効き方は未確認）
           </label>
         )}
+        {isPixai(settings.profile) && (
+          <label className="check">
+            <input type="checkbox" checked={settings.pixaiYears} onChange={(e) => store.setSettings({ pixaiYears: e.target.checked })} />
+            実験：年タグ（year 2024 など）もPIXAI向けに出力する（NovelAI公式のタグで、PIXAIでの効果は未確認）
+          </label>
+        )}
         {isPixai(settings.profile) && <p className="small muted">PIXAI向けでは「adult」「bust」を含む表現を出力しません。ネガティブプロンプトは作りません。</p>}
       </details>
 
@@ -161,16 +170,7 @@ export function OutputPanel({ store, dialog, result, activeCount }: { store: Sto
       </p>
 
       <div className="row-actions danger-zone">
-        <button
-          className="btn btn-danger-ghost"
-          disabled={activeCount === 0 && workspace.groups.every((g) => g.items.length === 0)}
-          onClick={async () => {
-            if (await dialog.confirm('調合をリセット', 'すべてのグループとタグを外して空にします。直後なら「元に戻す」で戻せます。保存済みのレシピは消えません。', 'リセット', true)) {
-              store.updateWorkspace(() => emptyWorkspace());
-              store.toast('調合を空にしました');
-            }
-          }}
-        >
+        <button className="btn btn-danger-ghost" disabled={isMixEmpty(workspace)} onClick={() => void reset()}>
           調合をリセット
         </button>
       </div>

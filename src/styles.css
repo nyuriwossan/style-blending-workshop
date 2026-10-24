@@ -213,7 +213,7 @@ select.text-input { appearance: none; -webkit-appearance: none; padding-right: 2
 .tag-kept, .tag-others { margin: 0 0 4px 30px; }
 .tag-detail { margin: 4px 4px 10px 30px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 13px; }
 .tag-detail p { margin: 0 0 8px; }
-.tag-detail dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 4px 10px; margin: 0; }
+.tag-detail dl { display: grid; grid-template-columns: 5.5em 1fr; gap: 4px 10px; margin: 0; }
 .tag-detail dt { color: var(--muted); }
 .tag-detail dd { margin: 0; overflow-wrap: anywhere; }
 .mono-id { font-family: var(--mono); font-size: 12px; }
@@ -338,3 +338,50 @@ select.text-input { appearance: none; -webkit-appearance: none; padding-right: 2
 .is-wide .toasts { bottom: 24px; }
 .toast { padding: 10px 14px; border-radius: var(--radius-m); background: var(--ink); color: var(--paper); font-size: 13.5px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); }
 .toast-warn { background: var(--ochre); color: #fff; }
+
+/* ── v1.1：調合画面の上部（要約とリセット） ── */
+.mix-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 8px; }
+.mix-summary { margin: 0; font-size: 14px; min-width: 0; }
+.mix-summary b { font-size: 20px; font-variant-numeric: tabular-nums; margin-right: 2px; font-family: var(--mincho); }
+.btn-reset { flex-shrink: 0; min-height: 36px; color: var(--ink-2); background: transparent; border-color: var(--line); }
+.btn-reset span { font-size: 15px; line-height: 1; }
+
+/* ── v1.1：年代・複雑度 ── */
+.nai-special { margin: 0 0 14px; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--surface); }
+.nai-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; width: 100%; border: 0; background: none; padding: 10px 12px; text-align: left; }
+.nai-title { font-family: var(--mincho); font-weight: 600; font-size: 16px; letter-spacing: 0.03em; }
+.nai-summary { flex-basis: 100%; color: var(--accent); }
+.nai-body { padding: 0 12px 10px; }
+.nai-block { padding: 10px 0; border-top: 1px solid var(--line); }
+.nai-block p { margin: 6px 0 0; }
+.nai-block code { font-family: var(--mono); font-size: 12.5px; }
+.nai-label { margin: 0 0 6px !important; font-weight: 600; font-size: 14px; }
+.seg-wrap { display: flex; flex-wrap: wrap; }
+.seg-wrap button { flex: 1 1 auto; }
+.year-form { display: flex; gap: 6px; }
+.year-form .text-input { width: 7em; flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+.year-list { list-style: none; margin: 8px 0 0; padding: 0; --cat: var(--ink-2); }
+.year-list li { padding: 2px 0 2px 10px; border-left: 3px solid transparent; }
+.year-list li + li { border-top: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
+.year-on { border-left-color: var(--ink-2) !important; }
+.year-on .tag-check { border-color: var(--ink-2); background: var(--ink-2); }
+.year-on .tag-check::after { content: ''; position: absolute; left: 6px; top: 2.5px; width: 5px; height: 10px; border: solid var(--paper); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.year-row { display: flex; align-items: center; gap: 6px; }
+.year-row .tag-en { font-family: var(--mono); font-size: 14px; color: var(--ink); }
+
+/* ── v1.1：公式掲載・モデル対応 ── */
+.badge-official { background: var(--accent-soft); color: var(--accent); }
+.badge-v5 { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
+.picker-filters { display: flex; gap: 6px; margin-top: 8px; }
+.chip-filter { min-height: 34px; font-size: 13px; }
+.support-list { list-style: none; margin: 0; padding: 0; font-size: 12.5px; }
+.support-list li.is-current { font-weight: 600; }
+.sup-official { color: var(--accent); }
+.sup-unsupported { color: var(--shu); }
+.sup-unverified { color: var(--muted); }
+.tag-detail code { font-family: var(--mono); font-size: 12px; }
+
+/* ── v1.1：通知から取り消し ── */
+.toast { display: flex; align-items: center; gap: 10px; }
+.toast > span { flex: 1; }
+.toast-action { pointer-events: auto; flex-shrink: 0; border: 1px solid color-mix(in srgb, var(--paper) 50%, transparent); background: transparent; color: inherit; border-radius: var(--radius-s); padding: 6px 10px; font-size: 13px; font-weight: 600; min-height: 34px; }

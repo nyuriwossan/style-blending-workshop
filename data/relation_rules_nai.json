@@ -1,0 +1,159 @@
+{
+ "schemaVersion": 1,
+ "origin": "nai_official_2026-10-24",
+ "rules": [
+  {
+   "id": "NAI-CR-001",
+   "type": "synonym",
+   "tagIds": [
+    "NAI-STY-001",
+    "NAI-STY-002"
+   ],
+   "tagPrompts": [
+    "3d",
+    "blender (medium)"
+   ],
+   "reason_JA": "公式資料が 3d の代替として blender (medium) を併記している。",
+   "recommended_ui_action": "show_synonym_note",
+   "evidence": "official_alternative",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-002",
+   "type": "synonym",
+   "tagIds": [
+    "NAI-STY-004",
+    "NAI-STY-005"
+   ],
+   "tagPrompts": [
+    "abstract",
+    "surreal"
+   ],
+   "reason_JA": "公式資料が abstract の代替として surreal を併記している。",
+   "recommended_ui_action": "show_synonym_note",
+   "evidence": "official_alternative",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-003",
+   "type": "synonym",
+   "tagIds": [
+    "NAI-STY-006",
+    "REC-STY-005"
+   ],
+   "tagPrompts": [
+    "realistic",
+    "photorealistic"
+   ],
+   "reason_JA": "公式資料が realistic の代替として photorealistic を併記している。",
+   "recommended_ui_action": "show_synonym_note",
+   "evidence": "official_alternative",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-004",
+   "type": "synonym",
+   "tagIds": [
+    "NAI-ATM-001",
+    "NAI-ATM-002"
+   ],
+   "tagPrompts": [
+    "emphasis lines",
+    "speed lines"
+   ],
+   "reason_JA": "公式資料が emphasis lines の代替として speed lines を併記している。",
+   "recommended_ui_action": "show_synonym_note",
+   "evidence": "official_alternative",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-005",
+   "type": "synonym",
+   "tagIds": [
+    "NAI-ATM-001",
+    "NAI-ATM-003"
+   ],
+   "tagPrompts": [
+    "emphasis lines",
+    "motion lines"
+   ],
+   "reason_JA": "公式資料が emphasis lines の代替として motion lines を併記している。",
+   "recommended_ui_action": "show_synonym_note",
+   "evidence": "official_alternative",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-006",
+   "type": "similar",
+   "tagIds": [
+    "NAI-PAL-005",
+    "REC-PAL-001"
+   ],
+   "tagPrompts": [
+    "muted color",
+    "muted colors"
+   ],
+   "reason_JA": "単数形・複数形の表記揺れ（公式表記は muted color）。効き方が同じかは未検証のため両方残す。",
+   "recommended_ui_action": "show_variant_note",
+   "evidence": "spelling_variant",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-007",
+   "type": "synergy",
+   "tagIds": [
+    "REC-STY-014",
+    "NAI-ATM-004"
+   ],
+   "tagPrompts": [
+    "pixel art",
+    "dithering"
+   ],
+   "reason_JA": "公式資料が pixel art と dithering の組み合わせを勧めている。",
+   "recommended_ui_action": "suggest_optional_pair",
+   "evidence": "official_tip",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-008",
+   "type": "synergy",
+   "tagIds": [
+    "NAI-LIN-005",
+    "NAI-STY-011"
+   ],
+   "tagPrompts": [
+    "color trace",
+    "production art"
+   ],
+   "reason_JA": "公式資料が color trace と production art の組み合わせを勧めている。",
+   "recommended_ui_action": "suggest_optional_pair",
+   "evidence": "official_tip",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  },
+  {
+   "id": "NAI-CR-009",
+   "type": "synergy",
+   "tagIds": [
+    "NAI-LIN-005",
+    "NAI-TEX-021"
+   ],
+   "tagPrompts": [
+    "color trace",
+    "animation paper"
+   ],
+   "reason_JA": "公式資料が color trace と animation paper の組み合わせを勧めている。",
+   "recommended_ui_action": "suggest_optional_pair",
+   "evidence": "official_tip",
+   "source_url": "https://docs.novelai.net/en/image/tutorial-artstyles/",
+   "origin": "nai_official_2026-10-24"
+  }
+ ]
+}

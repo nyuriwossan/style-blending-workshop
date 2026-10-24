@@ -1,14 +1,19 @@
 // 画面A｜調合：調合皿・グループ・関係警告・タグ選択
 import { memo, useEffect, useMemo, useState } from 'react';
 import {
+  BASIC_COUNT,
   META,
+  RECON,
   SLIDER,
   categoryMeta,
   evidenceLabel,
+  isSupported,
   profileMeta,
   searchTags,
   subcategoryLabel,
 } from '../core/dictionary';
+import { complexityTag, yearTag, type RenderResult } from '../core/render';
+import { useResetMix } from './reset';
 import {
   DEDUPE_RULE_LABEL,
   activeGroup,
@@ -24,10 +29,17 @@ import {
   shiftGroup,
   toggleItem,
   newId,
+  addYear,
+  removeYear,
+  setYear,
+  setComplexity,
+  validateYear,
+  isMixEmpty,
+  countActive,
   type EffectiveItem,
 } from '../core/mix';
 import { rulesForTag, type RelationHit } from '../core/relations';
-import { CATEGORY_KEYS, type CategoryKey, type MixItem, type ProfileId, type Tag } from '../core/types';
+import { CATEGORY_KEYS, PROFILE_IDS, type CategoryKey, type MixItem, type ProfileId, type Tag } from '../core/types';
 import type { DialogApi } from './Dialog';
 import type { Store } from './store';
 
@@ -39,6 +51,136 @@ export interface MixProps {
   effective: EffectiveItem[];
   relations: RelationHit[];
   unknownIds: string[];
+  result: RenderResult;
+}
+
+// ── 調合画面の上部：状態の要約とリセット ──
+function MixHeader({ store, dialog }: { store: Store; dialog: DialogApi }) {
+  const ws = store.state.workspace;
+  const reset = useResetMix(store, dialog);
+  const tags = countActive(ws); // タブ・下部バーと同じ数え方
+  const extras = [ws.complexity ? `複雑度 ${META.complexityLevels.find((c) => c.key === ws.complexity)?.label}` : '', ws.years.length ? `年 ${ws.years.length}` : '']
+    .filter(Boolean)
+    .join('・');
+  return (
+    <div className="mix-head">
+      <p className="mix-summary">
+        <b>{tags}</b>タグ
+        <span className="muted">／{ws.groups.length}グループ{extras && `／${extras}`}</span>
+      </p>
+      <button className="btn btn-small btn-reset" onClick={() => void reset()} disabled={isMixEmpty(ws)} aria-label="調合をリセット（確認あり）">
+        <span aria-hidden>↺</span> 調合をリセット
+      </button>
+    </div>
+  );
+}
+
+// ── NovelAI の年タグ・複雑度 ──
+function NaiSpecial({ store }: { store: Store }) {
+  const ws = store.state.workspace;
+  const profile = store.state.settings.profile;
+  const isV5 = profile === 'nai_v5';
+  const pixai = profileMeta(profile).family === 'pixai';
+  const [open, setOpen] = useState(ws.complexity !== null || ws.years.length > 0);
+  const [input, setInput] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const summary = [
+    ws.complexity ? `複雑度：${META.complexityLevels.find((c) => c.key === ws.complexity)?.label}` : '',
+    ws.years.length ? ws.years.map((y) => `${y.year}${y.on ? '' : '（OFF）'}`).join('・') : '',
+  ]
+    .filter(Boolean)
+    .join('　');
+  const submit = () => {
+    const e = validateYear(input, ws.years);
+    if (e) return setErr(e);
+    store.updateWorkspace((w) => addYear(w, Number(input.normalize('NFKC').trim())));
+    setInput('');
+    setErr(null);
+  };
+  return (
+    <section className="nai-special">
+      <button className="nai-head" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <span className="nai-title">年代・複雑度</span>
+        <span className="small muted">NovelAI公式の特別なタグ</span>
+        {summary && <span className="nai-summary small">{summary}</span>}
+      </button>
+      {open && (
+        <div className="nai-body">
+          <div className="nai-block">
+            <p className="nai-label">
+              複雑度 <span className="badge badge-v5">V5専用</span>
+            </p>
+            <div className="seg seg-wrap" role="radiogroup" aria-label="複雑度">
+              <button role="radio" aria-checked={ws.complexity === null} onClick={() => store.updateWorkspace((w) => setComplexity(w, null))}>
+                指定なし
+              </button>
+              {META.complexityLevels.map((c) => (
+                <button key={c.key} role="radio" aria-checked={ws.complexity === c.key} onClick={() => store.updateWorkspace((w) => setComplexity(w, c.key))}>
+                  {c.label}
+                </button>
+              ))}
+            </div>
+            <p className="small muted">
+              {ws.complexity ? <>出力：<code>{complexityTag(ws.complexity)}</code>（強度は付けません）。</> : '選んだときだけ出力します。'}
+              画面の描き込み量の目安で、高いほど良い画像になるわけではありません。公式は普段は「高」、様式化した絵では「最高」や「低」も試して調整するよう案内しています。
+            </p>
+            {ws.complexity && !isV5 && <p className="note-warn small">現在の出力先（{profileMeta(profile).short}）では出力しません。設定は保持しているので、V5に切り替えると出力されます。</p>}
+          </div>
+
+          <div className="nai-block">
+            <p className="nai-label">年タグ（year XXXX）</p>
+            <form
+              className="year-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                submit();
+              }}
+            >
+              <input
+                className="text-input"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={4}
+                placeholder="2024"
+                value={input}
+                aria-label="追加する西暦"
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  setErr(null);
+                }}
+              />
+              <button className="btn" type="submit">
+                年を追加
+              </button>
+            </form>
+            {err && <p className="note-warn small" role="alert">{err}</p>}
+            {ws.years.length > 0 && (
+              <ul className="year-list">
+                {ws.years.map((y) => (
+                  <li key={y.year} className={y.on ? 'year-on' : ''}>
+                    <div className="year-row">
+                      <button className="tag-toggle" aria-pressed={y.on} onClick={() => store.updateWorkspace((w) => setYear(w, y.year, { on: !y.on }))}>
+                        <span className="tag-check" aria-hidden />
+                        <span className="tag-en" lang="en">{yearTag(y.year)}</span>
+                      </button>
+                      <button className="btn btn-small btn-danger-ghost" onClick={() => store.updateWorkspace((w) => removeYear(w, y.year))} aria-label={`${y.year}年を削除`}>
+                        削除
+                      </button>
+                    </div>
+                    {y.on && <StrengthControl value={y.strength} label={`${y.year}年`} onChange={(v) => store.updateWorkspace((w) => setYear(w, y.year, { strength: v }))} />}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p className="small muted">{RECON.year.officialNoteJA} 初期状態では何も出力しません。</p>
+            {pixai && ws.years.length > 0 && !store.state.settings.pixaiYears && (
+              <p className="note-warn small">PIXAI向けには出力していません（効果未確認）。「出力 → 出力の設定」で実験的に出力できます。</p>
+            )}
+          </div>
+        </div>
+      )}
+    </section>
+  );
 }
 
 // ── 強度スライダー（± ボタン付き。iPhoneで細かく合わせやすいように） ──
@@ -203,8 +345,9 @@ function GroupBar({ store, dialog }: { store: Store; dialog: DialogApi }) {
 }
 
 // ── 関係・重複・不明タグの通知 ──
-function Notices({ store, effective, relations, unknownIds }: Omit<MixProps, 'dialog'>) {
-  const seriousCount = relations.filter((r) => r.bothActive && (r.level === 'strong' || r.level === 'warn')).length + unknownIds.length;
+function Notices({ store, effective, relations, unknownIds, result }: Omit<MixProps, 'dialog'>) {
+  const seriousCount =
+    relations.filter((r) => r.bothActive && (r.level === 'strong' || r.level === 'warn')).length + unknownIds.length + result.unsupported.tagIds.length + (result.unsupported.complexity ? 1 : 0);
   const [open, setOpen] = useState(seriousCount > 0);
   const [lastSerious, setLastSerious] = useState(seriousCount);
   if (seriousCount !== lastSerious) {
@@ -225,7 +368,9 @@ function Notices({ store, effective, relations, unknownIds }: Omit<MixProps, 'di
   const serious = relations.filter((r) => r.bothActive && (r.level === 'strong' || r.level === 'warn'));
   const infos = relations.filter((r) => r.bothActive && (r.level === 'info' || r.level === 'suggest'));
   const suggestions = relations.filter((r) => !r.bothActive).slice(0, 6);
-  const total = serious.length + infos.length + suggestions.length + dups.length + unknownIds.length;
+  const uns = result.unsupported;
+  const unsCount = uns.tagIds.length + (uns.complexity ? 1 : 0);
+  const total = serious.length + infos.length + suggestions.length + dups.length + unknownIds.length + unsCount;
   if (!total) return null;
 
   return (
@@ -237,11 +382,22 @@ function Notices({ store, effective, relations, unknownIds }: Omit<MixProps, 'di
           {suggestions.length > 0 && <b className="pill pill-suggest">相性候補 {suggestions.length}</b>}
           {dups.length > 0 && <b className="pill">重複 {dups.length}</b>}
           {unknownIds.length > 0 && <b className="pill pill-warn">不明 {unknownIds.length}</b>}
+          {unsCount > 0 && <b className="pill pill-warn">非対応 {unsCount}</b>}
         </span>
         <span className="muted small">{open ? '閉じる' : '開く'}</span>
       </button>
       {open && (
         <ul className="notice-list">
+          {unsCount > 0 && (
+            <li className="notice notice-warn">
+              <p>
+                <b>この出力先では出力しない項目</b>：{[...uns.tagIds.map(name), uns.complexity ? '複雑度' : ''].filter(Boolean).join('、')}
+              </p>
+              <p className="small">
+                公式にNovelAI V5専用と記載されている項目です。現在の出力先（{profileMeta(store.state.settings.profile).short}）では出力しませんが、選択は保持しています。V5に切り替えると元どおり出力されます。
+              </p>
+            </li>
+          )}
           {serious.map((h) => (
             <li key={h.rule.id} className={`notice notice-${h.level}`}>
               <p>
@@ -340,6 +496,8 @@ const TagRow = memo(function TagRow({ tag, item, others, hits, profile, expanded
             <span className="tag-ja">
               {tag.nameJa}
               {tag.origin === 'user' && <span className="badge badge-user">自作</span>}
+              {tag.official && <span className="badge badge-official">NAI公式</span>}
+              {tag.v5Only && <span className="badge badge-v5">V5専用</span>}
               {worst && <span className={`badge badge-${worst.level}`}>{worst.label}</span>}
             </span>
             <span className="tag-en" lang="en">{tag.prompt}</span>
@@ -351,6 +509,9 @@ const TagRow = memo(function TagRow({ tag, item, others, hits, profile, expanded
       </div>
       {on && <StrengthControl value={item!.strength} label={tag.nameJa} onChange={(v) => onStrength(tag.id, v)} />}
       {!on && item && item.strength > 0 && <p className="small muted tag-kept">OFF（値 {item.strength.toFixed(1)} を保持中）</p>}
+      {on && !isSupported(tag, profile) && (
+        <p className="small note-warn tag-kept">現在の出力先（{pm.short}）では出力しません。選択は保持しています。</p>
+      )}
       {others.length > 0 && (
         <p className="small muted tag-others">
           他のグループにも：{others.map((o) => `${o.groupName} ${o.on ? o.strength.toFixed(1) : 'OFF'}${o.enabled ? '' : '（無効）'}`).join('、')}
@@ -373,8 +534,40 @@ const TagRow = memo(function TagRow({ tag, item, others, hits, profile, expanded
                 </>
               )}
             </dd>
+            {tag.official && (
+              <>
+                <dt>公式掲載</dt>
+                <dd>
+                  NovelAI公式「{tag.official.section}」に <code>{tag.official.tag}</code> として掲載（{tag.official.checkedAt} 照合）。{' '}
+                  <a href={tag.official.url} target="_blank" rel="noopener noreferrer">公式ページ</a>
+                  {tag.official.officialSummaryJA && <span className="muted"> 公式の説明：{tag.official.officialSummaryJA}</span>}
+                </dd>
+              </>
+            )}
+            <dt>モデル対応</dt>
+            <dd>
+              <ul className="support-list">
+                {PROFILE_IDS.map((p) => (
+                  <li key={p} className={p === profile ? 'is-current' : ''}>
+                    {profileMeta(p).short}：<span className={`sup sup-${tag.support[p]}`}>{META.supportLabels[tag.support[p]]}</span>
+                  </li>
+                ))}
+              </ul>
+            </dd>
             <dt>{pm.short}での状況</dt>
             <dd>{tag.modelStatus[pm.statusKey]}</dd>
+            {tag.aliases.length > 0 && (
+              <>
+                <dt>別名・検索語</dt>
+                <dd>{tag.aliases.join('、')}</dd>
+              </>
+            )}
+            {tag.similarExisting.length > 0 && (
+              <>
+                <dt>似た既存タグ</dt>
+                <dd>{tag.similarExisting.map(nameOf).join('、')}（統合せず別のタグとして残しています）</dd>
+              </>
+            )}
             <dt>画像での検証</dt>
             <dd>未実施（{tag.validationStatus}）</dd>
             <dt>顔への影響</dt>
@@ -444,10 +637,13 @@ function TagPicker({ store, relations, jumpTo }: { store: Store; relations: Rela
 
   const searching = query.trim().length > 0;
   const visible = useMemo(() => {
-    if (searching) return searchTags(index.all, query); // 検索は常に全件が対象
-    if (settings.view === 'detail') return index.all;
-    return index.all.filter((t) => t.mvpCore || t.origin === 'user' || occ.has(t.id));
-  }, [searching, query, index.all, settings.view, occ]);
+    let list: Tag[];
+    if (searching) list = searchTags(index.all, query); // 検索は常に全件が対象
+    else if (settings.view === 'detail') list = index.all;
+    else list = index.all.filter((t) => t.basic || occ.has(t.id));
+    return settings.officialOnly ? list.filter((t) => t.official) : list;
+  }, [searching, query, index.all, settings.view, settings.officialOnly, occ]);
+  const officialTotal = useMemo(() => index.all.filter((t) => t.official).length, [index.all]);
 
   useEffect(() => {
     if (!jumpTo) return;
@@ -483,19 +679,25 @@ function TagPicker({ store, relations, jumpTo }: { store: Store; relations: Rela
         />
         <div className="seg" role="radiogroup" aria-label="表示件数">
           <button role="radio" aria-checked={settings.view === 'basic'} onClick={() => store.setSettings({ view: 'basic' })}>
-            基本 72
+            基本 {BASIC_COUNT}
           </button>
           <button role="radio" aria-checked={settings.view === 'detail'} onClick={() => store.setSettings({ view: 'detail' })}>
             詳細 {index.all.length}
           </button>
         </div>
       </div>
+      <div className="picker-filters">
+        <button className={`chip chip-filter ${settings.officialOnly ? 'chip-on' : ''}`} aria-pressed={settings.officialOnly} onClick={() => store.setSettings({ officialOnly: !settings.officialOnly })}>
+          NAI公式掲載のみ <span className="chip-n">{officialTotal}</span>
+        </button>
+      </div>
       <p className="small muted picker-note">
         {searching
           ? `全${index.all.length}件から ${visible.length} 件。`
           : settings.view === 'basic'
-            ? '基本表示：初期おすすめ72件と、選択中・自作のタグを表示しています。'
+            ? `基本表示：おすすめ${BASIC_COUNT}件と、選択中・自作のタグを表示しています。`
             : '詳細表示：全タグを小分類ごとに表示しています。'}
+        {settings.officialOnly && 'NovelAI公式資料に同じ文字列で載っているタグだけを表示中。'}
         「{act.name}」に追加されます。
       </p>
       {CATEGORY_KEYS.map((k) => {
@@ -556,7 +758,8 @@ function TagPicker({ store, relations, jumpTo }: { store: Store; relations: Rela
           </div>
         );
       })}
-      {visible.length === 0 && <p className="empty">見つかりませんでした。別の言い方（英語・ひらがな）でも探せます。ないタグは「保存棚 → 自作タグ」で追加できます。</p>}
+      {visible.length === 0 && settings.officialOnly && <p className="empty">公式掲載タグの中には見つかりませんでした。「NAI公式掲載のみ」を外すと全体から探せます。</p>}
+      {visible.length === 0 && !settings.officialOnly && <p className="empty">見つかりませんでした。別の言い方（英語・ひらがな）でも探せます。ないタグは「保存棚 → 自作タグ」で追加できます。</p>}
     </section>
   );
 }
@@ -565,9 +768,11 @@ export function MixPanel(props: MixProps) {
   const [jump, setJump] = useState<{ id: string; n: number } | null>(null);
   return (
     <div className="mix">
+      <MixHeader store={props.store} dialog={props.dialog} />
       <MixTray effective={props.effective} onJump={(t) => setJump({ id: t.id, n: Date.now() })} />
       <GroupBar store={props.store} dialog={props.dialog} />
-      <Notices store={props.store} effective={props.effective} relations={props.relations} unknownIds={props.unknownIds} />
+      <Notices store={props.store} effective={props.effective} relations={props.relations} unknownIds={props.unknownIds} result={props.result} />
+      <NaiSpecial store={props.store} />
       <TagPicker store={props.store} relations={props.relations} jumpTo={jump} />
     </div>
   );

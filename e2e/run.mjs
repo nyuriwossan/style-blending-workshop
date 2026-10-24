@@ -93,14 +93,14 @@ await test('12. GitHub Pages のサブパスで読み込める（404なし・JS�
   assert(errors.length === 0, errors.join('\n'));
 });
 
-await test('1/2. 基本表示は72件、詳細表示は329件', async () => {
+await test('1/2. 基本表示は86件（元のおすすめ72＋v1.1追加14）、詳細表示は398件', async () => {
   // すべて開いて数える
   for (const c of ['基本画風', '描線・線画', '塗り・彩色', '光・ライティング', '陰影・コントラスト', '色彩・パレット', '画材・質感', '光学効果', '大気感・印刷表現']) await openCat(c);
   const basic = await page.locator('li.tag').count();
-  assert(basic === 72, `基本 ${basic}`);
+  assert(basic === 86, `基本 ${basic}`);
   await page.getByRole('radio', { name: /詳細/ }).click();
   const detail = await page.locator('li.tag').count();
-  assert(detail === 329, `詳細 ${detail}`);
+  assert(detail === 398, `詳細 ${detail}`);
   await page.getByRole('radio', { name: /基本/ }).click();
 });
 
@@ -259,7 +259,7 @@ await test('10. JSONエクスポート → 別端末相当（新しい環境）�
   const file = join(out, 'backup.json');
   await dl.saveAs(file);
   const json = JSON.parse(await readFile(file, 'utf8'));
-  assert(json.app === 'style-blending-workshop' && json.schemaVersion === 1 && json.kind === 'backup', 'ヘッダ不正');
+  assert(json.app === 'style-blending-workshop' && json.schemaVersion === 2 && json.kind === 'backup', 'ヘッダ不正');
   assert(json.recipes.some((r) => r.name === 'E2Eレシピ'), 'レシピがない');
 
   const ctx2 = await browser.newContext({ ...devices['iPhone 13'] });
@@ -328,9 +328,168 @@ await test('元に戻す（undo）で調合が戻る', async () => {
   await tab('出力');
   await page.getByRole('button', { name: '調合をリセット' }).click();
   await page.locator('.dlg').getByRole('button', { name: 'リセット' }).click();
-  await page.getByRole('button', { name: '元に戻す' }).click();
+  await page.locator('.topbar').getByRole('button', { name: '元に戻す' }).click();
   const after = await preview();
   assert(before === after, 'undo失敗');
+});
+
+// ───────── v1.1 ─────────
+const lsGet = () => page.evaluate(() => localStorage.getItem('sbw.state.v1'));
+const shelfCounts = async () => {
+  await tab('保存棚');
+  const recipes = await page.locator('.shelf-sec').nth(0).locator('.shelf-list > li').count();
+  const groups = await page.locator('.shelf-sec').nth(1).locator('.shelf-list > li').count();
+  const custom = await page.locator('.shelf-sec').nth(2).locator('.shelf-list > li').count();
+  await tab('調合');
+  return { recipes, groups, custom };
+};
+
+await test('13/18. 調合画面の上部にリセットボタンがあり、iPhone幅でスクロールせずに見える', async () => {
+  await tab('調合');
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const btn = page.locator('.mix-head').getByRole('button', { name: /調合をリセット/ });
+  assert(await btn.isVisible(), '見えない');
+  const box = await btn.boundingBox();
+  const vp = page.viewportSize();
+  assert(box && box.y >= 0 && box.y + box.height <= vp.height * 0.45, `位置 ${JSON.stringify(box)}`);
+  assert(box.height >= 34, 'タップ領域が小さい');
+  await page.screenshot({ path: join(out, 'v11-mix-top.png') });
+});
+
+await test('14. キャンセルでは何も変わらない', async () => {
+  const before = await preview();
+  const ls = await lsGet();
+  await page.locator('.mix-head').getByRole('button', { name: /調合をリセット/ }).click();
+  const dlg = page.locator('.dlg');
+  assert((await dlg.locator('h2').innerText()) === '現在の調合を空にしますか？', '文言');
+  assert(/保存済みのレシピと自作タグは削除されません/.test(await dlg.innerText()), '補足文');
+  await dlg.getByRole('button', { name: 'キャンセル' }).click();
+  await page.waitForTimeout(400);
+  assert((await preview()) === before, '出力が変わった');
+  assert((await lsGet()) === ls, '保存データが変わった');
+});
+
+await test('15/16/17. リセットは調合だけを空にし、レシピ・グループ棚・自作タグ・出力先は残る。通知から元に戻せる', async () => {
+  await setProfile('nai_v45');
+  const before = await preview();
+  const counts = await shelfCounts();
+  await page.locator('.mix-head').getByRole('button', { name: /調合をリセット/ }).click();
+  await page.locator('.dlg').getByRole('button', { name: 'リセットする' }).click();
+  const toast = page.locator('.toast', { hasText: '調合を空にしました。元に戻すことができます。' }).last();
+  await toast.waitFor();
+  assert((await page.locator('.mix-summary b').innerText()) === '0', 'タグが残っている');
+  assert((await page.locator('.topbar select').inputValue()) === 'nai_v45', '出力先が変わった');
+  const after = await shelfCounts();
+  assert(JSON.stringify(after) === JSON.stringify(counts), `保存棚が変わった ${JSON.stringify(counts)} → ${JSON.stringify(after)}`);
+  await toast.getByRole('button', { name: '元に戻す' }).click();
+  assert((await preview()) === before, '通知の元に戻すで復元されない');
+});
+
+await test('7/9/11. V5で複雑度と年タグ。V5以外では非対応の項目を出さず保持し、V5に戻すと復元。再読み込み後も残る', async () => {
+  await setProfile('nai_v5');
+  await tab('調合');
+  const head = page.locator('.nai-head');
+  if ((await head.getAttribute('aria-expanded')) !== 'true') await head.click();
+  await page.getByRole('radiogroup', { name: '複雑度' }).getByRole('radio', { name: '高', exact: true }).click();
+  await page.getByLabel('追加する西暦').fill('2024');
+  await page.getByRole('button', { name: '年を追加' }).click();
+  await page.getByLabel('追加する西暦').fill('2025');
+  await page.getByRole('button', { name: '年を追加' }).click();
+  for (const y of ['2024', '2025']) await page.locator('.year-list li', { hasText: `year ${y}` }).locator('input[type=range]').fill('1.5');
+  await page.getByLabel('追加する西暦').fill('99');
+  await page.getByRole('button', { name: '年を追加' }).click();
+  assert(await page.locator('.nai-special [role=alert]').isVisible(), '入力検査なし');
+  // V5専用タグも1つ
+  await page.locator('input.search').fill('depthness');
+  await tagToggle('陰影の奥行き').locator('.tag-toggle').click();
+  await page.locator('input.search').fill('');
+  let p = await preview();
+  assert(p.includes('depthness') && p.endsWith('1.5::year 2024 ::, 1.5::year 2025 ::, high complexity'), 'V5: ' + p);
+  assert((p.match(/complexity/g) || []).length === 1, '複雑度が複数');
+  // 中に変更 → 1つだけ
+  await page.getByRole('radiogroup', { name: '複雑度' }).getByRole('radio', { name: '中', exact: true }).click();
+  p = await preview();
+  assert(p.endsWith('medium complexity') && !p.includes('high complexity'), '変更: ' + p);
+  await setProfile('nai_v45');
+  p = await preview();
+  assert(!p.includes('complexity') && !p.includes('depthness'), 'V4.5に出た: ' + p);
+  assert(p.includes('1.5::year 2024 ::'), '年タグはV4.5でも出る: ' + p);
+  assert(await page.locator('.pill', { hasText: '非対応' }).isVisible(), '非対応の表示がない');
+  await setProfile('pixai_sdxl');
+  p = await preview();
+  assert(!/complexity|depthness|year/.test(p), 'PIXAIに出た: ' + p);
+  await page.waitForTimeout(500);
+  await page.reload();
+  await setProfile('nai_v5');
+  p = await preview();
+  assert(p.includes('depthness') && p.includes('1.5::year 2025 ::') && p.endsWith('medium complexity'), '復元されない: ' + p);
+  // 解除
+  await tab('調合');
+  const h2 = page.locator('.nai-head');
+  if ((await h2.getAttribute('aria-expanded')) !== 'true') await h2.click();
+  await page.getByRole('radiogroup', { name: '複雑度' }).getByRole('radio', { name: '指定なし', exact: true }).click();
+  p = await preview();
+  assert(!p.includes('complexity'), '解除できない: ' + p);
+});
+
+await test('19. 出力画面のリセットも同じ処理（年タグ・複雑度も空、元に戻せる）', async () => {
+  const before = await preview();
+  await tab('出力');
+  await page.locator('.output').getByRole('button', { name: '調合をリセット' }).click();
+  assert((await page.locator('.dlg h2').innerText()) === '現在の調合を空にしますか？', '文言が違う');
+  await page.locator('.dlg').getByRole('button', { name: 'リセットする' }).click();
+  assert((await page.locator('pre.preview').innerText()).includes('タグを選ぶと'), '空にならない');
+  await page.locator('.toast').last().getByRole('button', { name: '元に戻す' }).click();
+  assert((await preview()) === before, '元に戻らない');
+});
+
+await test('NAI公式掲載のみの絞り込み・公式バッジ・別名検索', async () => {
+  await tab('調合');
+  await page.getByRole('radio', { name: /詳細/ }).click();
+  await page.getByRole('button', { name: /NAI公式掲載のみ/ }).click();
+  for (const c of ['基本画風', '描線・線画', '塗り・彩色', '光・ライティング', '陰影・コントラスト', '色彩・パレット', '画材・質感', '光学効果', '大気感・印刷表現']) await openCat(c);
+  const n = await page.locator('li.tag').count();
+  assert(n === 95, `公式 ${n}`);
+  const badges = await page.locator('li.tag .badge-official').count();
+  assert(badges === 95, `バッジ ${badges}`);
+  await page.getByRole('button', { name: /NAI公式掲載のみ/ }).click();
+  await page.getByRole('radio', { name: /基本/ }).click();
+  await page.locator('input.search').fill('blender');
+  assert((await page.locator('li.tag').count()) === 2, '別名検索');
+  await page.locator('input.search').fill('');
+  // ligne claire は基本表示に入っている
+  await openCat('基本画風');
+  assert(await tagToggle('リーニュ・クレール').isVisible(), 'ligne claire が基本表示にない');
+  // 公式掲載と画像検証が分けて表示される
+  await tagToggle('リーニュ・クレール').locator('.tag-info').click();
+  const d = await tagToggle('リーニュ・クレール').locator('.tag-detail').innerText();
+  assert(/公式掲載/.test(d) && /照合/.test(d) && /画像での検証\s*未実施/.test(d), d);
+  await tagToggle('リーニュ・クレール').locator('.tag-info').click();
+});
+
+await test('20. v1.0 の保存データ（端末内）をそのまま開ける・同じ出力になる', async () => {
+  const fx = (f) => readFile(join(here, '..', 'tests', 'fixtures', f), 'utf8');
+  const ls = await fx('v1.0-localstorage.json');
+  const exp = JSON.parse(await fx('v1.0-expected.json'));
+  const c = await browser.newContext({ ...devices['iPhone 13'] });
+  const p = await c.newPage();
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(String(e)));
+  await p.goto(ORIGIN + BASE);
+  await p.evaluate((s) => localStorage.setItem('sbw.state.v1', s), JSON.stringify(JSON.parse(ls)));
+  await p.reload();
+  await p.getByRole('navigation', { name: '画面' }).getByRole('button', { name: /^出力/ }).click();
+  const got = (await p.locator('pre.preview').innerText()).trim();
+  assert(got === exp.prompt, `v1.0と出力が違う\n${got}\n${exp.prompt}`);
+  await p.getByRole('navigation', { name: '画面' }).getByRole('button', { name: /^保存棚/ }).click();
+  assert(await p.locator('.shelf-list li', { hasText: 'v1.0のレシピ' }).isVisible(), 'レシピがない');
+  assert(await p.locator('.shelf-list li', { hasText: 'v1.0の線画グループ' }).isVisible(), 'グループがない');
+  assert((await p.locator('.shelf-sec').nth(2).locator('.shelf-list > li').count()) === 2, '自作タグが減った');
+  await p.waitForTimeout(400);
+  const saved = JSON.parse(await p.evaluate(() => localStorage.getItem('sbw.state.v1')));
+  assert(saved.schemaVersion === 2 && saved.customTags.length === 2, '移行後の保存が不正');
+  assert(errs.length === 0, errs.join('\n'));
+  await c.close();
 });
 
 await test('Tsubaki/PIXAI出力に adult・bust・負のプロンプトが出ない', async () => {

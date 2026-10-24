@@ -10,7 +10,10 @@ import {
   SCHEMA_VERSION,
   type AppState,
   type CategoryKey,
+  COMPLEXITY_LEVELS,
+  type Complexity,
   type CustomTag,
+  type YearItem,
   type DedupeRule,
   type MixGroup,
   type MixItem,
@@ -36,6 +39,8 @@ export const DEFAULT_SETTINGS: Settings = {
   tsubakiNumeric: false,
   personPrompt: '',
   personPosition: 'before',
+  officialOnly: false,
+  pixaiYears: false,
 };
 
 export function initialState(): AppState {
@@ -110,6 +115,37 @@ export function parseGroups(x: unknown, where: string, iss: Issues): MixGroup[] 
     .filter((g): g is MixGroup => !!g);
 }
 
+const isComplexity = (x: unknown): x is Complexity => typeof x === 'string' && (COMPLEXITY_LEVELS as readonly string[]).includes(x);
+
+/** v1.1：年タグ。v1.0 のデータには無いので空配列になる */
+export function parseYears(x: unknown, where: string, iss: Issues): YearItem[] {
+  if (x === undefined || x === null) return [];
+  if (!Array.isArray(x)) {
+    iss.warnings.push(`${where}：年タグの形式が不正なため空として読み込みました`);
+    return [];
+  }
+  const out: YearItem[] = [];
+  for (const raw of x.slice(0, 20)) {
+    const y = isObj(raw) ? Number(raw.year) : NaN;
+    if (!Number.isInteger(y) || y < 1900 || y > 2099) {
+      iss.warnings.push(`${where}：読み取れない年タグを1件スキップしました`);
+      continue;
+    }
+    if (out.some((o) => o.year === y)) continue;
+    const s = Number((raw as Record<string, unknown>).strength);
+    out.push({ year: y, strength: normalizeStrength(Number.isFinite(s) ? s : 1), on: (raw as Record<string, unknown>).on !== false });
+  }
+  return out;
+}
+export function parseComplexity(x: unknown, where: string, iss: Issues): Complexity | null {
+  if (x === undefined || x === null || x === '') return null;
+  if (isComplexity(x)) return x;
+  iss.warnings.push(`${where}：複雑度「${String(x).slice(0, 20)}」を読み取れないため「指定なし」にしました`);
+  return null;
+}
+
+const RECIPE_KEYS = new Set(['id', 'name', 'note', 'createdAt', 'updatedAt', 'groups', 'items', 'dedupeRule', 'profile', 'modelProfile', 'years', 'complexity', 'extra']);
+
 export function parseRecipe(x: unknown, iss: Issues): Recipe | null {
   if (!isObj(x)) return null;
   const name = cleanText(x.name, MAX_NAME, '無名のレシピ') || '無名のレシピ';
@@ -127,7 +163,20 @@ export function parseRecipe(x: unknown, iss: Issues): Recipe | null {
     groups,
     dedupeRule: isDedupe(x.dedupeRule) ? x.dedupeRule : 'first',
     profile: isProfile(x.profile) ? x.profile : isProfile(x.modelProfile) ? x.modelProfile : DEFAULT_SETTINGS.profile,
+    years: parseYears(x.years, `レシピ「${name}」`, iss),
+    complexity: parseComplexity(x.complexity, `レシピ「${name}」`, iss),
+    ...extraOf(x),
   };
+}
+
+/** 知らない項目は捨てずに extra へ退避（書き出し時もそのまま残る） */
+function extraOf(x: Record<string, unknown>): { extra?: Record<string, unknown> } {
+  const prev = isObj(x.extra) ? x.extra : {};
+  const unknown = Object.fromEntries(Object.entries(x).filter(([k]) => !RECIPE_KEYS.has(k)));
+  const merged = { ...prev, ...unknown };
+  if (Object.keys(merged).length === 0) return {};
+  const json = JSON.stringify(merged);
+  return json.length <= 20000 ? { extra: merged } : {};
 }
 
 export function parseSavedGroup(x: unknown, iss: Issues): SavedGroup | null {
@@ -147,20 +196,32 @@ export function parseSavedGroup(x: unknown, iss: Issues): SavedGroup | null {
 export const CUSTOM_PROMPT_FORBIDDEN = /[(){}[\]:\\<>\n\r\t]/;
 const DICT_PROMPTS = new Set(DICTIONARY_TAGS.map((t) => t.prompt.toLowerCase()));
 
-export function validateCustomPrompt(prompt: string): string | null {
+/** 構文上の検査のみ（保存済みデータの読み込みに使う。辞書との重複では捨てない） */
+export function validateCustomPromptSyntax(prompt: string): string | null {
   const p = prompt.trim();
   if (!p) return 'タグ文字列を入力してください';
   if (p.length > 100) return '100文字以内にしてください';
   if (CUSTOM_PROMPT_FORBIDDEN.test(p)) return '( ) { } [ ] : \\ < > と改行は、強調構文と衝突するため使えません';
   if (/^[,\s]|[,\s]$/.test(p)) return '先頭・末尾にカンマや空白は置けません';
-  if (DICT_PROMPTS.has(p.toLowerCase())) return '同じ文字列が辞書にあります。辞書のタグを使ってください';
   return null;
+}
+
+/** 新しく自作タグを作るときの検査（辞書と同じ文字列は作らせない） */
+export function validateCustomPrompt(prompt: string): string | null {
+  const e = validateCustomPromptSyntax(prompt);
+  if (e) return e;
+  if (DICT_PROMPTS.has(prompt.trim().toLowerCase())) return '同じ文字列が辞書にあります。辞書のタグを使ってください';
+  return null;
+}
+
+export function dictionaryHasPrompt(prompt: string): boolean {
+  return DICT_PROMPTS.has(prompt.trim().toLowerCase());
 }
 
 export function parseCustomTag(x: unknown, iss: Issues): CustomTag | null {
   if (!isObj(x)) return null;
   const prompt = cleanText(x.prompt, 100);
-  const err = validateCustomPrompt(prompt);
+  const err = validateCustomPromptSyntax(prompt);
   if (err) {
     iss.warnings.push(`ユーザー定義タグ「${prompt || '(空)'}」を読み込めませんでした：${err}`);
     return null;
@@ -187,19 +248,25 @@ export function parseSettings(x: unknown): Settings {
     tsubakiNumeric: s.tsubakiNumeric === true,
     personPrompt: cleanText(s.personPrompt, 4000),
     personPosition: s.personPosition === 'after' ? 'after' : 'before',
+    officialOnly: s.officialOnly === true,
+    pixaiYears: s.pixaiYears === true,
   };
 }
 
 export function parseWorkspace(x: unknown, iss: Issues): Workspace {
   if (!isObj(x)) return emptyWorkspace();
   const groups = parseGroups(x.groups, '調合中', iss);
-  if (groups.length === 0) return emptyWorkspace();
+  const years = parseYears(x.years, '調合中', iss);
+  const complexity = parseComplexity(x.complexity, '調合中', iss);
+  if (groups.length === 0) return { ...emptyWorkspace(), years, complexity };
   const active = typeof x.activeGroupId === 'string' && groups.some((g) => g.id === x.activeGroupId) ? x.activeGroupId : groups[0].id;
   return {
     groups,
     activeGroupId: active,
     dedupeRule: isDedupe(x.dedupeRule) ? x.dedupeRule : 'first',
     sourceRecipeId: typeof x.sourceRecipeId === 'string' ? x.sourceRecipeId : null,
+    years,
+    complexity,
   };
 }
 
@@ -211,7 +278,8 @@ export function migrateState(raw: unknown): { state: AppState; warnings: string[
   if (v > SCHEMA_VERSION) {
     return { state: initialState(), warnings: [`新しい版のアプリで保存されたデータです（schemaVersion ${v}）`], futureVersion: true };
   }
-  // v0（schemaVersion なし）→ v1：同じ構造として読む
+  // v0（schemaVersion なし）・v1（v1.0）→ v2：
+  // 構造は同じで、v2 で years・complexity・officialOnly・pixaiYears が増えただけ。無ければ初期値で補う
   const state: AppState = {
     schemaVersion: SCHEMA_VERSION,
     workspace: parseWorkspace(raw.workspace, iss),

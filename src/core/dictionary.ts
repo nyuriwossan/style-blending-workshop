@@ -3,22 +3,32 @@
 // 辞書レコードの内容は書き換えない（読み取り専用）
 // ───────────────────────────────────────────────
 import tagsJson from '../../data/style_tags.json';
+import naiTagsJson from '../../data/style_tags_nai_official.json';
+import reconJson from '../../data/nai_official_reconciliation.json';
+import naiRulesJson from '../../data/relation_rules_nai.json';
 import presetsJson from '../../data/style_presets.json';
 import rulesJson from '../../data/conflict_rules.json';
 import modelRulesJson from '../../data/model_output_rules.json';
 import metaJson from '../../data/app_meta.json';
 import {
   CATEGORY_KEYS,
+  PROFILE_IDS,
   type CategoryKey,
+  type Complexity,
   type CustomTag,
+  type OfficialInfo,
   type ProfileId,
+  type SupportStatus,
   type RawPreset,
   type RawRule,
   type RawStyleTag,
   type Tag,
 } from './types';
 
+/** 再構築版の元辞書（329件・未改変） */
 export const RAW_TAGS = (tagsJson as { tags: RawStyleTag[] }).tags;
+/** v1.1：NovelAI公式掲載タグの追加分 */
+export const RAW_NAI_TAGS = (naiTagsJson as unknown as { tags: RawStyleTag[] }).tags;
 export const DICTIONARY_INFO = {
   schemaVersion: (tagsJson as { schemaVersion: number }).schemaVersion,
   reconstruction: (tagsJson as { reconstruction: string }).reconstruction,
@@ -26,7 +36,33 @@ export const DICTIONARY_INFO = {
   note: (tagsJson as { note: string }).note,
 };
 export const PRESETS = (presetsJson as { presets: RawPreset[] }).presets;
-export const RULES = (rulesJson as { rules: RawRule[] }).rules;
+/** 再構築版の関係ルール（53件・未改変） */
+export const ORIGINAL_RULES = (rulesJson as { rules: RawRule[] }).rules;
+/** v1.1：公式資料に根拠のある関係（代替表現・表記揺れ・公式の組み合わせ提案） */
+export const NAI_RULES = (naiRulesJson as { rules: RawRule[] }).rules;
+export const RULES: RawRule[] = [...ORIGINAL_RULES, ...NAI_RULES];
+
+export interface ReconEntry {
+  officialTag: string;
+  page: string;
+  section: string;
+  status: 'exact' | 'added' | 'special_ui' | 'excluded' | 'duplicate_listing';
+  existingId?: string;
+  newId?: string;
+  similarExisting?: string[];
+  reason?: string;
+  note?: string;
+  ui?: string;
+}
+export const RECON = reconJson as {
+  checkedAt: string;
+  sources: { title: string; url: string }[];
+  note: string;
+  officialExactExistingIds: string[];
+  complexity: { tags: string[]; url: string; checkedAt: string; supportedProfiles: ProfileId[]; officialNoteJA: string };
+  year: { format: string; url: string; urlArt: string; checkedAt: string; officialNoteJA: string };
+  entries: ReconEntry[];
+};
 export const MODEL_RULES = modelRulesJson as {
   slider: { min: number; max: number; default: number; semantic: string };
   profiles: Record<string, Record<string, unknown>>;
@@ -47,6 +83,10 @@ export const META = metaJson as {
   }[];
   tsubakiModifiers: Record<'subtle' | 'gentle' | 'plain' | 'pronounced' | 'intense', string>;
   pixaiBannedSubstrings: string[];
+  basicViewExtraIds: { ids: string[] };
+  complexityLevels: { key: Complexity; label: string; tag: string }[];
+  yearRange: { min: number; max: number; maxItems: number };
+  supportLabels: Record<SupportStatus, string>;
 };
 
 export const SLIDER = {
@@ -83,8 +123,26 @@ function isCategoryKey(x: string): x is CategoryKey {
   return (CATEGORY_KEYS as readonly string[]).includes(x);
 }
 
+const allSupport = (st: SupportStatus) => Object.fromEntries(PROFILE_IDS.map((p) => [p, st])) as Record<ProfileId, SupportStatus>;
+const NAI_PROFILES: ProfileId[] = ['nai_v3', 'nai_v4', 'nai_v45', 'nai_v5'];
+const EXACT_EXISTING = new Set(RECON.officialExactExistingIds);
+const BASIC_EXTRA = new Set(META.basicViewExtraIds.ids);
+
+/** 既存タグのうち、公式ページで同一文字列が確認できたものの掲載情報（元レコードは変えない） */
+function overlayOfficial(r: RawStyleTag): OfficialInfo | null {
+  if (r.Official) return r.Official;
+  if (!EXACT_EXISTING.has(r.ID)) return null;
+  const e = RECON.entries.find((x) => x.status === 'exact' && x.existingId === r.ID);
+  return { source: 'NovelAI', tag: e?.officialTag ?? r.Prompt, url: e?.page ?? '', section: e?.section ?? '', checkedAt: RECON.checkedAt };
+}
+
 export function normalizeRawTag(r: RawStyleTag): Tag {
   if (!isCategoryKey(r.Category)) throw new Error(`未知のカテゴリ: ${r.ID} ${r.Category}`);
+  const official = overlayOfficial(r);
+  const support = allSupport('unverified');
+  if (official) for (const p of NAI_PROFILES) support[p] = 'official';
+  if (r.Model_Support) Object.assign(support, r.Model_Support);
+  const aliases = r.Aliases ?? [];
   return {
     id: r.ID,
     origin: 'dictionary',
@@ -107,8 +165,14 @@ export function normalizeRawTag(r: RawStyleTag): Tag {
     priority: r.Priority,
     mvpCore: r.MVP_Core === true,
     validationStatus: r.Validation_Status,
+    aliases,
+    official,
+    support,
+    v5Only: r.V5_Only === true,
+    basic: r.MVP_Core === true || r.Basic_View === true || BASIC_EXTRA.has(r.ID),
+    similarExisting: r.Similar_Existing ?? [],
     searchText: normalizeForSearch(
-      [r.ID, r.Name_JA, r.Name_EN, r.Prompt, subcategoryLabel(r.Subcategory)].join('|'),
+      [r.ID, r.Name_JA, r.Name_EN, r.Prompt, subcategoryLabel(r.Subcategory), ...aliases, official ? 'NAI公式 公式掲載' : ''].join('|'),
     ),
   };
 }
@@ -131,11 +195,24 @@ export function customToTag(c: CustomTag): Tag {
     priority: '-',
     mvpCore: false,
     validationStatus: '画像生成による効果検証は未実施',
+    aliases: [],
+    official: null,
+    support: allSupport('unverified'),
+    v5Only: false,
+    basic: true,
+    similarExisting: [],
     searchText: normalizeForSearch([c.id, c.nameJa, c.prompt, 'ユーザー定義'].join('|')),
   };
 }
 
-export const DICTIONARY_TAGS: Tag[] = RAW_TAGS.map(normalizeRawTag);
+/** 辞書全体（元の329件 → 公式追加分の順） */
+export const DICTIONARY_TAGS: Tag[] = [...RAW_TAGS, ...RAW_NAI_TAGS].map(normalizeRawTag);
+export const BASIC_COUNT = DICTIONARY_TAGS.filter((t) => t.basic).length;
+
+/** この出力先でタグを出力できるか（公式に別モデル専用と明記されたものは出さない） */
+export function isSupported(tag: Tag, profile: ProfileId): boolean {
+  return tag.support[profile] !== 'unsupported';
+}
 
 /** 辞書タグ＋ユーザー定義タグの索引 */
 export interface TagIndex {

@@ -11,6 +11,8 @@ import type {
   RawPreset,
   Tag,
   Workspace,
+  Complexity,
+  YearItem,
 } from './types';
 import type { TagIndex } from './dictionary';
 
@@ -39,7 +41,64 @@ export function emptyGroup(name = '調合グループ1'): MixGroup {
 
 export function emptyWorkspace(): Workspace {
   const g = emptyGroup();
-  return { groups: [g], activeGroupId: g.id, dedupeRule: 'first', sourceRecipeId: null };
+  return { groups: [g], activeGroupId: g.id, dedupeRule: 'first', sourceRecipeId: null, years: [], complexity: null };
+}
+
+/**
+ * 調合のリセット（調合画面・出力画面の共通処理）
+ * 空にするもの：グループ・タグ・年タグ・複雑度・編集中レシピの紐付け
+ * 残すもの：重複の採用規則（出力設定の一部）。保存棚・自作タグ・出力先は Workspace の外にあるので触れない
+ */
+export function resetMix(ws: Workspace): Workspace {
+  return { ...emptyWorkspace(), dedupeRule: ws.dedupeRule };
+}
+
+/** 調合が空か（タグ・年・複雑度のどれもない） */
+export function isMixEmpty(ws: Workspace): boolean {
+  return ws.groups.every((g) => g.items.length === 0) && ws.years.length === 0 && ws.complexity === null;
+}
+
+// ── 年タグ（year 2024 形式）──
+export const YEAR_MIN = 1900;
+export const YEAR_MAX = 2099;
+export const YEAR_MAX_ITEMS = 10;
+
+/** 入力された年の検査。問題なければ null */
+export function validateYear(input: string, existing: YearItem[]): string | null {
+  const t = input.normalize('NFKC').trim();
+  if (!/^\d{4}$/.test(t)) return '西暦を4桁の数字で入力してください（例：2024）';
+  const y = Number(t);
+  if (y < YEAR_MIN || y > YEAR_MAX) return `${YEAR_MIN}〜${YEAR_MAX}年の範囲で入力してください`;
+  if (existing.some((e) => e.year === y)) return `${y}年はすでに追加されています`;
+  if (existing.length >= YEAR_MAX_ITEMS) return `年タグは${YEAR_MAX_ITEMS}件までです`;
+  return null;
+}
+
+export function addYear(ws: Workspace, year: number, strength = SLIDER.default): Workspace {
+  if (ws.years.some((y) => y.year === year)) return ws;
+  return { ...ws, years: [...ws.years, { year, strength: normalizeStrength(strength), on: true }] };
+}
+
+export function setYear(ws: Workspace, year: number, patch: Partial<YearItem>): Workspace {
+  return {
+    ...ws,
+    years: ws.years.map((y) => {
+      if (y.year !== year) return y;
+      const next = { ...y, ...patch, year: y.year };
+      next.strength = normalizeStrength(next.strength);
+      if (patch.strength !== undefined) next.on = next.strength > 0;
+      if (patch.on === true && next.strength === 0) next.strength = SLIDER.default;
+      return next;
+    }),
+  };
+}
+
+export function removeYear(ws: Workspace, year: number): Workspace {
+  return { ...ws, years: ws.years.filter((y) => y.year !== year) };
+}
+
+export function setComplexity(ws: Workspace, c: Complexity | null): Workspace {
+  return ws.complexity === c ? ws : { ...ws, complexity: c };
 }
 
 export function activeGroup(ws: Workspace): MixGroup {

@@ -8,13 +8,24 @@ PIXAI・NovelAI 向けに、**画風・描線・塗り・光・陰影・色彩�
 - iPhone Safari 中心、PCでは2カラム表示
 - 端末内（localStorage）に自動保存、JSONでバックアップ
 
-> **注意**：収録データは元調査成果物の完全復元ではなく**再構築版**です。全329タグについて、画像生成による効果は未検証です。アプリ内でも「未検証」として表示します。
+> **注意**：基礎の329タグは元調査成果物の完全復元ではなく**再構築版**です。v1.1 で NovelAI 公式資料に掲載されたタグを69件追加しました（計398件）。**公式資料への掲載と、画像生成での効果確認は別の情報**として扱い、全タグについて画像での効果は未検証と表示します。
+
+## v1.1 の変更点
+
+- **NovelAI公式タグの拡充**：公式「Prompting for Unique Artstyles」「Tagging」「Strengthening & Weakening」と照合し、未収録の69件を追加（既存の329件・ID・内容は未変更）。照合の全結果は [docs/nai-official-reconciliation.md](docs/nai-official-reconciliation.md)
+- **NAI公式掲載の表示と絞り込み**：「NAI公式」バッジ、「NAI公式掲載のみ」フィルター、照合日・出典・モデル別対応の表示、公式の代替表現や日本語での別名検索
+- **V5専用タグの制御**：複雑度・depthness・meta:novel era などは V5 以外では出力せず、選択は保持（V5に戻すと復元）
+- **複雑度**：指定なし／低／中／高／最高の排他選択（V5専用、強度なし）
+- **年タグ**：`year 2024` 形式、複数年・個別強度・ON/OFF・削除。PIXAI向けは既定で出力せず、実験モードでのみ出力
+- **基本表示**：ligne claire など14件を追加（72→86件）
+- **リセット**：調合画面の上部に「調合をリセット」を追加。出力画面と共通の処理で、通知から「元に戻す」も可能
+- **保存データ**：schemaVersion 2。v1.0 のデータはそのまま読み込める（実際の v1.0 ビルドで作った保存データでテスト済み）
 
 ## 主な機能
 
 | 画面 | できること |
 |---|---|
-| 調合 | 9カテゴリ・基本72件／詳細329件、日英・ひらがな検索、タグごとのON/OFFと強度（0〜1.6、0.1刻み、±ボタン付き）、調合皿（選択中タグの一覧）、関係の警告・相性候補 |
+| 調合 | 9カテゴリ・基本86件／詳細398件、NAI公式掲載のみの絞り込み、年代・複雑度（NovelAI）、上部のリセット、日英・ひらがな検索、タグごとのON/OFFと強度（0〜1.6、0.1刻み、±ボタン付き）、調合皿（選択中タグの一覧）、関係の警告・相性候補 |
 | グループ | 同じカテゴリから何件でも選び、まとまりを「調合グループ」として扱う。名前変更・複製・削除・無効化・並べ替え・一括 ±0.1・グループ棚への保存 |
 | プリセット | 36種。置き換え／編集中のグループに追加／新しいグループで追加。重複タグは「現在の値を残す／プリセットの値にする」を選択（加算しない） |
 | 保存棚 | レシピの保存・上書き・読み込み・名前変更・複製・削除・単体書き出し、グループ棚、自作タグ、全体バックアップ（追加読み込み／完全復元／直前の状態に戻す） |
@@ -30,6 +41,10 @@ PIXAI・NovelAI 向けに、**画風・描線・塗り・光・陰影・色彩�
 | NovelAI V4 / V4.5 / V5 | 出さない | `tag` | `1.2::tag ::` | NovelAI公式「Strengthening & Weakening」（2026-10-24 確認） |
 | NovelAI V3（実験的） | 出さない | `tag` | `{}` / `[]` を `round(|ln w / ln 1.05|)` 段 | 同上（1段=1.05倍） |
 
+- **V5専用**（複雑度・depthness・meta:novel era・meta:golden era・visual novel art/cg）は NovelAI V5 にだけ出力します。他の出力先では除外して「非対応」と表示し、選択は保持します。
+- **年タグ** `year 2024`：NovelAI 各版は上表と同じ強調構文。PIXAI向けは既定で出力せず、「出力の設定」の実験モードでのみ出力（Tsubaki の自然言語方式では強度を付けない）。
+- **複雑度** `high complexity` など：V5 のみ、強度なしで1つだけ出力。
+- **(medium) など括弧を含む公式タグ**：NovelAI ではそのまま。PIXAI SDXL（と Tsubaki 数値の実験モード）では、重み構文と衝突しないよう `watercolor \(medium\)` のように括弧をエスケープし、PIXAIでの解釈は未確認と警告します。
 - ネガティブプロンプトはどの出力先でも生成しません。
 - PIXAI向けでは `adult`・`bust` を含む表現を出力しません（自作タグに含まれる場合は除外して警告。人物プロンプト欄は書き換えず警告のみ）。
 - 同じタグIDが複数グループにある場合は1回だけ出力し、採用値は「上のグループを優先（既定）／最大値／最小値」から選べます。値は加算しません。意味が似た別タグは統合しません。
@@ -40,6 +55,9 @@ PIXAI・NovelAI 向けに、**画風・描線・塗り・光・陰影・色彩�
 ```
 data/                    データ辞書（ここを更新すればタグを増やせる）
   style_tags.json        329タグ（再構築版・REC-* ID）※内容は未改変
+  style_tags_nai_official.json  v1.1：NovelAI公式掲載タグ69件（NAI-* ID・出典・照合日・モデル対応）
+  nai_official_reconciliation.json  v1.1：公式ページ全タグの照合結果（一致・追加・専用UI・除外と理由）
+  relation_rules_nai.json  v1.1：公式資料に根拠のある関係（代替表現・表記揺れ・組み合わせ提案）
   style_presets.json     36プリセット ※未改変
   conflict_rules.json    53関係ルール ※未改変
   model_output_rules.json モデル別出力ルール ※未改変
@@ -53,6 +71,9 @@ src/core/                UIから独立したロジック
 src/storage/             端末内保存・ファイル入出力・コピー
 src/ui/                  画面（React）
 scripts/validate-data.mjs データ整合性チェック（ビルド前に自動実行）
+scripts/build-nai-official.py 公式照合データの生成元（照合日・タグ・説明文を定義）
+scripts/recon-to-md.mjs  照合結果を docs/nai-official-reconciliation.md に書き出す
+tests/fixtures/          v1.0 の実ビルドで作った保存データ（互換性テスト用）
 tests/                   単体・回帰テスト（Vitest）
 e2e/run.mjs              E2Eテスト（Playwright、iPhone 13相当・Pagesと同じサブパス）
 docs/source-data/        添付ZIPの調査資料・CSV（参照用）
@@ -79,9 +100,16 @@ npm run e2e          # ビルド後に実行。Playwright と Chromium が必要
 
 保存済みレシピはタグIDと強度だけを持つので、英語表現を直しても壊れません。辞書から消えたIDは、読み込み時に「辞書にないタグ」として警告し、データは保持します。
 
+## 公式資料を再照合するとき
+
+1. 公式ページを確認し、`scripts/build-nai-official.py` のタグ・説明・照合日（`CHECKED`）を更新
+2. `python3 scripts/build-nai-official.py && node scripts/recon-to-md.mjs`
+3. `npm run validate-data && npm test`
+
 ## 保存データ
 
-- `localStorage` の `sbw.state.v1` に `schemaVersion: 1` 付きで保存
+- `localStorage` の `sbw.state.v1` に `schemaVersion: 2` 付きで保存（v1.0 は 1。読み込み時に年タグ・複雑度などを初期値で補って移行。キー名は互換のため据え置き）
+- レシピの知らない項目は `extra` に退避して保持し、書き出しにも残す
 - 読めないデータ・新しい版のデータは消さずに別キーへ退避
 - 書き出しJSON：`{ app, kind: backup|recipe|group, schemaVersion, dictionary, exportedAt, ... }`
 - 読み込みは「追加」が基本（同じIDは別IDで追加、上書きしない）。完全復元は置き換え前の状態を1世代退避
