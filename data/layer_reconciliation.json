@@ -1,0 +1,559 @@
+{
+ "schemaVersion": 1,
+ "checkedAt": "2026-10-24",
+ "note": "資料A・B と依頼書に挙がった候補の採否。公式資料での確認状況は各タグの Evidence を参照。",
+ "sources": [
+  {
+   "title": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+   "url": "https://docs.novelai.net/en/image/tags/"
+  },
+  {
+   "title": "NovelAI Docs – 品質タグ追加の切替え",
+   "url": "https://docs.novelai.net/en/image/qualitytags/"
+  },
+  {
+   "title": "NovelAI Diffusion V4.5 Full Release（公式ブログ）",
+   "url": "https://blog.novelai.net/novelai-diffusion-v4-5-full-release-678318c86205"
+  },
+  {
+   "title": "PixAI Docs – 生成ページガイド（品質タグ）",
+   "url": "https://docs.pixai.art/ja/docs/tools/panel-tools"
+  },
+  {
+   "title": "PixAI公式ブログ – プロンプトの書き方",
+   "url": "https://blog.pixai.art/ja/how-to-write-pixai-prompts-formula-ja/"
+  },
+  {
+   "title": "PixAI Docs – Tsubaki.3 Prompt Templates",
+   "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts"
+  },
+  {
+   "title": "PixAI – Tsubaki.2 Guide",
+   "url": "https://pixai.art/en/tsubaki-2/guide"
+  },
+  {
+   "title": "PixAI Docs – Other Models（Haruka v2）",
+   "url": "https://docs.pixai.art/docs/models/other-models"
+  }
+ ],
+ "qualityCandidates": [
+  {
+   "tag": "best quality",
+   "status": "included",
+   "id": "QLT-RAT-001"
+  },
+  {
+   "tag": "amazing quality",
+   "status": "included",
+   "id": "QLT-RAT-002"
+  },
+  {
+   "tag": "great quality",
+   "status": "included",
+   "id": "QLT-RAT-003"
+  },
+  {
+   "tag": "normal quality",
+   "status": "included",
+   "id": "QLT-RAT-004"
+  },
+  {
+   "tag": "bad quality",
+   "status": "included",
+   "id": "QLT-RAT-005"
+  },
+  {
+   "tag": "worst quality",
+   "status": "included",
+   "id": "QLT-RAT-006"
+  },
+  {
+   "tag": "masterpiece",
+   "status": "included",
+   "id": "QLT-AES-001"
+  },
+  {
+   "tag": "top aesthetic",
+   "status": "included",
+   "id": "QLT-AES-002"
+  },
+  {
+   "tag": "very aesthetic",
+   "status": "included",
+   "id": "QLT-AES-003"
+  },
+  {
+   "tag": "aesthetic",
+   "status": "included",
+   "id": "QLT-AES-004"
+  },
+  {
+   "tag": "displeasing",
+   "status": "included",
+   "id": "QLT-AES-005"
+  },
+  {
+   "tag": "very displeasing",
+   "status": "included",
+   "id": "QLT-AES-006"
+  },
+  {
+   "tag": "highres",
+   "status": "included",
+   "id": "QLT-RES-001"
+  },
+  {
+   "tag": "absurdres",
+   "status": "included",
+   "id": "QLT-RES-002"
+  },
+  {
+   "tag": "high quality",
+   "status": "included",
+   "id": "QLT-GEN-001"
+  },
+  {
+   "tag": "ultra-high quality",
+   "status": "included",
+   "id": "QLT-GEN-002"
+  },
+  {
+   "tag": "high detail",
+   "status": "included",
+   "id": "QLT-DEN-001"
+  },
+  {
+   "tag": "highly detailed",
+   "status": "included",
+   "id": "QLT-DEN-002"
+  },
+  {
+   "tag": "ultra detailed",
+   "status": "included",
+   "id": "QLT-DEN-003"
+  },
+  {
+   "tag": "ultra-detailed",
+   "status": "included",
+   "id": "QLT-DEN-004"
+  },
+  {
+   "tag": "8k",
+   "status": "included",
+   "id": "QLT-RES-004"
+  },
+  {
+   "tag": "8k resolution",
+   "status": "included",
+   "id": "QLT-RES-005"
+  },
+  {
+   "tag": "high definition",
+   "status": "included",
+   "id": "QLT-RES-003"
+  },
+  {
+   "tag": "intricate details",
+   "status": "included",
+   "id": "QLT-DEN-005"
+  },
+  {
+   "tag": "no text",
+   "status": "included",
+   "id": "QLT-AUX-001"
+  }
+ ],
+ "detailCandidatesFromReportB": [
+  {
+   "tag": "detailed eyes",
+   "status": "included",
+   "id": "DTL-EYE-001"
+  },
+  {
+   "tag": "detailed irises",
+   "status": "included",
+   "id": "DTL-EYE-002"
+  },
+  {
+   "tag": "detailed pupils",
+   "status": "included",
+   "id": "DTL-EYE-003"
+  },
+  {
+   "tag": "detailed eyelashes",
+   "status": "included",
+   "id": "DTL-EYE-004"
+  },
+  {
+   "tag": "defined eyelashes",
+   "status": "included",
+   "id": "DTL-EYE-005"
+  },
+  {
+   "tag": "eye highlights",
+   "status": "included",
+   "id": "DTL-EYE-006"
+  },
+  {
+   "tag": "glossy eyes",
+   "status": "included",
+   "id": "DTL-EYE-007"
+  },
+  {
+   "tag": "gradation eyes",
+   "status": "included",
+   "id": "DTL-EYE-008"
+  },
+  {
+   "tag": "detailed hair",
+   "status": "included",
+   "id": "DTL-HAI-001"
+  },
+  {
+   "tag": "intricate hair strands",
+   "status": "included",
+   "id": "DTL-HAI-002"
+  },
+  {
+   "tag": "fine hair strands",
+   "status": "included",
+   "id": "DTL-HAI-003"
+  },
+  {
+   "tag": "flyaway hairs",
+   "status": "included",
+   "id": "DTL-HAI-004"
+  },
+  {
+   "tag": "soft hair texture",
+   "status": "included",
+   "id": "DTL-HAI-005"
+  },
+  {
+   "tag": "glossy hair",
+   "status": "included",
+   "id": "DTL-HAI-006"
+  },
+  {
+   "tag": "hair sheen",
+   "status": "included",
+   "id": "DTL-HAI-007"
+  },
+  {
+   "tag": "smooth skin",
+   "status": "included",
+   "id": "DTL-SKN-001"
+  },
+  {
+   "tag": "soft skin",
+   "status": "included",
+   "id": "DTL-SKN-002"
+  },
+  {
+   "tag": "detailed skin",
+   "status": "included",
+   "id": "DTL-SKN-003"
+  },
+  {
+   "tag": "skin texture",
+   "status": "included",
+   "id": "DTL-SKN-004"
+  },
+  {
+   "tag": "dewy skin",
+   "status": "included",
+   "id": "DTL-SKN-005"
+  },
+  {
+   "tag": "luminous skin",
+   "status": "included",
+   "id": "DTL-SKN-006"
+  },
+  {
+   "tag": "shiny skin",
+   "status": "included",
+   "id": "DTL-SKN-007"
+  },
+  {
+   "tag": "skin sheen",
+   "status": "included",
+   "id": "DTL-SKN-008"
+  },
+  {
+   "tag": "glossy lips",
+   "status": "included",
+   "id": "DTL-LIP-001"
+  },
+  {
+   "tag": "shiny lips",
+   "status": "included",
+   "id": "DTL-LIP-002"
+  },
+  {
+   "tag": "soft lips",
+   "status": "included",
+   "id": "DTL-LIP-003"
+  },
+  {
+   "tag": "subtle lip texture",
+   "status": "included",
+   "id": "DTL-LIP-004"
+  },
+  {
+   "tag": "hydrated lips",
+   "status": "included",
+   "id": "DTL-LIP-005"
+  },
+  {
+   "tag": "natural lip sheen",
+   "status": "included",
+   "id": "DTL-LIP-006"
+  },
+  {
+   "tag": "smooth lips",
+   "status": "included",
+   "id": "DTL-LIP-007"
+  },
+  {
+   "tag": "subtle lip highlight",
+   "status": "included",
+   "id": "DTL-LIP-008"
+  },
+  {
+   "tag": "detailed fabric",
+   "status": "included",
+   "id": "DTL-CLO-001"
+  },
+  {
+   "tag": "fabric texture",
+   "status": "included",
+   "id": "DTL-CLO-002"
+  },
+  {
+   "tag": "detailed clothing",
+   "status": "included",
+   "id": "DTL-CLO-003"
+  },
+  {
+   "tag": "intricate embroidery",
+   "status": "included",
+   "id": "DTL-CLO-004"
+  },
+  {
+   "tag": "lace detail",
+   "status": "included",
+   "id": "DTL-CLO-005"
+  },
+  {
+   "tag": "metallic texture",
+   "status": "included",
+   "id": "DTL-CLO-006"
+  },
+  {
+   "tag": "water droplets",
+   "status": "included",
+   "id": "DTL-CLO-007"
+  },
+  {
+   "tag": "intricate details",
+   "status": "included",
+   "id": "QLT-DEN-005"
+  },
+  {
+   "tag": "fine details",
+   "status": "included",
+   "id": "DTL-ALL-001"
+  },
+  {
+   "tag": "detailed textures",
+   "status": "included",
+   "id": "DTL-ALL-002"
+  },
+  {
+   "tag": "refined details",
+   "status": "included",
+   "id": "DTL-ALL-003"
+  },
+  {
+   "tag": "high detail",
+   "status": "included",
+   "id": "QLT-DEN-001"
+  },
+  {
+   "tag": "highly detailed",
+   "status": "included",
+   "id": "QLT-DEN-002"
+  },
+  {
+   "tag": "polished rendering",
+   "status": "included",
+   "id": "DTL-ALL-004"
+  }
+ ],
+ "additions": [
+  {
+   "tag": "sharp focus",
+   "id": "QLT-RES-006",
+   "reason": "PixAI Tsubaki.3 の公式テンプレートに使用例"
+  },
+  {
+   "tag": "highly intricate",
+   "id": "QLT-DEN-006",
+   "reason": "PixAI Tsubaki.3 の公式テンプレートに使用例"
+  },
+  {
+   "tag": "best illustration",
+   "id": "QLT-GEN-003",
+   "reason": "PixAI Tsubaki.3 の公式テンプレートの品質ブロックに使用例"
+  },
+  {
+   "tag": "detailed clothes",
+   "id": "DTL-CLO-008",
+   "reason": "資料A：PixAI公開作品での使用例"
+  },
+  {
+   "tag": "detailed background",
+   "id": "DTL-ALL-005",
+   "reason": "資料A：PixAI公開作品での使用例"
+  }
+ ],
+ "excluded": [
+  {
+   "tag": "big eyes",
+   "layer": "detail",
+   "reason": "目の大きさ・顔立ちを変える外見設定のため（資料Bも見送り）。"
+  },
+  {
+   "tag": "shiny hair",
+   "layer": "detail",
+   "reason": "髪全体の光沢や濡れ髪へ拡散しやすい（資料Bの見送り候補）。代わりに hair sheen / glossy hair を収録。"
+  },
+  {
+   "tag": "airy, semi-transparent hair strands",
+   "layer": "detail",
+   "reason": "髪全体の透明化や光学効果に逸れやすい（資料Bの見送り候補）。"
+  },
+  {
+   "tag": "matte skin",
+   "layer": "detail",
+   "reason": "反射を抑えすぎて平坦化し、差分として不安定（資料Bの見送り候補）。"
+  },
+  {
+   "tag": "subtle pores",
+   "layer": "detail",
+   "reason": "アニメ表現で写実化・点状ノイズに寄りやすく、根拠も弱い（資料Bの見送り候補）。"
+  },
+  {
+   "tag": "plump lips",
+   "layer": "detail",
+   "reason": "唇の厚み・形を変える外見設定のため。"
+  },
+  {
+   "tag": "polished metal",
+   "layer": "detail",
+   "reason": "反射が強く、金属以外に波及しやすい（資料Bの見送り候補）。代わりに metallic texture を収録。"
+  },
+  {
+   "tag": "glass-like",
+   "layer": "detail",
+   "reason": "透明化・背景効果に逸れやすい（資料Bの見送り候補）。"
+  },
+  {
+   "tag": "high complexity",
+   "layer": "detail",
+   "reason": "NovelAI V5 の画面全体の複雑度タグ。既存の「複雑度」設定で扱う。"
+  },
+  {
+   "tag": "highly detailed face",
+   "layer": "detail",
+   "reason": "顔立ち・表情・目の印象を変えやすい（資料Bの見送り候補）。"
+  },
+  {
+   "tag": "pale skin / tan skin",
+   "layer": "detail",
+   "reason": "肌の色の指定（人物設定）のため。"
+  },
+  {
+   "tag": "髪型・髪色の指定",
+   "layer": "detail",
+   "reason": "人物の外見設定のため。人物設定側のツールで扱う。"
+  },
+  {
+   "tag": "lowres, low quality, bad anatomy, bad hands, text, error, missing fingers, jpeg artifacts, signature, watermark",
+   "layer": "quality",
+   "reason": "PixAIの初期ネガティブプロンプトに含まれる語。ネガティブプロンプト生成は今回の対象外で、人物の破綻に関するタグは品質調合の中心に含めない。"
+  },
+  {
+   "tag": "beautiful anime aesthetic",
+   "layer": "quality",
+   "reason": "画風の方向まで含む抽象的な語で、品質評価・描き込み密度のどちらにも当てはまらず、根拠も公開作品の使用例のみ。"
+  },
+  {
+   "tag": "location / rating:general / -0.8::feet::",
+   "layer": "quality",
+   "reason": "NovelAI V4.5・V4 の自動品質タグに含まれるが、場所・レーティング・部位の指定で、品質評価ではないため。"
+  },
+  {
+   "tag": "absundres",
+   "layer": "quality",
+   "reason": "absurdres の誤記（資料A）。absurdres の別名として検索できるようにした。"
+  }
+ ],
+ "naiAutoQuality": {
+  "url": "https://docs.novelai.net/en/image/qualitytags/",
+  "checkedAt": "2026-10-24",
+  "position": "end",
+  "note": "V3〜V5 は、NovelAI側がプロンプトの末尾に追加する（Anime V2 以前は先頭）。入力欄には見えないがプロンプトの文字数上限には含まれる。",
+  "models": {
+   "nai_v5": {
+    "light": [
+     "very aesthetic",
+     "amazing quality",
+     "no text"
+    ],
+    "standard": [
+     "very aesthetic",
+     "masterpiece",
+     "no text"
+    ]
+   },
+   "nai_v45": {
+    "on": [
+     "location",
+     "very aesthetic",
+     "masterpiece",
+     "no text"
+    ],
+    "onCurated": [
+     "location",
+     "masterpiece",
+     "no text",
+     "-0.8::feet::",
+     "rating:general"
+    ]
+   },
+   "nai_v4": {
+    "on": [
+     "no text",
+     "best quality",
+     "very aesthetic",
+     "absurdres"
+    ],
+    "onCurated": [
+     "rating:general",
+     "amazing quality",
+     "very aesthetic",
+     "absurdres"
+    ]
+   },
+   "nai_v3": {
+    "on": [
+     "best quality",
+     "amazing quality",
+     "very aesthetic",
+     "absurdres"
+    ]
+   }
+  }
+ }
+}

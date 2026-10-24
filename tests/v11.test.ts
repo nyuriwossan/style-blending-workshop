@@ -218,7 +218,7 @@ describe('年タグ・複雑度', () => {
   it('11. 複数の年タグ・複雑度がレシピとして保存・復元される', () => {
     let w = addYear(addYear(ws(['bloom', 1]), 2024, 1.5), 2025, 1.3);
     w = setComplexity(w, 'high');
-    const state = { ...initialState(), workspace: w, recipes: [{ id: 'r1', name: '年入り', note: '', createdAt: '2026-10-24T00:00:00.000Z', updatedAt: '2026-10-24T00:00:00.000Z', groups: w.groups, dedupeRule: 'first' as const, profile: 'nai_v5' as const, years: w.years, complexity: w.complexity }] };
+    const state = { ...initialState(), workspace: w, recipes: [{ id: 'r1', name: '年入り', note: '', createdAt: '2026-10-24T00:00:00.000Z', updatedAt: '2026-10-24T00:00:00.000Z', groups: w.groups, dedupeRule: 'first' as const, profile: 'nai_v5' as const, years: w.years, complexity: w.complexity, quality: [], detail: [] }] };
     const back = restoreFromBackup(JSON.stringify(exportBackup(state)));
     expect(back.state.recipes[0].years).toEqual([{ year: 2024, strength: 1.5, on: true }, { year: 2025, strength: 1.3, on: true }]);
     expect(back.state.recipes[0].complexity).toBe('high');
@@ -252,7 +252,7 @@ describe('互換性（v1.0 の実データ）', () => {
     const m = migrateState(lsRaw);
     expect(m.futureVersion).toBe(false);
     expect(m.warnings).toEqual([]);
-    expect(m.state.schemaVersion).toBe(2);
+    expect(m.state.schemaVersion).toBe(3); // v1.2 で 3
     expect(m.state.recipes).toHaveLength(1);
     expect(m.state.groups).toHaveLength(1);
     expect(m.state.workspace.years).toEqual([]);
@@ -264,13 +264,14 @@ describe('互換性（v1.0 の実データ）', () => {
     expect(m.state.customTags).toEqual(lsRaw.customTags);
     expect(m.state.recipes[0].groups).toEqual(lsRaw.recipes[0].groups);
     expect(m.state.groups[0].items).toEqual(lsRaw.groups[0].items);
+    expect(m.state.groups[0].layer).toBe('style');
     expect(m.state.workspace.groups).toEqual(lsRaw.workspace.groups);
   });
   it('20c. v1.0 のレシピは v1.1 でも同じプロンプトを出力する', () => {
     const m = migrateState(lsRaw);
     const r = m.state.recipes[0];
     const idx = buildIndex(m.state.customTags);
-    const w: Workspace = { groups: r.groups, activeGroupId: r.groups[0].id, dedupeRule: r.dedupeRule, sourceRecipeId: r.id, years: r.years, complexity: r.complexity };
+    const w: Workspace = { groups: r.groups, activeGroupId: r.groups[0].id, dedupeRule: r.dedupeRule, sourceRecipeId: r.id, years: r.years, complexity: r.complexity, quality: r.quality, detail: r.detail };
     const s = renderPrompt(effectiveItems(w, idx), S(r.profile), { years: r.years, complexity: r.complexity }).style;
     expect(r.profile).toBe(expected.profile);
     expect(s).toBe(expected.prompt);
@@ -298,8 +299,8 @@ describe('互換性（v1.0 の実データ）', () => {
     const re = JSON.parse(JSON.stringify(exportBackup(r.state)));
     expect(re.recipes[0].extra).toEqual({ futureField: { a: 1 } });
   });
-  it('新しい版（schemaVersion 3）は読み込まずに退避扱い', () => {
-    expect(migrateState({ ...lsRaw, schemaVersion: 3 }).futureVersion).toBe(true);
+  it('新しい版（schemaVersion 4）は読み込まずに退避扱い', () => {
+    expect(migrateState({ ...lsRaw, schemaVersion: 4 }).futureVersion).toBe(true);
   });
 });
 

@@ -2,7 +2,7 @@
 // 調合ロジック：グループ操作、重複整理、プリセット適用
 // すべて純粋関数（引数を書き換えず、新しい値を返す）
 // ───────────────────────────────────────────────
-import { CATEGORY_ORDER, SLIDER } from './dictionary';
+import { CATEGORY_ORDER, LAYER_ORDER, SLIDER } from './dictionary';
 import type {
   DedupeRule,
   MixGroup,
@@ -13,6 +13,7 @@ import type {
   Workspace,
   Complexity,
   YearItem,
+  Layer,
 } from './types';
 import type { TagIndex } from './dictionary';
 
@@ -41,21 +42,21 @@ export function emptyGroup(name = '調合グループ1'): MixGroup {
 
 export function emptyWorkspace(): Workspace {
   const g = emptyGroup();
-  return { groups: [g], activeGroupId: g.id, dedupeRule: 'first', sourceRecipeId: null, years: [], complexity: null };
+  return { groups: [g], activeGroupId: g.id, dedupeRule: 'first', sourceRecipeId: null, years: [], complexity: null, quality: [], detail: [] };
 }
 
 /**
  * 調合のリセット（調合画面・出力画面の共通処理）
- * 空にするもの：グループ・タグ・年タグ・複雑度・編集中レシピの紐付け
+ * 空にするもの：画風（グループ・タグ）・品質・仕上げディテール・年タグ・複雑度・編集中レシピの紐付け
  * 残すもの：重複の採用規則（出力設定の一部）。保存棚・自作タグ・出力先は Workspace の外にあるので触れない
  */
 export function resetMix(ws: Workspace): Workspace {
   return { ...emptyWorkspace(), dedupeRule: ws.dedupeRule };
 }
 
-/** 調合が空か（タグ・年・複雑度のどれもない） */
+/** 調合が空か（3層のタグ・年・複雑度のどれもない） */
 export function isMixEmpty(ws: Workspace): boolean {
-  return ws.groups.every((g) => g.items.length === 0) && ws.years.length === 0 && ws.complexity === null;
+  return ws.groups.every((g) => g.items.length === 0) && ws.years.length === 0 && ws.complexity === null && ws.quality.length === 0 && ws.detail.length === 0;
 }
 
 // ── 年タグ（year 2024 形式）──
@@ -111,27 +112,92 @@ function mapGroup(ws: Workspace, groupId: string, fn: (g: MixGroup) => MixGroup)
 
 // ── タグ単位の操作（同じカテゴリから何件でも選べる。類似タグを統合しない） ──
 
+/** タグ一覧の1件を更新（画風のグループ・品質・仕上げで共通の規則） */
+export function patchItemList(list: MixItem[], tagId: string, patch: Partial<MixItem>): MixItem[] {
+  const idx = list.findIndex((i) => i.tagId === tagId);
+  if (idx === -1) {
+    const item: MixItem = { tagId, strength: SLIDER.default, on: true, ...patch };
+    item.strength = normalizeStrength(item.strength);
+    if (item.strength === 0) item.on = false;
+    return [...list, item];
+  }
+  const cur = list[idx];
+  const next: MixItem = { ...cur, ...patch };
+  next.strength = normalizeStrength(next.strength);
+  // 0はOFFと同義
+  if (patch.strength !== undefined && next.strength === 0) next.on = false;
+  if (patch.strength !== undefined && next.strength > 0 && patch.on === undefined) next.on = true;
+  // OFF→ONにした時、強度0なら標準値に戻す
+  if (patch.on === true && next.strength === 0) next.strength = SLIDER.default;
+  const items = list.slice();
+  items[idx] = next;
+  return items;
+}
+
 export function setItem(ws: Workspace, groupId: string, tagId: string, patch: Partial<MixItem>): Workspace {
-  return mapGroup(ws, groupId, (g) => {
-    const idx = g.items.findIndex((i) => i.tagId === tagId);
-    if (idx === -1) {
-      const item: MixItem = { tagId, strength: SLIDER.default, on: true, ...patch };
-      item.strength = normalizeStrength(item.strength);
-      if (item.strength === 0) item.on = false;
-      return { ...g, items: [...g.items, item] };
-    }
-    const cur = g.items[idx];
-    const next: MixItem = { ...cur, ...patch };
-    next.strength = normalizeStrength(next.strength);
-    // 0はOFFと同義
-    if (patch.strength !== undefined && next.strength === 0) next.on = false;
-    if (patch.strength !== undefined && next.strength > 0 && patch.on === undefined) next.on = true;
-    // OFF→ONにした時、強度0なら標準値に戻す
-    if (patch.on === true && next.strength === 0) next.strength = SLIDER.default;
-    const items = g.items.slice();
-    items[idx] = next;
-    return { ...g, items };
+  return mapGroup(ws, groupId, (g) => ({ ...g, items: patchItemList(g.items, tagId, patch) }));
+}
+
+// ── v1.2：品質調合・仕上げディテール（それぞれ1つのタグ一覧） ──
+export type ListLayer = 'quality' | 'detail';
+
+export function setLayerItem(ws: Workspace, layer: ListLayer, tagId: string, patch: Partial<MixItem>): Workspace {
+  return { ...ws, [layer]: patchItemList(ws[layer], tagId, patch) };
+}
+export function toggleLayerItem(ws: Workspace, layer: ListLayer, tagId: string): Workspace {
+  const cur = ws[layer].find((i) => i.tagId === tagId);
+  if (!cur) return setLayerItem(ws, layer, tagId, { on: true, strength: SLIDER.default });
+  return setLayerItem(ws, layer, tagId, { on: !isActive(cur) });
+}
+export function removeLayerItem(ws: Workspace, layer: ListLayer, tagId: string): Workspace {
+  return { ...ws, [layer]: ws[layer].filter((i) => i.tagId !== tagId) };
+}
+export function clearLayer(ws: Workspace, layer: ListLayer): Workspace {
+  return ws[layer].length === 0 ? ws : { ...ws, [layer]: [] };
+}
+/** 層の一括調整（画風グループの一括調整と同じく、個別の値を変える） */
+export function shiftLayer(ws: Workspace, layer: ListLayer, delta: number): { ws: Workspace; clamped: string[] } {
+  const clamped: string[] = [];
+  const items = ws[layer].map((i) => {
+    if (!isActive(i)) return i;
+    const raw = Math.round((i.strength + delta) * 100) / 100;
+    const v = Math.min(SLIDER.max, Math.max(0.1, raw));
+    if (v !== raw) clamped.push(i.tagId);
+    return { ...i, strength: v };
   });
+  return { ws: { ...ws, [layer]: items }, clamped };
+}
+/** 層の重複（プリセット・グループ棚から加えるとき） */
+export function layerDuplicates(ws: Workspace, layer: ListLayer, items: MixItem[]): PresetDuplicate[] {
+  const out: PresetDuplicate[] = [];
+  for (const pi of items) {
+    const cur = ws[layer].find((i) => i.tagId === pi.tagId);
+    if (cur) out.push({ tagId: pi.tagId, current: cur.strength, currentOn: cur.on, preset: pi.strength });
+  }
+  return out;
+}
+/** 層へタグの組を適用。他の層には触れない。重複は dupPolicy に従う（加算はしない） */
+export function applyToLayer(ws: Workspace, layer: ListLayer, incoming: MixItem[], mode: 'replace' | 'merge', dupPolicy: DupPolicy = 'keepCurrent'): Workspace {
+  const items = dedupeWithin(incoming);
+  if (mode === 'replace') return { ...ws, [layer]: items.map((i) => ({ ...i })) };
+  const next = ws[layer].slice();
+  for (const pi of items) {
+    const idx = next.findIndex((i) => i.tagId === pi.tagId);
+    if (idx === -1) next.push({ ...pi });
+    else if (dupPolicy === 'usePreset') next[idx] = { ...pi };
+  }
+  return { ...ws, [layer]: next };
+}
+export function countLayer(ws: Workspace, layer: Layer): number {
+  if (layer === 'style') return countActive(ws);
+  return ws[layer].filter(isActive).length;
+}
+export function countAll(ws: Workspace): number {
+  return new Set([
+    ...ws.groups.filter((g) => g.enabled).flatMap((g) => g.items.filter(isActive).map((i) => i.tagId)),
+    ...ws.quality.filter(isActive).map((i) => i.tagId),
+    ...ws.detail.filter(isActive).map((i) => i.tagId),
+  ]).size;
 }
 
 export function toggleItem(ws: Workspace, groupId: string, tagId: string): Workspace {
@@ -224,11 +290,15 @@ export interface EffectiveSource {
   groupId: string;
   groupName: string;
   strength: number;
+  /** v1.2：どの層から来たか */
+  layer: Layer;
 }
 export interface EffectiveItem {
   tagId: string;
   tag: Tag | undefined;
   strength: number;
+  /** v1.2：採用された層（出力ブロックの決定に使う） */
+  layer: Layer;
   /** 採用された値の出どころ */
   adoptedFrom: EffectiveSource;
   /** 同じタグIDを含む全グループ（2件以上なら重複） */
@@ -247,44 +317,45 @@ export const DEDUPE_RULE_LABEL: Record<DedupeRule, string> = {
  * 有効なグループ・ONのタグだけを集め、同一タグIDの重複を規則に従って1つにまとめる。
  * 意味の似た別タグ（別ID）は統合しない。値の加算もしない。
  */
+export const LAYER_SOURCE_NAME: Record<ListLayer, string> = { quality: '品質調合', detail: '仕上げディテール' };
+
+/**
+ * v1.2：品質 → 画風（グループ順）→ 仕上げ の順に集め、同じタグIDは層をまたいでも1つにまとめる。
+ * 「上を優先」は、この順で先に出てきた値を採用する。品質・仕上げが空なら v1.1 と同じ結果。
+ */
 export function effectiveItems(ws: Workspace, index: TagIndex, order: OrderRule = 'category'): EffectiveItem[] {
   const map = new Map<string, EffectiveItem>();
   let n = 0;
+  const visit = (i: MixItem, src: EffectiveSource) => {
+    if (!isActive(i)) return;
+    const cur = map.get(i.tagId);
+    if (!cur) {
+      map.set(i.tagId, { tagId: i.tagId, tag: index.byId.get(i.tagId), strength: i.strength, layer: src.layer, adoptedFrom: src, sources: [src], mixOrder: n++ });
+      return;
+    }
+    cur.sources.push(src);
+    const take = (ws.dedupeRule === 'max' && i.strength > cur.strength) || (ws.dedupeRule === 'min' && i.strength < cur.strength);
+    if (take) {
+      cur.strength = i.strength;
+      cur.adoptedFrom = src;
+      cur.layer = src.layer;
+    }
+  };
+  for (const i of ws.quality ?? []) visit(i, { groupId: 'quality', groupName: LAYER_SOURCE_NAME.quality, strength: i.strength, layer: 'quality' });
   for (const g of ws.groups) {
     if (!g.enabled) continue;
-    for (const i of g.items) {
-      if (!isActive(i)) continue;
-      const src: EffectiveSource = { groupId: g.id, groupName: g.name, strength: i.strength };
-      const cur = map.get(i.tagId);
-      if (!cur) {
-        map.set(i.tagId, {
-          tagId: i.tagId,
-          tag: index.byId.get(i.tagId),
-          strength: i.strength,
-          adoptedFrom: src,
-          sources: [src],
-          mixOrder: n++,
-        });
-        continue;
-      }
-      cur.sources.push(src);
-      const take =
-        (ws.dedupeRule === 'max' && i.strength > cur.strength) ||
-        (ws.dedupeRule === 'min' && i.strength < cur.strength);
-      if (take) {
-        cur.strength = i.strength;
-        cur.adoptedFrom = src;
-      }
-    }
+    for (const i of g.items) visit(i, { groupId: g.id, groupName: g.name, strength: i.strength, layer: 'style' });
   }
+  for (const i of ws.detail ?? []) visit(i, { groupId: 'detail', groupName: LAYER_SOURCE_NAME.detail, strength: i.strength, layer: 'detail' });
   const list = [...map.values()];
-  if (order === 'category') {
-    list.sort((a, b) => {
-      const ca = a.tag ? CATEGORY_ORDER[a.tag.category] : 99;
-      const cb = b.tag ? CATEGORY_ORDER[b.tag.category] : 99;
-      return ca - cb || a.mixOrder - b.mixOrder;
-    });
-  }
+  list.sort((a, b) => {
+    const la = LAYER_ORDER[a.layer] - LAYER_ORDER[b.layer];
+    if (la) return la;
+    if (order === 'mix') return a.mixOrder - b.mixOrder;
+    const ca = a.tag ? CATEGORY_ORDER[a.tag.category] : 99;
+    const cb = b.tag ? CATEGORY_ORDER[b.tag.category] : 99;
+    return ca - cb || a.mixOrder - b.mixOrder;
+  });
   return list;
 }
 
@@ -292,9 +363,11 @@ export function effectiveItems(ws: Workspace, index: TagIndex, order: OrderRule 
 export function unknownTagIds(ws: Workspace, index: TagIndex): string[] {
   const s = new Set<string>();
   for (const g of ws.groups) for (const i of g.items) if (!index.byId.has(i.tagId)) s.add(i.tagId);
+  for (const i of [...(ws.quality ?? []), ...(ws.detail ?? [])]) if (!index.byId.has(i.tagId)) s.add(i.tagId);
   return [...s];
 }
 
+/** 画風層（グループ）で有効なタグ数。v1.1 までの数え方 */
 export function countActive(ws: Workspace): number {
   return new Set(ws.groups.filter((g) => g.enabled).flatMap((g) => g.items.filter(isActive).map((i) => i.tagId))).size;
 }

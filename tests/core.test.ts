@@ -3,6 +3,7 @@ import {
   DICTIONARY_TAGS,
   ORIGINAL_RULES,
   PRESETS,
+  STYLE_RULES,
   RAW_TAGS,
   RULES,
   buildIndex,
@@ -162,7 +163,9 @@ describe('7. 関係（競合警告）', () => {
   it('元データの関係は4種・53件のまま。v1.1は公式資料に根拠のある関係だけを追加', () => {
     expect(relationCounts(ORIGINAL_RULES)).toMatchObject({ exclusive: 7, conflict: 13, conditional: 14, synergy: 19, synonym: 0, similar: 0, complement: 0 });
     expect(ORIGINAL_RULES).toHaveLength(53);
-    expect(relationCounts(RULES)).toMatchObject({ exclusive: 7, conflict: 13, conditional: 14, synergy: 22, synonym: 5, similar: 1, complement: 0 });
+    expect(relationCounts(STYLE_RULES)).toMatchObject({ exclusive: 7, conflict: 13, conditional: 14, synergy: 22, synonym: 5, similar: 1, complement: 0 });
+    // v1.2：品質・仕上げの関係を追加（公式の尺度の反対側14・表記揺れ3・改称1）
+    expect(RULES.length - STYLE_RULES.length).toBe(18);
   });
   it('排他的：no lineart × thick lineart は強い警告、選択は残る', () => {
     const w = ws(['no lineart', 1], ['thick lineart', 1]);
@@ -250,8 +253,8 @@ describe('グループ調合と重複整理', () => {
   it('カテゴリ別出力', () => {
     const r = out(ws(['film grain', 1], ['anime illustration', 1], ['bloom', 1.2]), 'nai_v5');
     expect(r.byCategory).toEqual([
-      { category: 'style_genre', text: 'anime illustration', count: 1 },
-      { category: 'optical_effects', text: 'film grain, 1.2::bloom ::', count: 2 },
+      { category: 'style_genre', layer: 'style', text: 'anime illustration', count: 1 },
+      { category: 'optical_effects', layer: 'style', text: 'film grain, 1.2::bloom ::', count: 2 },
     ]);
   });
 });

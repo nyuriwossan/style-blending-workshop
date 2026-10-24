@@ -1,0 +1,206 @@
+{
+ "schemaVersion": 1,
+ "note": "品質調合のプリセット。manual はアプリが出力するタグ、auto_setting はサービス側の自動品質タグ設定を記録するだけ（出力しない）。強度は出発点で、効果は未検証。",
+ "presets": [
+  {
+   "id": "QPR-00",
+   "kind": "clear",
+   "name_ja": "品質指定なし",
+   "description_ja": "品質調合を空にします（他の層はそのまま）。モデル側の自動品質タグだけに任せたいときに。",
+   "items": []
+  },
+  {
+   "id": "QPR-01",
+   "kind": "manual",
+   "name_ja": "NAI向け品質強調",
+   "description_ja": "NovelAI公式の品質・美的タグの組み合わせ。V4.5 以降向け（masterpiece は V4.5 以上の公式タグ）。",
+   "items": [
+    {
+     "tagId": "QLT-AES-001",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-RAT-001",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-AES-003",
+     "strength": 1.0
+    }
+   ],
+   "recommended_profiles": [
+    "nai_v45",
+    "nai_v5"
+   ]
+  },
+  {
+   "id": "QPR-02",
+   "kind": "manual",
+   "name_ja": "NAI V5 Light 相当を手動で出力",
+   "description_ja": "NovelAI V5 の自動品質タグ（Light）と同じタグを、アプリの出力として書き出します。NovelAI側の「品質タグ追加」をOFFにしているとき用。",
+   "items": [
+    {
+     "tagId": "QLT-AES-003",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-RAT-002",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-AUX-001",
+     "strength": 1.0
+    }
+   ],
+   "recommended_profiles": [
+    "nai_v5"
+   ]
+  },
+  {
+   "id": "QPR-03",
+   "kind": "manual",
+   "name_ja": "NAI V5 Standard 相当を手動で出力",
+   "description_ja": "NovelAI V5 の自動品質タグ（Standard）と同じタグを、アプリの出力として書き出します。NovelAI側の「品質タグ追加」をOFFにしているとき用。",
+   "items": [
+    {
+     "tagId": "QLT-AES-003",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-AES-001",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-AUX-001",
+     "strength": 1.0
+    }
+   ],
+   "recommended_profiles": [
+    "nai_v5"
+   ]
+  },
+  {
+   "id": "QPR-04",
+   "kind": "manual",
+   "name_ja": "PIXAI向け品質強調",
+   "description_ja": "PixAI公式ブログが定番として紹介する3タグ。公式も「盛れば盛るほど良くなるわけではない」と説明している。",
+   "items": [
+    {
+     "tagId": "QLT-AES-001",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-RAT-001",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-DEN-001",
+     "strength": 1.0
+    }
+   ],
+   "recommended_profiles": [
+    "pixai_sdxl",
+    "pixai_tsubaki2",
+    "pixai_tsubaki3"
+   ]
+  },
+  {
+   "id": "QPR-05",
+   "kind": "manual",
+   "name_ja": "高精細志向",
+   "description_ja": "解像感と描き込み密度を少し強める組み合わせ。全部を重ねるより2〜3個に絞るほうが比較しやすい。",
+   "items": [
+    {
+     "tagId": "QLT-RAT-001",
+     "strength": 1.0
+    },
+    {
+     "tagId": "QLT-RES-001",
+     "strength": 1.1
+    },
+    {
+     "tagId": "QLT-DEN-003",
+     "strength": 1.1
+    }
+   ],
+   "recommended_profiles": [
+    "pixai_sdxl",
+    "pixai_tsubaki2",
+    "pixai_tsubaki3",
+    "nai_v4",
+    "nai_v45",
+    "nai_v5",
+    "nai_v3"
+   ]
+  },
+  {
+   "id": "QPR-06",
+   "kind": "manual",
+   "name_ja": "控えめな品質指定",
+   "description_ja": "品質・美的タグを弱めに入れて、画風への影響を抑えたいとき用。",
+   "items": [
+    {
+     "tagId": "QLT-RAT-001",
+     "strength": 0.8
+    },
+    {
+     "tagId": "QLT-AES-003",
+     "strength": 0.8
+    }
+   ],
+   "recommended_profiles": [
+    "pixai_sdxl",
+    "pixai_tsubaki2",
+    "pixai_tsubaki3",
+    "nai_v4",
+    "nai_v45",
+    "nai_v5",
+    "nai_v3"
+   ]
+  },
+  {
+   "id": "QPR-07",
+   "kind": "manual",
+   "name_ja": "比較実験用（1語だけ固定）",
+   "description_ja": "品質タグを best quality 1語に固定して、画風や仕上げディテールの差だけを比べるための基準。",
+   "items": [
+    {
+     "tagId": "QLT-RAT-001",
+     "strength": 1.0
+    }
+   ],
+   "recommended_profiles": [
+    "pixai_sdxl",
+    "pixai_tsubaki2",
+    "pixai_tsubaki3",
+    "nai_v4",
+    "nai_v45",
+    "nai_v5",
+    "nai_v3"
+   ]
+  }
+ ],
+ "autoSettingPresets": [
+  {
+   "id": "QAU-OFF",
+   "kind": "auto_setting",
+   "name_ja": "NovelAIの「品質タグ追加」はOFF",
+   "autoSetting": "off",
+   "description_ja": "記録するだけで、出力には何も加えません。"
+  },
+  {
+   "id": "QAU-LIGHT",
+   "kind": "auto_setting",
+   "name_ja": "NovelAI V5 の「品質タグ追加」は Light",
+   "autoSetting": "light",
+   "description_ja": "NovelAI側が末尾に very aesthetic, amazing quality, no text を加えます。アプリの出力には加えず、重複だけを知らせます。"
+  },
+  {
+   "id": "QAU-STD",
+   "kind": "auto_setting",
+   "name_ja": "NovelAI V5 の「品質タグ追加」は Standard",
+   "autoSetting": "standard",
+   "description_ja": "NovelAI側が末尾に very aesthetic, masterpiece, no text を加えます。アプリの出力には加えず、重複だけを知らせます。"
+  }
+ ]
+}

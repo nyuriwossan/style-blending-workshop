@@ -10,6 +10,26 @@ PIXAI・NovelAI 向けに、**画風・描線・塗り・光・陰影・色彩�
 
 > **注意**：基礎の329タグは元調査成果物の完全復元ではなく**再構築版**です。v1.1 で NovelAI 公式資料に掲載されたタグを69件追加しました（計398件）。**公式資料への掲載と、画像生成での効果確認は別の情報**として扱い、全タグについて画像での効果は未検証と表示します。
 
+## v1.2 の変更点（品質調合・仕上げディテール）
+
+プロンプトを3つの層に分けて組み立てられるようになりました。**画風を作る → 目・髪・肌などの描き込みを整える → 必要なら品質タグを足す → 完成レシピとして保存する**、という流れを想定しています。
+
+| 層 | 内容 | 画面 |
+|---|---|---|
+| 画風調合 | 従来の9カテゴリ・398タグ・36プリセット・年タグ・複雑度 | 調合画面の下半分（主役） |
+| 品質調合（新規） | 品質評価・美的評価・解像感・描き込み密度・補助（no text）の28タグ | よく使う6タグのチップ＋「詳細設定」で全タグと強度 |
+| 仕上げディテール（新規） | 目・髪・肌・唇・衣服・全体の47タグ（基本24件） | 「高度な設定｜仕上げディテール」。初回は閉じ、開閉は端末に記憶 |
+
+- **重複の整理**：英語プロンプトが同じタグは3層を通して1つのID（`high detail`・`highly detailed`・`intricate details` は品質と仕上げの両方から選べるが、出力は1回だけ）。表現の違うタグは統合しない。
+- **自動品質タグ**：NovelAI・PIXAI側の「品質タグ追加」を自己申告で選ぶと、手動で選んだタグとの重複を知らせる（アプリの出力からは削除しない）。V5 の Light/Standard ほか、公式資料にある各版の自動タグを収録。
+- **モデル対応**：`masterpiece` は NovelAI V4.5 以上の公式タグなので V3/V4 には出力しない。`top aesthetic` は公式資料の間で食い違いがあるため V4.5 以降では「未検証」として扱う。
+- **出力の並び**：おまかせでは PIXAI は「品質 → 画風 → 仕上げ」、NovelAI は「画風 → 仕上げ → 品質」（NovelAI の自動品質タグも末尾に付くため）。設定で変更可。品質・仕上げが空なら v1.1 と同じ出力。
+- **Tsubaki**：仕上げディテールは自然文テンプレート（実験的、短いタグ形式にも切替可）。品質タグは強度を付けずに出力。
+- **コピー**：全体／画風だけ／品質だけ／仕上げだけ／画風＋仕上げ／画風＋品質＋仕上げ。
+- **プリセット**：品質8種（手動で出力するもの）と、自動品質タグの設定を記録するだけのもの（出力しない）を区別。仕上げ6種。どれも他の層を変えない。
+- **保存**：レシピに3層を保存。「一部だけ読み込む」で画風／品質／仕上げのどれかだけを再利用。グループ棚に品質・仕上げのセットも保存できる。schemaVersion 3（v1.0・v1.1 のデータはそのまま読める）。
+- 収録タグ・根拠・採否の一覧：[docs/quality-detail-tags.md](docs/quality-detail-tags.md)
+
 ## v1.1 の変更点
 
 - **NovelAI公式タグの拡充**：公式「Prompting for Unique Artstyles」「Tagging」「Strengthening & Weakening」と照合し、未収録の69件を追加（既存の329件・ID・内容は未変更）。照合の全結果は [docs/nai-official-reconciliation.md](docs/nai-official-reconciliation.md)
@@ -58,6 +78,11 @@ data/                    データ辞書（ここを更新すればタグを増�
   style_tags_nai_official.json  v1.1：NovelAI公式掲載タグ69件（NAI-* ID・出典・照合日・モデル対応）
   nai_official_reconciliation.json  v1.1：公式ページ全タグの照合結果（一致・追加・専用UI・除外と理由）
   relation_rules_nai.json  v1.1：公式資料に根拠のある関係（代替表現・表記揺れ・組み合わせ提案）
+  quality_tags.json        v1.2：品質調合 28件（QLT-*）
+  detail_tags.json         v1.2：仕上げディテール 44件（DTL-*）＋品質と共有する3件の参照
+  quality_presets.json / detail_presets.json  v1.2：品質・仕上げのプリセット
+  layer_relations.json     v1.2：品質・仕上げの関係（同じ尺度の反対側・表記揺れ・改称）
+  layer_reconciliation.json  v1.2：候補の採否と理由、NovelAI の自動品質タグ一覧
   style_presets.json     36プリセット ※未改変
   conflict_rules.json    53関係ルール ※未改変
   model_output_rules.json モデル別出力ルール ※未改変
@@ -73,7 +98,9 @@ src/ui/                  画面（React）
 scripts/validate-data.mjs データ整合性チェック（ビルド前に自動実行）
 scripts/build-nai-official.py 公式照合データの生成元（照合日・タグ・説明文を定義）
 scripts/recon-to-md.mjs  照合結果を docs/nai-official-reconciliation.md に書き出す
-tests/fixtures/          v1.0 の実ビルドで作った保存データ（互換性テスト用）
+scripts/build-layers.py  品質・仕上げの辞書の生成元（タグ・説明・根拠・リスク・テンプレート）
+scripts/layers-to-md.mjs 収録一覧を docs/quality-detail-tags.md に書き出す
+tests/fixtures/          v1.0・v1.1 の実ビルドで作った保存データ（互換性テスト用）
 tests/                   単体・回帰テスト（Vitest）
 e2e/run.mjs              E2Eテスト（Playwright、iPhone 13相当・Pagesと同じサブパス）
 docs/source-data/        添付ZIPの調査資料・CSV（参照用）
@@ -108,7 +135,8 @@ npm run e2e          # ビルド後に実行。Playwright と Chromium が必要
 
 ## 保存データ
 
-- `localStorage` の `sbw.state.v1` に `schemaVersion: 2` 付きで保存（v1.0 は 1。読み込み時に年タグ・複雑度などを初期値で補って移行。キー名は互換のため据え置き）
+- `localStorage` の `sbw.state.v1` に `schemaVersion: 3` 付きで保存（v1.0 は 1、v1.1 は 2。読み込み時に年タグ・複雑度・品質・仕上げなどを初期値で補って移行。キー名は互換のため据え置き）
+- パネルの開閉などの端末ごとのUI設定は `sbw.ui.v1` に別保存（レシピ・バックアップには含めない。リセットしても変わらない）
 - レシピの知らない項目は `extra` に退避して保持し、書き出しにも残す
 - 読めないデータ・新しい版のデータは消さずに別キーへ退避
 - 書き出しJSON：`{ app, kind: backup|recipe|group, schemaVersion, dictionary, exportedAt, ... }`

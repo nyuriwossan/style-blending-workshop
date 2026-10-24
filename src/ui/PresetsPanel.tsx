@@ -1,12 +1,130 @@
 // プリセット：36種の画風プリセットを読み込む（置き換え／追加）
 import { useState } from 'react';
-import { PRESETS, SLIDER, categoryMeta, profileMeta } from '../core/dictionary';
+import { DETAIL_PRESETS, PRESETS, QUALITY_AUTO_PRESETS, QUALITY_PRESETS, SLIDER, categoryMeta, profileMeta, type LayerPreset } from '../core/dictionary';
+import { applyItemsToLayer, clearLayerWithUndo, LAYER_NAME } from './layerActions';
+import { useUiPrefs } from './uiPrefs';
 import { activeGroup, applyPreset, countActive, presetDuplicates, type DupPolicy, type PresetMode } from '../core/mix';
-import type { RawPreset } from '../core/types';
+import type { MixItem, RawPreset } from '../core/types';
 import type { DialogApi } from './Dialog';
 import type { Store } from './store';
 
 export function PresetsPanel({ store, dialog, onApplied }: { store: Store; dialog: DialogApi; onApplied: () => void }) {
+  const [prefs, setPrefs] = useUiPrefs();
+  const tab = prefs.presetLayer;
+  return (
+    <div>
+      <div className="seg seg-wide" role="tablist" aria-label="プリセットの層">
+        {(['style', 'quality', 'detail'] as const).map((l) => (
+          <button key={l} role="tab" aria-checked={tab === l} aria-selected={tab === l} onClick={() => setPrefs({ presetLayer: l })}>
+            {{ style: `画風 ${PRESETS.length}`, quality: `品質 ${QUALITY_PRESETS.length}`, detail: `仕上げ ${DETAIL_PRESETS.length}` }[l]}
+          </button>
+        ))}
+      </div>
+      {tab === 'style' && <StylePresets store={store} dialog={dialog} onApplied={onApplied} />}
+      {tab === 'quality' && <QualityPresets store={store} dialog={dialog} onApplied={onApplied} />}
+      {tab === 'detail' && <DetailPresets store={store} dialog={dialog} onApplied={onApplied} />}
+    </div>
+  );
+}
+
+function LayerPresetList({ store, dialog, onApplied, layer, presets }: { store: Store; dialog: DialogApi; onApplied: () => void; layer: 'quality' | 'detail'; presets: LayerPreset[] }) {
+  const [openId, setOpenId] = useState<string | null>(null);
+  const { index } = store;
+  return (
+    <ul className="preset-list">
+      {presets.map((p) => {
+        const open = openId === p.id;
+        const items = p.items.map((i) => ({ ...i, tag: index.byId.get(i.tagId) }));
+        return (
+          <li key={p.id} className={`preset ${open ? 'preset-open' : ''}`}>
+            <button className="preset-head" aria-expanded={open} onClick={() => setOpenId(open ? null : p.id)}>
+              <span className="preset-strip" aria-hidden>
+                {items.length ? (
+                  items.map((i) => (
+                    <i key={i.tagId} style={{ flexGrow: i.strength, background: i.tag ? categoryMeta(i.tag.category).color : '#999', opacity: 0.35 + (i.strength / SLIDER.max) * 0.65 }} />
+                  ))
+                ) : (
+                  <i style={{ flexGrow: 1, background: 'var(--line)' }} />
+                )}
+              </span>
+              <span className="preset-name">{p.name_ja}</span>
+              <span className="preset-en muted">{p.kind === 'clear' ? 'この層を空にする' : `${items.length}タグ`}</span>
+            </button>
+            {open && (
+              <div className="preset-body">
+                {items.length > 0 && (
+                  <ul className="preset-items">
+                    {items.map((i) => (
+                      <li key={i.tagId}>
+                        <i style={{ background: i.tag ? categoryMeta(i.tag.category).color : '#999' }} />
+                        <span>{i.tag?.nameJa ?? i.tagId}</span>
+                        <span className="muted" lang="en">{i.tag?.prompt}</span>
+                        <b>{i.strength.toFixed(1)}</b>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <p className="small">{p.description_ja}</p>
+                {p.recommended_profiles && <p className="small muted">想定モデル：{p.recommended_profiles.map((x) => profileMeta(x)?.short ?? x).join('、')}</p>}
+                <p className="small muted">強度は出発点で、効果は未検証です。ほかの層の選択はそのまま残ります。</p>
+                <div className="preset-actions">
+                  {p.kind === 'clear' ? (
+                    <button className="btn btn-primary" onClick={() => { clearLayerWithUndo(store, layer); onApplied(); }} disabled={!store.state.workspace[layer].length}>
+                      {LAYER_NAME[layer]}を空にする
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        if (await applyItemsToLayer(store, dialog, layer, p.name_ja, p.items.map((i): MixItem => ({ tagId: i.tagId, strength: i.strength, on: true })))) onApplied();
+                      }}
+                    >
+                      {LAYER_NAME[layer]}に使う
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function QualityPresets({ store, dialog, onApplied }: { store: Store; dialog: DialogApi; onApplied: () => void }) {
+  const s = store.state.settings;
+  return (
+    <section className="presets">
+      <p className="lede">品質調合の出発点です。下の「手動で出力するセット」はアプリの出力にタグを加えます。サービス側の自動品質タグとは別物です。</p>
+      <h3 className="preset-sec-title">手動で出力するセット</h3>
+      <LayerPresetList store={store} dialog={dialog} onApplied={onApplied} layer="quality" presets={QUALITY_PRESETS} />
+      <h3 className="preset-sec-title">サービス側の自動品質タグ（設定の記録だけ）</h3>
+      <p className="small muted">NovelAIの「品質タグ追加」をどうしているかを記録します。アプリの出力には何も加えず、手動で選んだタグとの重複だけを知らせます。</p>
+      <ul className="auto-presets">
+        {QUALITY_AUTO_PRESETS.map((p) => (
+          <li key={p.id}>
+            <button className={`btn ${s.naiAutoQuality === p.autoSetting ? 'btn-primary' : ''}`} aria-pressed={s.naiAutoQuality === p.autoSetting} onClick={() => { store.setSettings({ naiAutoQuality: p.autoSetting! }); store.toast(`記録しました：${p.name_ja}`); }}>
+              {p.name_ja}
+            </button>
+            <p className="small muted">{p.description_ja}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function DetailPresets({ store, dialog, onApplied }: { store: Store; dialog: DialogApi; onApplied: () => void }) {
+  return (
+    <section className="presets">
+      <p className="lede">仕上げディテールの出発点です。目・髪・肌・唇・布地の描き込みと質感を整えます。人物の形や色は指定しません。</p>
+      <LayerPresetList store={store} dialog={dialog} onApplied={onApplied} layer="detail" presets={DETAIL_PRESETS} />
+    </section>
+  );
+}
+
+function StylePresets({ store, dialog, onApplied }: { store: Store; dialog: DialogApi; onApplied: () => void }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const { index } = store;
   const ws = store.state.workspace;
@@ -62,7 +180,7 @@ export function PresetsPanel({ store, dialog, onApplied }: { store: Store; dialo
   return (
     <section className="presets">
       <p className="lede">
-        よく使う組み合わせの出発点です。読み込んだ後は、スライダーで自由に調整できます。強度は初期値で、最適値ではありません（画像での効果は未検証）。
+        画風のよく使う組み合わせの出発点です。品質・仕上げディテールの選択には影響しません。読み込んだ後は、スライダーで自由に調整できます。強度は初期値で、最適値ではありません（画像での効果は未検証）。
       </p>
       <ul className="preset-list">
         {PRESETS.map((p) => {

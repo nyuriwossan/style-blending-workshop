@@ -1,17 +1,18 @@
 // 画面A｜調合：調合皿・グループ・関係警告・タグ選択
-import { memo, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
+  ALL_CATEGORY_KEYS,
   BASIC_COUNT,
   META,
   RECON,
   SLIDER,
   categoryMeta,
-  evidenceLabel,
-  isSupported,
   profileMeta,
   searchTags,
   subcategoryLabel,
 } from '../core/dictionary';
+import { DetailPanel } from './DetailPanel';
+import { QualityPanel } from './QualityPanel';
 import { complexityTag, yearTag, type RenderResult } from '../core/render';
 import { useResetMix } from './reset';
 import {
@@ -35,15 +36,18 @@ import {
   setComplexity,
   validateYear,
   isMixEmpty,
-  countActive,
+  countLayer,
+  toggleLayerItem,
+  setLayerItem,
   type EffectiveItem,
 } from '../core/mix';
-import { rulesForTag, type RelationHit } from '../core/relations';
-import { CATEGORY_KEYS, PROFILE_IDS, type CategoryKey, type MixItem, type ProfileId, type Tag } from '../core/types';
+import type { RelationHit } from '../core/relations';
+import { CATEGORY_KEYS, type CategoryKey, type Tag } from '../core/types';
 import type { DialogApi } from './Dialog';
 import type { Store } from './store';
+import { StrengthControl, TagRow, type Occ } from './TagRow';
+import { useUiPrefs } from './uiPrefs';
 
-type Occ = { groupId: string; groupName: string; strength: number; on: boolean; enabled: boolean };
 
 export interface MixProps {
   store: Store;
@@ -58,15 +62,19 @@ export interface MixProps {
 function MixHeader({ store, dialog }: { store: Store; dialog: DialogApi }) {
   const ws = store.state.workspace;
   const reset = useResetMix(store, dialog);
-  const tags = countActive(ws); // タブ・下部バーと同じ数え方
+  const style = countLayer(ws, 'style');
+  const quality = countLayer(ws, 'quality');
+  const detail = countLayer(ws, 'detail');
   const extras = [ws.complexity ? `複雑度 ${META.complexityLevels.find((c) => c.key === ws.complexity)?.label}` : '', ws.years.length ? `年 ${ws.years.length}` : '']
     .filter(Boolean)
     .join('・');
   return (
     <div className="mix-head">
-      <p className="mix-summary">
-        <b>{tags}</b>タグ
-        <span className="muted">／{ws.groups.length}グループ{extras && `／${extras}`}</span>
+      <p className="mix-summary" aria-label={`画風${style}件、品質${quality}件、仕上げ${detail}件`}>
+        <span className="mix-layer">画風 <b>{style}</b></span>
+        <span className="mix-layer">品質 <b>{quality}</b></span>
+        <span className="mix-layer">仕上げ <b>{detail}</b></span>
+        <span className="muted mix-extra">{ws.groups.length}グループ{extras && `・${extras}`}</span>
       </p>
       <button className="btn btn-small btn-reset" onClick={() => void reset()} disabled={isMixEmpty(ws)} aria-label="調合をリセット（確認あり）">
         <span aria-hidden>↺</span> 調合をリセット
@@ -183,32 +191,6 @@ function NaiSpecial({ store }: { store: Store }) {
   );
 }
 
-// ── 強度スライダー（± ボタン付き。iPhoneで細かく合わせやすいように） ──
-export function StrengthControl({ value, onChange, label }: { value: number; onChange: (v: number) => void; label: string }) {
-  const step = (d: number) => onChange(Math.round(Math.min(SLIDER.max, Math.max(SLIDER.min, value + d)) * 10) / 10);
-  return (
-    <div className="strength">
-      <button className="step" onClick={() => step(-SLIDER.step)} aria-label={`${label}を弱める`} disabled={value <= SLIDER.min}>
-        −
-      </button>
-      <input
-        type="range"
-        min={SLIDER.min}
-        max={SLIDER.max}
-        step={SLIDER.step}
-        value={value}
-        aria-label={`${label}の強度`}
-        onChange={(e) => onChange(Number(e.target.value))}
-        style={{ ['--fill' as string]: `${(value / SLIDER.max) * 100}%` }}
-      />
-      <button className="step" onClick={() => step(SLIDER.step)} aria-label={`${label}を強める`} disabled={value >= SLIDER.max}>
-        ＋
-      </button>
-      <output className={`strength-val ${value === 1 ? 'is-std' : ''}`}>{value === 0 ? 'OFF' : value.toFixed(1)}</output>
-    </div>
-  );
-}
-
 // ── 調合皿：選択中タグを顔料の帯として並べる ──
 export function MixTray({ effective, onJump }: { effective: EffectiveItem[]; onJump: (t: Tag) => void }) {
   const known = effective.filter((e) => e.tag);
@@ -216,7 +198,7 @@ export function MixTray({ effective, onJump }: { effective: EffectiveItem[]; onJ
   if (known.length === 0)
     return (
       <div className="tray tray-empty" aria-label="調合皿">
-        <p>まだ何も混ぜていません。下の一覧からタグを選ぶか、プリセットから始めてください。</p>
+        <p>まだ何も混ぜていません。画風を選んで、必要なら品質と仕上げディテールを足してください。プリセットから始めることもできます。</p>
       </div>
     );
   return (
@@ -238,7 +220,7 @@ export function MixTray({ effective, onJump }: { effective: EffectiveItem[]; onJ
         })}
       </div>
       <ul className="tray-legend">
-        {CATEGORY_KEYS.map((k) => {
+        {ALL_CATEGORY_KEYS.map((k) => {
           const items = known.filter((e) => e.tag!.category === k);
           if (!items.length) return null;
           const c = categoryMeta(k);
@@ -294,7 +276,7 @@ function GroupBar({ store, dialog }: { store: Store; dialog: DialogApi }) {
       const n = await dialog.promptText('グループ棚に保存', act.name, '保存');
       if (n) {
         const now = new Date().toISOString();
-        store.update((s) => ({ ...s, groups: [{ id: newId('sgp'), name: n, createdAt: now, updatedAt: now, items: act.items.map((i) => ({ ...i })) }, ...s.groups] }));
+        store.update((s) => ({ ...s, groups: [{ id: newId('sgp'), name: n, createdAt: now, updatedAt: now, items: act.items.map((i) => ({ ...i })), layer: 'style' }, ...s.groups] }));
         store.toast(`「${n}」をグループ棚に保存しました`);
       }
     } else if (a === 'delete') {
@@ -468,134 +450,6 @@ function Notices({ store, effective, relations, unknownIds, result }: Omit<MixPr
   );
 }
 
-// ── タグ1件 ──
-interface RowProps {
-  tag: Tag;
-  item: MixItem | undefined;
-  others: Occ[];
-  hits: RelationHit[];
-  profile: ProfileId;
-  expanded: boolean;
-  onExpand: (id: string | null) => void;
-  onToggle: (id: string) => void;
-  onStrength: (id: string, v: number) => void;
-  nameOf: (id: string) => string;
-}
-
-const TagRow = memo(function TagRow({ tag, item, others, hits, profile, expanded, onExpand, onToggle, onStrength, nameOf }: RowProps) {
-  const on = !!item && isActive(item);
-  const pm = profileMeta(profile);
-  const ev = evidenceLabel(tag.evidenceLevel);
-  const worst = hits.find((h) => h.level === 'strong') ?? hits.find((h) => h.level === 'warn');
-  return (
-    <li id={`tag-${tag.id}`} className={`tag ${on ? 'tag-on' : ''}`}>
-      <div className="tag-main">
-        <button className="tag-toggle" aria-pressed={on} onClick={() => onToggle(tag.id)}>
-          <span className="tag-check" aria-hidden />
-          <span className="tag-names">
-            <span className="tag-ja">
-              {tag.nameJa}
-              {tag.origin === 'user' && <span className="badge badge-user">自作</span>}
-              {tag.official && <span className="badge badge-official">NAI公式</span>}
-              {tag.v5Only && <span className="badge badge-v5">V5専用</span>}
-              {worst && <span className={`badge badge-${worst.level}`}>{worst.label}</span>}
-            </span>
-            <span className="tag-en" lang="en">{tag.prompt}</span>
-          </span>
-        </button>
-        <button className="tag-info" aria-expanded={expanded} aria-label={`${tag.nameJa}の詳細`} onClick={() => onExpand(expanded ? null : tag.id)}>
-          {expanded ? '閉' : '詳'}
-        </button>
-      </div>
-      {on && <StrengthControl value={item!.strength} label={tag.nameJa} onChange={(v) => onStrength(tag.id, v)} />}
-      {!on && item && item.strength > 0 && <p className="small muted tag-kept">OFF（値 {item.strength.toFixed(1)} を保持中）</p>}
-      {on && !isSupported(tag, profile) && (
-        <p className="small note-warn tag-kept">現在の出力先（{pm.short}）では出力しません。選択は保持しています。</p>
-      )}
-      {others.length > 0 && (
-        <p className="small muted tag-others">
-          他のグループにも：{others.map((o) => `${o.groupName} ${o.on ? o.strength.toFixed(1) : 'OFF'}${o.enabled ? '' : '（無効）'}`).join('、')}
-        </p>
-      )}
-      {expanded && (
-        <div className="tag-detail">
-          <p>{tag.description}</p>
-          <dl>
-            <dt>狙い</dt>
-            <dd>{tag.intendedEffect}</dd>
-            <dt>根拠</dt>
-            <dd>
-              {ev.label}
-              <span className="muted">。{ev.detail}</span>
-              {tag.sourceUrl && (
-                <>
-                  {' '}
-                  <a href={tag.sourceUrl} target="_blank" rel="noopener noreferrer">参照資料</a>
-                </>
-              )}
-            </dd>
-            {tag.official && (
-              <>
-                <dt>公式掲載</dt>
-                <dd>
-                  NovelAI公式「{tag.official.section}」に <code>{tag.official.tag}</code> として掲載（{tag.official.checkedAt} 照合）。{' '}
-                  <a href={tag.official.url} target="_blank" rel="noopener noreferrer">公式ページ</a>
-                  {tag.official.officialSummaryJA && <span className="muted"> 公式の説明：{tag.official.officialSummaryJA}</span>}
-                </dd>
-              </>
-            )}
-            <dt>モデル対応</dt>
-            <dd>
-              <ul className="support-list">
-                {PROFILE_IDS.map((p) => (
-                  <li key={p} className={p === profile ? 'is-current' : ''}>
-                    {profileMeta(p).short}：<span className={`sup sup-${tag.support[p]}`}>{META.supportLabels[tag.support[p]]}</span>
-                  </li>
-                ))}
-              </ul>
-            </dd>
-            <dt>{pm.short}での状況</dt>
-            <dd>{tag.modelStatus[pm.statusKey]}</dd>
-            {tag.aliases.length > 0 && (
-              <>
-                <dt>別名・検索語</dt>
-                <dd>{tag.aliases.join('、')}</dd>
-              </>
-            )}
-            {tag.similarExisting.length > 0 && (
-              <>
-                <dt>似た既存タグ</dt>
-                <dd>{tag.similarExisting.map(nameOf).join('、')}（統合せず別のタグとして残しています）</dd>
-              </>
-            )}
-            <dt>画像での検証</dt>
-            <dd>未実施（{tag.validationStatus}）</dd>
-            <dt>顔への影響</dt>
-            <dd>{tag.faceImpact}</dd>
-            <dt>ID</dt>
-            <dd className="mono-id">{tag.id}{tag.priority !== '-' && `（優先度 ${tag.priority}）`}</dd>
-          </dl>
-          {rulesForTag(tag.id).length > 0 && (
-            <div className="tag-rel">
-              <p className="small muted">定義済みの関係</p>
-              <ul>
-                {rulesForTag(tag.id).map((r) => {
-                  const other = r.tagIds.find((x) => x !== tag.id)!;
-                  return (
-                    <li key={r.id} className="small">
-                      {META.relationTypes[r.type]?.label}：{nameOf(other)}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-    </li>
-  );
-});
-
 // ── タグ選択（カテゴリ別・検索・基本/詳細） ──
 // タブを切り替えても開閉状態と検索語を保つ（このページを開いている間だけ）
 const pickerMemory: { open: Set<CategoryKey>; query: string } = { open: new Set(['style_genre']), query: '' };
@@ -636,21 +490,24 @@ function TagPicker({ store, relations, jumpTo }: { store: Store; relations: Rela
   }, [relations]);
 
   const searching = query.trim().length > 0;
+  // 画風の層のタグ（v1.1 までと同じ範囲）。品質・仕上げは検索したときだけ下に別枠で出す
+  const styleTags = useMemo(() => index.all.filter((t) => t.layer === 'style'), [index.all]);
   const visible = useMemo(() => {
     let list: Tag[];
-    if (searching) list = searchTags(index.all, query); // 検索は常に全件が対象
-    else if (settings.view === 'detail') list = index.all;
-    else list = index.all.filter((t) => t.basic || occ.has(t.id));
+    if (searching) list = searchTags(styleTags, query); // 検索は常に全件が対象
+    else if (settings.view === 'detail') list = styleTags;
+    else list = styleTags.filter((t) => t.basic || occ.has(t.id));
     return settings.officialOnly ? list.filter((t) => t.official) : list;
-  }, [searching, query, index.all, settings.view, settings.officialOnly, occ]);
-  const officialTotal = useMemo(() => index.all.filter((t) => t.official).length, [index.all]);
+  }, [searching, query, styleTags, settings.view, settings.officialOnly, occ]);
+  const layerHits = useMemo(() => (searching ? searchTags(index.all.filter((t) => t.layer !== 'style'), query) : []), [searching, query, index.all]);
+  const officialTotal = useMemo(() => styleTags.filter((t) => t.official).length, [styleTags]);
 
   useEffect(() => {
     if (!jumpTo) return;
     const t = index.byId.get(jumpTo.id);
-    if (!t) return;
+    if (!t || t.layer !== 'style') return;
     setQuery('');
-    setOpenCats((s) => new Set(s).add(t.category));
+    setOpenCats((s) => new Set(s).add(t.category as CategoryKey));
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         const el = document.getElementById(`tag-${t.id}`);
@@ -682,7 +539,7 @@ function TagPicker({ store, relations, jumpTo }: { store: Store; relations: Rela
             基本 {BASIC_COUNT}
           </button>
           <button role="radio" aria-checked={settings.view === 'detail'} onClick={() => store.setSettings({ view: 'detail' })}>
-            詳細 {index.all.length}
+            詳細 {styleTags.length}
           </button>
         </div>
       </div>
@@ -693,7 +550,7 @@ function TagPicker({ store, relations, jumpTo }: { store: Store; relations: Rela
       </div>
       <p className="small muted picker-note">
         {searching
-          ? `全${index.all.length}件から ${visible.length} 件。`
+          ? `画風${styleTags.length}件から ${visible.length} 件${layerHits.length ? `、品質・仕上げから ${layerHits.length} 件` : ''}。`
           : settings.view === 'basic'
             ? `基本表示：おすすめ${BASIC_COUNT}件と、選択中・自作のタグを表示しています。`
             : '詳細表示：全タグを小分類ごとに表示しています。'}
@@ -758,18 +615,63 @@ function TagPicker({ store, relations, jumpTo }: { store: Store; relations: Rela
           </div>
         );
       })}
-      {visible.length === 0 && settings.officialOnly && <p className="empty">公式掲載タグの中には見つかりませんでした。「NAI公式掲載のみ」を外すと全体から探せます。</p>}
-      {visible.length === 0 && !settings.officialOnly && <p className="empty">見つかりませんでした。別の言い方（英語・ひらがな）でも探せます。ないタグは「保存棚 → 自作タグ」で追加できます。</p>}
+      {layerHits.length > 0 && (
+        <div className="cat layer-hits" style={{ ['--cat' as string]: 'var(--ink-2)' }}>
+          <h3 className="sub-head layer-hits-head">品質調合・仕上げディテールのタグ</h3>
+          <ul className="tag-list">
+            {layerHits.map((t) => {
+              const layer = t.layer === 'quality' ? 'quality' : 'detail';
+              const item = ws[layer].find((i) => i.tagId === t.id);
+              return (
+                <TagRow
+                  key={t.id}
+                  tag={t}
+                  item={item}
+                  others={[]}
+                  hits={hitsByTag.get(t.id) ?? []}
+                  profile={settings.profile}
+                  expanded={expanded === t.id}
+                  onExpand={setExpanded}
+                  onToggle={(id) => store.updateWorkspace((w) => toggleLayerItem(w, layer, id))}
+                  onStrength={(id, v) => store.updateWorkspace((w) => setLayerItem(w, layer, id, { strength: v }))}
+                  nameOf={nameOf}
+                  otherLayerNote={`${layer === 'quality' ? '品質調合' : '仕上げディテール'}に入ります`}
+                />
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {visible.length === 0 && layerHits.length === 0 && settings.officialOnly && <p className="empty">公式掲載タグの中には見つかりませんでした。「NAI公式掲載のみ」を外すと全体から探せます。</p>}
+      {visible.length === 0 && layerHits.length === 0 && !settings.officialOnly && <p className="empty">見つかりませんでした。別の言い方（英語・ひらがな）でも探せます。ないタグは「保存棚 → 自作タグ」で追加できます。</p>}
     </section>
   );
 }
 
 export function MixPanel(props: MixProps) {
   const [jump, setJump] = useState<{ id: string; n: number } | null>(null);
+  const [, setPrefs] = useUiPrefs();
+  const onJump = (t: Tag) => {
+    if (t.layer === 'style') return setJump({ id: t.id, n: Date.now() });
+    // 品質・仕上げのタグはそれぞれのパネルを開いて表示
+    const inQuality = props.store.state.workspace.quality.some((i) => i.tagId === t.id);
+    setPrefs(inQuality ? { qualityAdvancedOpen: true } : { detailOpen: true });
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        const sel = inQuality ? `.layer-quality [data-tag-id="${t.id}"]` : '.layer-detail';
+        document.querySelector(sel)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }),
+    );
+  };
   return (
     <div className="mix">
       <MixHeader store={props.store} dialog={props.dialog} />
-      <MixTray effective={props.effective} onJump={(t) => setJump({ id: t.id, n: Date.now() })} />
+      <MixTray effective={props.effective} onJump={onJump} />
+      <QualityPanel store={props.store} dialog={props.dialog} relations={props.relations} />
+      <DetailPanel store={props.store} dialog={props.dialog} relations={props.relations} />
+      <h2 className="layer-section-title">
+        画風調合 <span className="small muted">絵柄・線・塗り・光・色など9カテゴリ</span>
+      </h2>
       <GroupBar store={props.store} dialog={props.dialog} />
       <Notices store={props.store} effective={props.effective} relations={props.relations} unknownIds={props.unknownIds} result={props.result} />
       <NaiSpecial store={props.store} />

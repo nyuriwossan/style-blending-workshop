@@ -14,6 +14,8 @@ import {
   type Complexity,
   type CustomTag,
   type YearItem,
+  LAYERS,
+  type Layer,
   type DedupeRule,
   type MixGroup,
   type MixItem,
@@ -41,6 +43,11 @@ export const DEFAULT_SETTINGS: Settings = {
   personPosition: 'before',
   officialOnly: false,
   pixaiYears: false,
+  naiAutoQuality: 'unknown',
+  pixaiAutoQuality: 'unknown',
+  pixaiAutoQualityTags: '',
+  qualityPosition: 'auto',
+  tsubakiDetailNL: true,
 };
 
 export function initialState(): AppState {
@@ -144,7 +151,13 @@ export function parseComplexity(x: unknown, where: string, iss: Issues): Complex
   return null;
 }
 
-const RECIPE_KEYS = new Set(['id', 'name', 'note', 'createdAt', 'updatedAt', 'groups', 'items', 'dedupeRule', 'profile', 'modelProfile', 'years', 'complexity', 'extra']);
+const RECIPE_KEYS = new Set(['id', 'name', 'note', 'createdAt', 'updatedAt', 'groups', 'items', 'dedupeRule', 'profile', 'modelProfile', 'years', 'complexity', 'quality', 'detail', 'extra']);
+const isLayer = (x: unknown): x is Layer => typeof x === 'string' && (LAYERS as readonly string[]).includes(x);
+/** v1.2：品質・仕上げのタグ一覧。v1.1 以前のデータには無いので空になる */
+function parseLayerItems(x: unknown, where: string, iss: Issues): MixItem[] {
+  if (x === undefined || x === null) return [];
+  return parseItems(x, where, iss);
+}
 
 export function parseRecipe(x: unknown, iss: Issues): Recipe | null {
   if (!isObj(x)) return null;
@@ -165,6 +178,8 @@ export function parseRecipe(x: unknown, iss: Issues): Recipe | null {
     profile: isProfile(x.profile) ? x.profile : isProfile(x.modelProfile) ? x.modelProfile : DEFAULT_SETTINGS.profile,
     years: parseYears(x.years, `レシピ「${name}」`, iss),
     complexity: parseComplexity(x.complexity, `レシピ「${name}」`, iss),
+    quality: parseLayerItems(x.quality, `レシピ「${name}」の品質調合`, iss),
+    detail: parseLayerItems(x.detail, `レシピ「${name}」の仕上げディテール`, iss),
     ...extraOf(x),
   };
 }
@@ -188,6 +203,7 @@ export function parseSavedGroup(x: unknown, iss: Issues): SavedGroup | null {
     createdAt: isoOr(x.createdAt),
     updatedAt: isoOr(x.updatedAt),
     items: parseItems(x.items, `グループ「${name}」`, iss),
+    layer: isLayer(x.layer) ? x.layer : 'style',
   };
 }
 
@@ -250,6 +266,11 @@ export function parseSettings(x: unknown): Settings {
     personPosition: s.personPosition === 'after' ? 'after' : 'before',
     officialOnly: s.officialOnly === true,
     pixaiYears: s.pixaiYears === true,
+    naiAutoQuality: (['unknown', 'off', 'light', 'standard', 'on'] as const).find((v) => v === s.naiAutoQuality) ?? 'unknown',
+    pixaiAutoQuality: (['unknown', 'off', 'on'] as const).find((v) => v === s.pixaiAutoQuality) ?? 'unknown',
+    pixaiAutoQualityTags: cleanText(s.pixaiAutoQualityTags, 500),
+    qualityPosition: (['auto', 'start', 'end'] as const).find((v) => v === s.qualityPosition) ?? 'auto',
+    tsubakiDetailNL: s.tsubakiDetailNL !== false,
   };
 }
 
@@ -258,7 +279,9 @@ export function parseWorkspace(x: unknown, iss: Issues): Workspace {
   const groups = parseGroups(x.groups, '調合中', iss);
   const years = parseYears(x.years, '調合中', iss);
   const complexity = parseComplexity(x.complexity, '調合中', iss);
-  if (groups.length === 0) return { ...emptyWorkspace(), years, complexity };
+  const quality = parseLayerItems(x.quality, '調合中の品質調合', iss);
+  const detail = parseLayerItems(x.detail, '調合中の仕上げディテール', iss);
+  if (groups.length === 0) return { ...emptyWorkspace(), years, complexity, quality, detail };
   const active = typeof x.activeGroupId === 'string' && groups.some((g) => g.id === x.activeGroupId) ? x.activeGroupId : groups[0].id;
   return {
     groups,
@@ -267,6 +290,8 @@ export function parseWorkspace(x: unknown, iss: Issues): Workspace {
     sourceRecipeId: typeof x.sourceRecipeId === 'string' ? x.sourceRecipeId : null,
     years,
     complexity,
+    quality,
+    detail,
   };
 }
 
@@ -278,8 +303,9 @@ export function migrateState(raw: unknown): { state: AppState; warnings: string[
   if (v > SCHEMA_VERSION) {
     return { state: initialState(), warnings: [`新しい版のアプリで保存されたデータです（schemaVersion ${v}）`], futureVersion: true };
   }
-  // v0（schemaVersion なし）・v1（v1.0）→ v2：
-  // 構造は同じで、v2 で years・complexity・officialOnly・pixaiYears が増えただけ。無ければ初期値で補う
+  // v0（schemaVersion なし）・v1（v1.0）・v2（v1.1）→ v3（v1.2）：
+  // 構造は同じで、v2 で years・complexity・officialOnly・pixaiYears、v3 で quality・detail・自動品質タグの設定・
+  // グループ棚の layer が増えただけ。無ければ初期値（品質・仕上げは未選択）で補う
   const state: AppState = {
     schemaVersion: SCHEMA_VERSION,
     workspace: parseWorkspace(raw.workspace, iss),
@@ -383,6 +409,7 @@ export function importIntoState(current: AppState, text: string, knownIds: (cust
     addedCustom++;
   }
   const fix = (items: MixItem[]) => dedupeWithin(items.map((i) => (remap.has(i.tagId) ? { ...i, tagId: remap.get(i.tagId)! } : i)));
+  const allItems = (r: Recipe) => [...r.groups.flatMap((g) => g.items), ...r.quality, ...r.detail];
 
   // レシピ・グループ：ID衝突時は新IDで追加（既存を上書きしない）
   const rIds = new Set(current.recipes.map((r) => r.id));
@@ -402,7 +429,7 @@ export function importIntoState(current: AppState, text: string, knownIds: (cust
 
   const known = knownIds(customTags);
   const unknown = new Set<string>();
-  for (const r of recipes) for (const g of r.groups) for (const i of g.items) if (!known.has(i.tagId)) unknown.add(i.tagId);
+  for (const r of recipes) for (const i of allItems(r)) if (!known.has(i.tagId)) unknown.add(i.tagId);
   for (const g of groups) for (const i of g.items) if (!known.has(i.tagId)) unknown.add(i.tagId);
   if (unknown.size)
     iss.warnings.push(`辞書にないタグID ${unknown.size} 件を含みます（${[...unknown].slice(0, 8).join(', ')}${unknown.size > 8 ? ' ほか' : ''}）。削除せず保持しますが、出力には含まれません`);

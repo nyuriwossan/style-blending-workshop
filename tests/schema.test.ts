@@ -24,13 +24,13 @@ function sampleState(): AppState {
   w = setItem(w, w.activeGroupId, 'USR-abc', { strength: 1.2 });
   const recipe: Recipe = {
     id: 'rcp-1', name: '繊細な茶色の線画', note: 'メモ', createdAt: '2026-10-24T00:00:00.000Z', updatedAt: '2026-10-24T00:00:00.000Z',
-    groups: w.groups, dedupeRule: 'max', profile: 'nai_v45', years: [], complexity: null,
+    groups: w.groups, dedupeRule: 'max', profile: 'nai_v45', years: [], complexity: null, quality: [], detail: [],
   };
   return {
     ...s,
     workspace: w,
     recipes: [recipe],
-    groups: [{ id: 'sgp-1', name: '線画グループ', createdAt: recipe.createdAt, updatedAt: recipe.updatedAt, items: [{ tagId: 'REC-LIN-003', strength: 1.3, on: true }] }],
+    groups: [{ id: 'sgp-1', name: '線画グループ', createdAt: recipe.createdAt, updatedAt: recipe.updatedAt, items: [{ tagId: 'REC-LIN-003', strength: 1.3, on: true }], layer: 'style' }],
     customTags: [{ id: 'USR-abc', category: 'linework', nameJa: '繊細な細い線画', prompt: 'delicate thin lineart', note: '', createdAt: recipe.createdAt, updatedAt: recipe.updatedAt }],
   };
 }
@@ -42,8 +42,8 @@ describe('9. 保存・復元（状態の往復）', () => {
     expect(m.warnings).toEqual([]);
     expect(m.state).toEqual(s);
   });
-  it('schemaVersion を持つ（v1.1 は 2）', () => {
-    expect(JSON.parse(JSON.stringify(sampleState())).schemaVersion).toBe(2);
+  it('schemaVersion を持つ（v1.1 は 2、v1.2 は 3）', () => {
+    expect(JSON.parse(JSON.stringify(sampleState())).schemaVersion).toBe(3);
   });
   it('新しい版のデータは読み込まず、その旨を返す（上書き防止）', () => {
     const m = migrateState({ ...sampleState(), schemaVersion: 99 });

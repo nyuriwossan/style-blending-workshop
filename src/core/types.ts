@@ -17,6 +17,17 @@ export const CATEGORY_KEYS = [
 ] as const;
 export type CategoryKey = (typeof CATEGORY_KEYS)[number];
 
+/** v1.2：プロンプトの3層 */
+export const LAYERS = ['style', 'quality', 'detail'] as const;
+export type Layer = (typeof LAYERS)[number];
+export const QUALITY_CATEGORY_KEYS = ['quality_rating', 'aesthetic_rating', 'resolution', 'detail_density', 'general_quality', 'auxiliary'] as const;
+export type QualityCategory = (typeof QUALITY_CATEGORY_KEYS)[number];
+export const DETAIL_CATEGORY_KEYS = ['eyes', 'hair', 'skin', 'lips', 'clothing', 'overall'] as const;
+export type DetailCategory = (typeof DETAIL_CATEGORY_KEYS)[number];
+export type TagCategory = CategoryKey | QualityCategory | DetailCategory;
+export type RiskLevel = 'low' | 'medium' | 'high';
+export type DetailType = 'density' | 'texture' | 'finish';
+
 export const PROFILE_IDS = [
   'pixai_sdxl',
   'pixai_tsubaki2',
@@ -78,9 +89,10 @@ export interface OfficialInfo {
  * モデル対応の状態
  * - official：公式資料に掲載（そのモデルでの使用が案内されている）
  * - unsupported：公式に別モデル専用と明記（このモデルには出力しない）
+ * - example：公式の作例・テンプレートに使用例がある（v1.2。効果の保証ではない）
  * - unverified：公式の記載なし・効果未検証（出力はする）
  */
-export type SupportStatus = 'official' | 'unsupported' | 'unverified';
+export type SupportStatus = 'official' | 'example' | 'unsupported' | 'unverified';
 
 export interface RawPreset {
   id: string;
@@ -119,7 +131,10 @@ export interface RawRule {
 export interface Tag {
   id: string;
   origin: 'dictionary' | 'user';
-  category: CategoryKey;
+  /** v1.2：主に属する層と、選べる層（共有タグは複数） */
+  layer: Layer;
+  layers: Layer[];
+  category: TagCategory;
   subcategory: string;
   nameJa: string;
   nameEn: string;
@@ -143,6 +158,24 @@ export interface Tag {
   /** 基本表示に出すか */
   basic: boolean;
   similarExisting: string[];
+  // ── v1.2：品質・仕上げディテール用（画風タグでは空） ──
+  /** 仕上げディテールでの表示先（共有タグの場合も） */
+  detailCategory?: DetailCategory;
+  /** 仕上げディテールの基本表示に出すか */
+  detailBasic: boolean;
+  /** 品質調合のクイック選択に出すか */
+  quick: boolean;
+  risk?: RiskLevel;
+  riskNote?: string;
+  /** 新しい要素（浮き毛・刺繍・水滴など）を描き足す可能性 */
+  addsElements: boolean;
+  detailType?: DetailType;
+  /** 出典区分（nai_special / official_example / official_phrase / community_usage / research_candidate） */
+  sourceClass?: string;
+  evidence: { source: string; url: string; note: string }[];
+  /** Tsubaki向け自然文テンプレート（{m} に強度の語が入る。実験的） */
+  nlTemplate?: string;
+  caution?: string;
   /** 検索用の正規化済み文字列 */
   searchText: string;
 }
@@ -201,6 +234,10 @@ export interface Workspace {
   years: YearItem[];
   /** v1.1：複雑度（V5専用。null＝指定なし） */
   complexity: Complexity | null;
+  /** v1.2：品質調合（初期は空） */
+  quality: MixItem[];
+  /** v1.2：仕上げディテール（初期は空） */
+  detail: MixItem[];
 }
 
 export interface Recipe {
@@ -215,6 +252,9 @@ export interface Recipe {
   /** v1.1 */
   years: YearItem[];
   complexity: Complexity | null;
+  /** v1.2 */
+  quality: MixItem[];
+  detail: MixItem[];
   /** 読み込んだデータにあった未知の項目（無断で捨てずに保持し、書き出し時に戻す） */
   extra?: Record<string, unknown>;
 }
@@ -225,7 +265,13 @@ export interface SavedGroup {
   createdAt: string;
   updatedAt: string;
   items: MixItem[];
+  /** v1.2：どの層のグループか（v1.1以前は画風） */
+  layer: Layer;
 }
+
+/** NovelAI の「品質タグ追加」（自己申告。V5 は Light/Standard、他の版は on） */
+export type NaiAutoQuality = 'unknown' | 'off' | 'light' | 'standard' | 'on';
+export type PixaiAutoQuality = 'unknown' | 'off' | 'on';
 
 export interface Settings {
   profile: ProfileId;
@@ -241,9 +287,18 @@ export interface Settings {
   officialOnly: boolean;
   /** v1.1：PIXAIにも年タグを出力する実験モード（既定OFF） */
   pixaiYears: boolean;
+  /** v1.2：サービス側の自動品質タグ（自己申告。アプリからは取得・変更できない） */
+  naiAutoQuality: NaiAutoQuality;
+  pixaiAutoQuality: PixaiAutoQuality;
+  /** PIXAI側で自動追加されるタグ（利用者が確認して入力した場合のみ） */
+  pixaiAutoQualityTags: string;
+  /** 品質タグの位置。auto＝PIXAIは先頭、NovelAIは末尾（NovelAIの自動品質タグと同じ位置） */
+  qualityPosition: 'auto' | 'start' | 'end';
+  /** Tsubaki向けに仕上げディテールを自然文テンプレートで出力（実験的） */
+  tsubakiDetailNL: boolean;
 }
 
-export const SCHEMA_VERSION = 2 as const;
+export const SCHEMA_VERSION = 3 as const;
 
 export interface AppState {
   schemaVersion: typeof SCHEMA_VERSION;

@@ -1,8 +1,10 @@
 // プロンプト出力：モデル切替・プレビュー・コピー・カテゴリ別コピー・リセット
-import { META, categoryMeta, profileMeta } from '../core/dictionary';
-import { DEDUPE_RULE_LABEL, isMixEmpty } from '../core/mix';
+import { META, categoryMeta, layerMeta, profileMeta } from '../core/dictionary';
+import { autoQualityInfo } from '../core/autoQuality';
+import type { Layer } from '../core/types';
+import { DEDUPE_RULE_LABEL, isActive, isMixEmpty } from '../core/mix';
 import { useResetMix } from './reset';
-import { isPixai, isTsubaki, syntaxDescription, type RenderResult } from '../core/render';
+import { JOINER, isPixai, isTsubaki, syntaxDescription, type RenderResult } from '../core/render';
 import type { DedupeRule, ProfileId } from '../core/types';
 import { copyText } from '../storage/files';
 import type { DialogApi } from './Dialog';
@@ -43,6 +45,18 @@ export function useCopy(store: Store) {
 
 export function OutputPanel({ store, dialog, result }: { store: Store; dialog: DialogApi; result: RenderResult }) {
   const { settings, workspace } = store.state;
+  const auto = autoQualityInfo(
+    settings,
+    workspace.quality.filter(isActive).map((i) => store.index.byId.get(i.tagId)?.prompt).filter((p): p is string => !!p),
+  );
+  const join = (...ls: Layer[]) => result.order.filter((l) => ls.includes(l)).map((l) => result[l]).filter(Boolean).join(JOINER);
+  const partCopies = [
+    { label: '画風だけ', text: result.style },
+    { label: '品質だけ', text: result.quality },
+    { label: '仕上げだけ', text: result.detail },
+    { label: '画風＋仕上げ', text: join('style', 'detail') },
+    { label: '画風＋品質＋仕上げ', text: result.combined },
+  ];
   const copy = useCopy(store);
   const reset = useResetMix(store, dialog);
   const pm = profileMeta(settings.profile);
@@ -61,20 +75,27 @@ export function OutputPanel({ store, dialog, result }: { store: Store; dialog: D
           {result.full || <span className="muted">タグを選ぶと、ここにプロンプトが表示されます。</span>}
         </pre>
         <div className="row-actions">
-          <button className="btn btn-primary" onClick={() => copy(result.full, hasPerson ? '人物＋画風プロンプト' : 'プロンプト')} disabled={!result.full}>
+          <button className="btn btn-primary" onClick={() => copy(result.full, hasPerson ? '人物＋全体のプロンプト' : 'プロンプト全体')} disabled={!result.full}>
             全体をコピー
           </button>
-          {hasPerson && (
-            <button className="btn" onClick={() => copy(result.style, '画風部分')} disabled={!result.style}>
-              画風部分だけコピー
-            </button>
-          )}
         </div>
+        <div className="copy-menu" role="group" aria-label="部分コピー">
+          <span className="small muted">部分コピー：</span>
+          {partCopies.map((c) => (
+            <button key={c.label} className="chip chip-copy" onClick={() => copy(c.text, c.label)} disabled={!c.text}>
+              {c.label}
+            </button>
+          ))}
+        </div>
+        <p className="small muted layer-order-note">
+          並び：{result.order.map((l) => layerMeta(l).short).join(' → ')}
+          {settings.qualityPosition === 'auto' && (isPixai(settings.profile) ? '（PIXAIは品質タグを先頭に置く定番の書き方）' : '（NovelAIは自動品質タグと同じく品質タグを末尾に）')}
+        </p>
       </div>
 
-      {result.warnings.length > 0 && (
+      {(result.warnings.length > 0 || auto.notes.length > 0) && (
         <ul className="out-warnings">
-          {result.warnings.map((w, i) => (
+          {[...auto.notes, ...result.warnings].map((w, i) => (
             <li key={i} className="small">{w}</li>
           ))}
         </ul>
@@ -91,6 +112,7 @@ export function OutputPanel({ store, dialog, result }: { store: Store; dialog: D
                 <li key={c.category} style={{ ['--cat' as string]: m?.color ?? 'var(--ink-2)' }}>
                   <div className="by-cat-head">
                     <span className="cat-swatch" aria-hidden />
+                    <span className={`layer-tag layer-tag-${c.layer}`}>{layerMeta(c.layer).short}</span>
                     <b>{label}</b>
                     <span className="muted small">{c.count}</span>
                     <button className="btn btn-small" onClick={() => copy(c.text, label)}>コピー</button>
@@ -143,7 +165,16 @@ export function OutputPanel({ store, dialog, result }: { store: Store; dialog: D
             ))}
           </select>
         </div>
-        <p className="small muted">同じタグは1回だけ出力し、値は足し算しません。意味が似ている別のタグはまとめません。</p>
+        <p className="small muted">同じタグは1回だけ出力し、値は足し算しません（品質と仕上げの両方で選んだタグも1回だけ）。意味が似ている別のタグはまとめません。</p>
+        <div className="opt-row">
+          <span>品質タグの位置</span>
+          <div className="seg" role="radiogroup" aria-label="品質タグの位置">
+            <button role="radio" aria-checked={settings.qualityPosition === 'auto'} onClick={() => store.setSettings({ qualityPosition: 'auto' })}>おまかせ</button>
+            <button role="radio" aria-checked={settings.qualityPosition === 'start'} onClick={() => store.setSettings({ qualityPosition: 'start' })}>先頭</button>
+            <button role="radio" aria-checked={settings.qualityPosition === 'end'} onClick={() => store.setSettings({ qualityPosition: 'end' })}>末尾</button>
+          </div>
+        </div>
+        <p className="small muted">おまかせ：PIXAIは先頭（公式の定番 masterpiece, best quality, high detail の書き方）、NovelAIは末尾（NovelAIの「品質タグ追加」も末尾に付く。画風タグは先頭寄りが推奨）。</p>
         {settings.profile === 'pixai_sdxl' && (
           <label className="check">
             <input type="checkbox" checked={settings.sdxlClamp} onChange={(e) => store.setSettings({ sdxlClamp: e.target.checked })} />
@@ -154,6 +185,12 @@ export function OutputPanel({ store, dialog, result }: { store: Store; dialog: D
           <label className="check">
             <input type="checkbox" checked={settings.tsubakiNumeric} onChange={(e) => store.setSettings({ tsubakiNumeric: e.target.checked })} />
             実験：数値ウェイトで出力する（公式の構文仕様・効き方は未確認）
+          </label>
+        )}
+        {isTsubaki(settings.profile) && !settings.tsubakiNumeric && (
+          <label className="check">
+            <input type="checkbox" checked={settings.tsubakiDetailNL} onChange={(e) => store.setSettings({ tsubakiDetailNL: e.target.checked })} />
+            仕上げディテールを自然文テンプレートで出力する（実験的。OFFにすると短いタグ形式）
           </label>
         )}
         {isPixai(settings.profile) && (

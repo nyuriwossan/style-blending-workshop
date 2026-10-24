@@ -259,7 +259,7 @@ await test('10. JSONエクスポート → 別端末相当（新しい環境）�
   const file = join(out, 'backup.json');
   await dl.saveAs(file);
   const json = JSON.parse(await readFile(file, 'utf8'));
-  assert(json.app === 'style-blending-workshop' && json.schemaVersion === 2 && json.kind === 'backup', 'ヘッダ不正');
+  assert(json.app === 'style-blending-workshop' && json.schemaVersion === 3 && json.kind === 'backup', 'ヘッダ不正');
   assert(json.recipes.some((r) => r.name === 'E2Eレシピ'), 'レシピがない');
 
   const ctx2 = await browser.newContext({ ...devices['iPhone 13'] });
@@ -377,7 +377,7 @@ await test('15/16/17. リセットは調合だけを空にし、レシピ・グ�
   await page.locator('.dlg').getByRole('button', { name: 'リセットする' }).click();
   const toast = page.locator('.toast', { hasText: '調合を空にしました。元に戻すことができます。' }).last();
   await toast.waitFor();
-  assert((await page.locator('.mix-summary b').innerText()) === '0', 'タグが残っている');
+  assert((await page.locator('.mix-summary b').allInnerTexts()).every((t) => t === '0'), 'タグが残っている');
   assert((await page.locator('.topbar select').inputValue()) === 'nai_v45', '出力先が変わった');
   const after = await shelfCounts();
   assert(JSON.stringify(after) === JSON.stringify(counts), `保存棚が変わった ${JSON.stringify(counts)} → ${JSON.stringify(after)}`);
@@ -487,9 +487,263 @@ await test('20. v1.0 の保存データ（端末内）をそのまま開ける�
   assert((await p.locator('.shelf-sec').nth(2).locator('.shelf-list > li').count()) === 2, '自作タグが減った');
   await p.waitForTimeout(400);
   const saved = JSON.parse(await p.evaluate(() => localStorage.getItem('sbw.state.v1')));
-  assert(saved.schemaVersion === 2 && saved.customTags.length === 2, '移行後の保存が不正');
+  assert(saved.schemaVersion === 3 && saved.customTags.length === 2, '移行後の保存が不正');
   assert(errs.length === 0, errs.join('\n'));
   await c.close();
+});
+
+// ───────── v1.2：品質調合・仕上げディテール ─────────
+const fresh = async () => {
+  const c = await browser.newContext({ ...devices['iPhone 13'] });
+  await c.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {});
+  const p = await c.newPage();
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(String(e)));
+  await p.goto(ORIGIN + BASE);
+  const nav = (n) => p.getByRole('navigation', { name: '画面' }).getByRole('button', { name: new RegExp(`^${n}`) }).click();
+  const prev = async () => {
+    await nav('出力');
+    const t = (await p.locator('pre.preview').innerText()).trim();
+    await nav('調合');
+    return t;
+  };
+  const drow = (ja) => p.locator('.layer-detail li.tag', { has: p.locator('.tag-ja', { hasText: new RegExp(`^${ja}`) }) }).first();
+  const qrow = (ja) => p.locator('.layer-quality li.tag', { has: p.locator('.tag-ja', { hasText: new RegExp(`^${ja}`) }) }).first();
+  return { c, p, errs, nav, prev, drow, qrow };
+};
+let L; // v1.2 用の新しい環境（ほかのテストと状態を分ける）
+
+await test('v1.2-26/18. 初回：品質は簡易表示、仕上げディテールは閉じていて、見出しはiPhone幅の最初の画面内', async () => {
+  L = await fresh();
+  const { p } = L;
+  const head = p.locator('.detail-toggle');
+  assert((await head.getAttribute('aria-expanded')) === 'false', '初回は閉じていること');
+  const box = await head.boundingBox();
+  assert(box && box.y + box.height <= p.viewportSize().height, `見出しが最初の画面にない ${JSON.stringify(box)}`);
+  assert((await p.locator('.quick-chips button').count()) === 6, 'クイック選択は6件');
+  assert((await p.locator('.layer-quality li.tag').count()) === 0, '最初から全スライダーを並べない');
+  assert((await p.locator('.mix-summary').innerText()).includes('品質'), '層ごとの件数');
+  await p.screenshot({ path: join(out, 'v12-first.png') });
+});
+
+await test('v1.2-6/7/8/9. 品質タグを複数選択・個別強度・OFF・モデル別構文', async () => {
+  const { p, prev, qrow } = L;
+  await p.locator('.topbar select').selectOption('nai_v5');
+  for (const t of ['amazing quality', 'very aesthetic', 'highres', 'masterpiece']) await p.locator('.quick-chips').getByRole('button', { name: t }).click();
+  await p.locator('.layer-quality').getByRole('button', { name: '詳細設定' }).click();
+  await qrow('素晴らしい品質').locator('input[type=range]').fill('1.5');
+  await qrow('とても美的').locator('input[type=range]').fill('1.4');
+  await qrow('高解像度').locator('input[type=range]').fill('1.3');
+  await qrow('マスターピース').locator('input[type=range]').fill('1.2');
+  let t = await prev();
+  // 同じカテゴリ（美的評価）の中は選んだ順：very aesthetic → masterpiece
+  assert(t === '1.5::amazing quality ::, 1.4::very aesthetic ::, 1.2::masterpiece ::, 1.3::highres ::', 'V5: ' + t);
+  await qrow('高解像度').locator('.tag-toggle').click(); // OFF
+  t = await prev();
+  assert(!t.includes('highres'), 'OFFが出た: ' + t);
+  await p.locator('.topbar select').selectOption('pixai_sdxl');
+  t = await prev();
+  assert(t === '(amazing quality:1.5), (very aesthetic:1.4), (masterpiece:1.2)', 'SDXL: ' + t);
+  await p.locator('.topbar select').selectOption('nai_v4');
+  t = await prev();
+  assert(!t.includes('masterpiece') && t.includes('amazing quality'), 'V4 では masterpiece を出さない: ' + t);
+  assert(await p.locator('.quick-chips .chip-unsupported', { hasText: 'masterpiece' }).isVisible(), '非対応の表示');
+  await p.locator('.topbar select').selectOption('nai_v5');
+});
+
+await test('v1.2-10/11/12. NovelAI V5 の自動品質タグ（Standard）と重なると警告、手動選択は残る', async () => {
+  const { p, prev } = L;
+  await p.locator('.layer-quality select').selectOption('standard');
+  const note = p.locator('.layer-quality .auto-note');
+  await note.first().waitFor();
+  const text = await note.first().innerText();
+  assert(/masterpiece/.test(text) && /very aesthetic/.test(text) && /自動追加される可能性/.test(text), text);
+  const t = await prev();
+  assert(t.includes('1.2::masterpiece ::') && t.includes('1.4::very aesthetic ::'), '削除された: ' + t);
+  await p.locator('.layer-quality select').selectOption('off');
+  assert((await p.locator('.layer-quality .auto-note').count()) === 0, 'OFFなのに警告');
+});
+
+await test('v1.2-13/14/15/16. 仕上げディテール：6サブカテゴリ・複数選択・個別強度・外見リスク表示', async () => {
+  const { p, drow } = L;
+  await p.locator('.detail-toggle').click();
+  const heads = await p.locator('.layer-detail .cat-head .cat-name').allInnerTexts();
+  assert(JSON.stringify(heads) === JSON.stringify(['目・虹彩・まつ毛', '髪の描き込み・質感', '肌の質感', '唇・口元', '衣服・装飾・素材', '全体の細密さ']), heads.join());
+  for (const c of ['髪の描き込み・質感', '肌の質感', '唇・口元']) await p.locator('.layer-detail .cat-head', { hasText: c }).click();
+  await drow('詳細な虹彩').locator('.tag-toggle').click();
+  await drow('詳細なまつ毛').locator('.tag-toggle').click();
+  await drow('細い髪の毛筋').locator('.tag-toggle').click();
+  await drow('肌の薄いツヤ').locator('.tag-toggle').click();
+  await drow('自然な唇のツヤ').locator('.tag-toggle').click();
+  await drow('詳細な虹彩').locator('input[type=range]').fill('1.4');
+  await drow('詳細なまつ毛').locator('input[type=range]').fill('1.2');
+  await drow('細い髪の毛筋').locator('input[type=range]').fill('1.3');
+  await drow('肌の薄いツヤ').locator('input[type=range]').fill('0.7');
+  await drow('自然な唇のツヤ').locator('input[type=range]').fill('0.8');
+  assert((await drow('浮き毛・後れ毛').locator('.badge-risk').innerText()).includes('中'), 'リスク表示');
+  assert(await drow('浮き毛・後れ毛').locator('.badge-adds').isVisible(), '要素追加の表示');
+  await drow('浮き毛・後れ毛').locator('.tag-info').click();
+  assert(/暫定分類/.test(await drow('浮き毛・後れ毛').locator('.tag-detail').innerText()), '暫定の明記');
+  await drow('浮き毛・後れ毛').locator('.tag-info').click();
+  assert((await p.locator('.selected-chips li').count()) === 5, '選択中一覧');
+  assert((await p.locator('.layer-detail .cat-head', { hasText: '目・虹彩・まつ毛' }).locator('.cat-sel').innerText()) === '2', 'カテゴリ別の件数');
+  await p.screenshot({ path: join(out, 'v12-detail.png'), fullPage: false });
+});
+
+await test('v1.2-19. 3層をまとめて出力（NovelAIは品質を末尾）', async () => {
+  const { p, prev } = L;
+  await p.locator('.picker input.search').fill('ligne claire');
+  await p.locator('li.tag', { has: p.locator('.tag-ja', { hasText: /^リーニュ・クレール/ }) }).first().locator('.tag-toggle').click();
+  await p.locator('.picker input.search').fill('');
+  const t = await prev();
+  assert(
+    t === 'ligne claire, 1.4::detailed irises ::, 1.2::detailed eyelashes ::, 1.3::fine hair strands ::, 0.7::skin sheen ::, 0.8::natural lip sheen ::, 1.5::amazing quality ::, 1.4::very aesthetic ::, 1.2::masterpiece ::',
+    t,
+  );
+});
+
+await test('v1.2-20. 各層を個別にコピーできる', async () => {
+  const { p, nav } = L;
+  await nav('出力');
+  const read = () => p.evaluate(() => navigator.clipboard.readText());
+  const cases = {
+    画風だけ: 'ligne claire',
+    品質だけ: '1.5::amazing quality ::, 1.4::very aesthetic ::, 1.2::masterpiece ::',
+    仕上げだけ: '1.4::detailed irises ::, 1.2::detailed eyelashes ::, 1.3::fine hair strands ::, 0.7::skin sheen ::, 0.8::natural lip sheen ::',
+    '画風＋仕上げ': 'ligne claire, 1.4::detailed irises ::, 1.2::detailed eyelashes ::, 1.3::fine hair strands ::, 0.7::skin sheen ::, 0.8::natural lip sheen ::',
+  };
+  try {
+    for (const [label, want] of Object.entries(cases)) {
+      await p.locator('.copy-menu').getByRole('button', { name: label, exact: true }).click();
+      const got = await read();
+      assert(got === want, `${label}: ${got}`);
+    }
+    await p.locator('.copy-menu').getByRole('button', { name: '画風＋品質＋仕上げ' }).click();
+    assert((await read()).split(', ').length === 9, '3層');
+    await p.getByRole('button', { name: '全体をコピー' }).click();
+    assert((await read()) === (await p.locator('pre.preview').innerText()).trim(), '全体');
+  } finally {
+    await nav('調合');
+  }
+});
+
+await test('v1.2-17/18. 閉じても選択は有効。開閉状態は再アクセス時に復元、レシピを切り替えても変わらない', async () => {
+  const { p, prev } = L;
+  await p.locator('.detail-toggle').click(); // 閉じる
+  assert((await p.locator('.detail-toggle').innerText()).includes('5タグ選択中'), '件数表示');
+  assert((await prev()).includes('detailed irises'), '閉じたら出力から消えた');
+  await p.locator('.detail-toggle').click(); // 開く
+  await p.waitForTimeout(300);
+  await p.reload();
+  assert((await p.locator('.detail-toggle').getAttribute('aria-expanded')) === 'true', '開いた状態が復元されない');
+  await p.locator('.detail-toggle').click(); // 閉じる
+  await p.reload();
+  assert((await p.locator('.detail-toggle').getAttribute('aria-expanded')) === 'false', '閉じた状態が復元されない');
+  await p.locator('.detail-toggle').click(); // 開いておく
+});
+
+await test('v1.2-21/25. 3層のレシピを保存・読み込み。リセット後の「元に戻す」で3層が戻る', async () => {
+  const { p, nav, prev } = L;
+  const before = await prev();
+  await nav('保存棚');
+  await p.getByRole('button', { name: '新しいレシピとして保存' }).click();
+  await p.locator('.dlg input').fill('3層レシピ');
+  await p.locator('.dlg').getByRole('button', { name: '保存' }).click();
+  await nav('調合');
+  await p.locator('.mix-head').getByRole('button', { name: /調合をリセット/ }).click();
+  await p.locator('.dlg').getByRole('button', { name: 'リセットする' }).click();
+  assert((await p.locator('.mix-summary b').allInnerTexts()).every((t) => t === '0'), '3層が空にならない');
+  assert((await p.locator('.detail-toggle').getAttribute('aria-expanded')) === 'true', 'リセットで開閉状態が変わった');
+  await p.locator('.toast').last().getByRole('button', { name: '元に戻す' }).click();
+  assert((await prev()) === before, '元に戻らない');
+  await p.locator('.mix-head').getByRole('button', { name: /調合をリセット/ }).click();
+  await p.locator('.dlg').getByRole('button', { name: 'リセットする' }).click();
+  await nav('保存棚');
+  await p.locator('.shelf-list li', { hasText: '3層レシピ' }).getByRole('button', { name: '読み込んで編集' }).click();
+  assert((await prev()) === before, 'レシピから3層が復元されない');
+  // 一部だけ読み込む：品質だけ
+  await p.locator('.mix-head').getByRole('button', { name: /調合をリセット/ }).click();
+  await p.locator('.dlg').getByRole('button', { name: 'リセットする' }).click();
+  await nav('保存棚');
+  await p.locator('.shelf-list li', { hasText: '3層レシピ' }).getByRole('button', { name: '一部だけ読み込む' }).click();
+  await p.locator('.dlg').getByRole('button', { name: /品質だけ/ }).click();
+  const q = await prev();
+  assert(q === '1.5::amazing quality ::, 1.4::very aesthetic ::, 1.2::masterpiece ::', '品質だけ: ' + q);
+  await nav('保存棚');
+  await p.locator('.shelf-list li', { hasText: '3層レシピ' }).getByRole('button', { name: '読み込んで編集' }).click();
+  await p.locator('.dlg').getByRole('button', { name: '読み込む' }).click().catch(() => {});
+});
+
+await test('v1.2-22. JSONバックアップに3層が入り、別環境で同じ出力になる', async () => {
+  const { p, nav, prev } = L;
+  const want = await prev();
+  await nav('保存棚');
+  const [dl] = await Promise.all([p.waitForEvent('download'), p.getByRole('button', { name: '全体を書き出す（JSON）' }).click()]);
+  const f = join(out, 'v12-backup.json');
+  await dl.saveAs(f);
+  const j = JSON.parse(await readFile(f, 'utf8'));
+  const r = j.recipes.find((x) => x.name === '3層レシピ');
+  assert(j.schemaVersion === 3 && r.quality.length === 4 && r.detail.length === 5, 'バックアップの中身');
+  const L2 = await fresh();
+  await L2.nav('保存棚');
+  await L2.p.locator('input[type=file]').nth(1).setInputFiles(f); // 完全復元
+  await L2.p.locator('.dlg').getByRole('button', { name: '置き換える' }).click();
+  await L2.p.locator('.shelf-list li', { hasText: '3層レシピ' }).getByRole('button', { name: '読み込んで編集' }).click();
+  await L2.p.locator('.dlg').getByRole('button', { name: '読み込む' }).click().catch(() => {});
+  const got = await L2.prev();
+  assert(got === want, `復元後が違う\n${got}\n${want}`);
+  assert(L2.errs.length === 0, L2.errs.join());
+  await L2.c.close();
+  await nav('調合');
+});
+
+await test('v1.2-23/24. v1.1 の保存データ（端末内）をそのまま開ける・v1.1 と同じ出力', async () => {
+  const ls = await readFile(join(here, '..', 'tests', 'fixtures', 'v1.1-localstorage.json'), 'utf8');
+  const exp = JSON.parse(await readFile(join(here, '..', 'tests', 'fixtures', 'v1.1-expected.json'), 'utf8'));
+  const L3 = await fresh();
+  await L3.p.evaluate((s) => localStorage.setItem('sbw.state.v1', s), JSON.stringify(JSON.parse(ls)));
+  await L3.p.reload();
+  let t = await L3.prev();
+  assert(t === exp.nai_v5, `V5\n${t}\n${exp.nai_v5}`);
+  await L3.p.locator('.topbar select').selectOption('pixai_sdxl');
+  t = await L3.prev();
+  assert(t === exp.pixai_sdxl, `SDXL\n${t}`);
+  assert((await L3.p.locator('.mix-summary b').nth(1).innerText()) === '0' && (await L3.p.locator('.mix-summary b').nth(2).innerText()) === '0', '品質・仕上げは未選択で始まる');
+  await L3.nav('保存棚');
+  assert(await L3.p.locator('.shelf-list li', { hasText: 'v1.1の画風グループ' }).isVisible(), 'グループ');
+  assert(await L3.p.locator('.shelf-list li', { hasText: 'thin brown colored outlines' }).isVisible(), '自作タグ');
+  assert(L3.errs.length === 0, L3.errs.join());
+  await L3.c.close();
+});
+
+await test('v1.2. 調合画面の検索から品質・仕上げのタグも探せる', async () => {
+  const { p } = L;
+  await p.locator('.picker input.search').fill('irises');
+  await p.locator('.layer-hits').waitFor();
+  assert(/詳細な虹彩/.test(await p.locator('.layer-hits').innerText()), '検索結果');
+  await p.locator('.picker input.search').fill('');
+});
+
+await test('v1.2-27. 仕上げを全件表示・全サブカテゴリを開いても操作が重くならない', async () => {
+  const { p, drow } = L;
+  await p.locator('.layer-detail').getByRole('radiogroup', { name: '仕上げディテールの表示件数' }).getByRole('radio', { name: /すべて/ }).click();
+  for (const c of ['目・虹彩・まつ毛', '髪の描き込み・質感', '肌の質感', '唇・口元', '衣服・装飾・素材', '全体の細密さ']) {
+    const h = p.locator('.layer-detail .cat-head', { hasText: c });
+    if ((await h.getAttribute('aria-expanded')) !== 'true') await h.click();
+  }
+  const n = await p.locator('.layer-detail li.tag').count();
+  assert(n === 47, `全件 ${n}`);
+  const t0 = Date.now();
+  for (const ja of ['詳細な目', '詳細な瞳孔', '輪郭のはっきりしたまつ毛', '光沢のある目', '髪の細部描写', 'なめらかな肌', '艶やかな唇', '細部まで描かれた布地', '布地の質感', '細部のディテール']) {
+    await drow(ja).locator('.tag-toggle').click();
+    await drow(ja).locator('input[type=range]').fill('1.1');
+  }
+  const ms = Date.now() - t0;
+  console.log(`      （20操作 ${ms}ms）`);
+  assert(ms < 8000, `遅い ${ms}ms`);
+  await p.screenshot({ path: join(out, 'v12-detail-all.png') });
+  assert(L.errs.length === 0, L.errs.join());
+  await L.c.close();
 });
 
 await test('Tsubaki/PIXAI出力に adult・bust・負のプロンプトが出ない', async () => {

@@ -1,7 +1,8 @@
 // 保存棚：レシピ・グループ・自作タグ・バックアップ
 import { useRef, useState } from 'react';
 import { META, buildIndex, categoryMeta, profileMeta } from '../core/dictionary';
-import { addGroup, countActive, dedupeWithin, isActive, isMixEmpty, newId, referencedTagIds } from '../core/mix';
+import { addGroup, dedupeWithin, isActive, isMixEmpty, newId, referencedTagIds } from '../core/mix';
+import { applyItemsToLayer, LAYER_NAME } from './layerActions';
 import {
   exportBackup,
   exportGroup,
@@ -10,12 +11,14 @@ import {
   restoreFromBackup,
   validateCustomPrompt,
 } from '../core/schema';
-import { CATEGORY_KEYS, type CategoryKey, type CustomTag, type MixGroup, type Recipe, type SavedGroup } from '../core/types';
+import { CATEGORY_KEYS, type CategoryKey, type CustomTag, type MixGroup, type MixItem, type Recipe, type SavedGroup } from '../core/types';
 import { downloadJson, readFileText, safeFilename, stamp } from '../storage/files';
 import { loadPrevious, stashPrevious } from '../storage/persist';
 import type { DialogApi } from './Dialog';
 import type { Store } from './store';
 
+const LAYER_LABEL = { style: '画風', quality: '品質', detail: '仕上げ' } as const;
+const cloneItems = (xs: MixItem[]) => xs.map((i) => ({ ...i }));
 const cloneGroups = (gs: MixGroup[]): MixGroup[] => gs.map((g) => ({ ...g, id: newId('grp'), items: g.items.map((i) => ({ ...i })) }));
 const fmtDate = (iso: string) => {
   const d = new Date(iso);
@@ -26,7 +29,7 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
   const { state } = store;
   const ws = state.workspace;
   const editing = ws.sourceRecipeId ? state.recipes.find((r) => r.id === ws.sourceRecipeId) : undefined;
-  const wsEmpty = countActive(ws) === 0 && isMixEmpty(ws);
+  const wsEmpty = isMixEmpty(ws);
 
   // ── レシピ ──
   const saveNew = async () => {
@@ -35,7 +38,7 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
     const now = new Date().toISOString();
     const r: Recipe = {
       id: newId('rcp'), name, note: '', createdAt: now, updatedAt: now, groups: cloneGroups(ws.groups), dedupeRule: ws.dedupeRule, profile: state.settings.profile,
-      years: ws.years.map((y) => ({ ...y })), complexity: ws.complexity,
+      years: ws.years.map((y) => ({ ...y })), complexity: ws.complexity, quality: cloneItems(ws.quality), detail: cloneItems(ws.detail),
     };
     store.update((s) => ({ ...s, recipes: [r, ...s.recipes], workspace: { ...s.workspace, sourceRecipeId: r.id } }));
     store.toast(`「${name}」を保存しました`);
@@ -48,7 +51,7 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
       ...s,
       recipes: s.recipes.map((r) =>
         r.id === editing.id
-          ? { ...r, groups: cloneGroups(ws.groups), dedupeRule: ws.dedupeRule, profile: s.settings.profile, years: ws.years.map((y) => ({ ...y })), complexity: ws.complexity, updatedAt: now }
+          ? { ...r, groups: cloneGroups(ws.groups), dedupeRule: ws.dedupeRule, profile: s.settings.profile, years: ws.years.map((y) => ({ ...y })), complexity: ws.complexity, quality: cloneItems(ws.quality), detail: cloneItems(ws.detail), updatedAt: now }
           : r,
       ),
     }));
@@ -57,11 +60,37 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
   const loadRecipe = async (r: Recipe) => {
     if (!wsEmpty && !(await dialog.confirm('レシピを読み込む', `今の調合を「${r.name}」に入れ替えます。直後なら「元に戻す」で戻せます。`, '読み込む'))) return;
     const groups = cloneGroups(r.groups.length ? r.groups : [{ id: newId('grp'), name: '調合グループ1', enabled: true, items: [] }]);
-    store.updateWorkspace(() => ({ groups, activeGroupId: groups[0].id, dedupeRule: r.dedupeRule, sourceRecipeId: r.id, years: r.years.map((y) => ({ ...y })), complexity: r.complexity }));
+    store.updateWorkspace(() => ({
+      groups, activeGroupId: groups[0].id, dedupeRule: r.dedupeRule, sourceRecipeId: r.id,
+      years: r.years.map((y) => ({ ...y })), complexity: r.complexity, quality: cloneItems(r.quality), detail: cloneItems(r.detail),
+    }));
     if (r.profile !== state.settings.profile) store.setSettings({ profile: r.profile });
     const idx = buildIndex(state.customTags);
-    const unknown = new Set(r.groups.flatMap((g) => g.items.filter((i) => !idx.byId.has(i.tagId)).map((i) => i.tagId)));
+    const unknown = new Set([...r.groups.flatMap((g) => g.items), ...r.quality, ...r.detail].filter((i) => !idx.byId.has(i.tagId)).map((i) => i.tagId));
     store.toast(unknown.size ? `「${r.name}」を読み込みました。辞書にないタグが ${unknown.size} 件あります` : `「${r.name}」を読み込みました（出力先：${profileMeta(r.profile).short}）`, unknown.size ? 'warn' : 'ok');
+    onLoaded();
+  };
+  /** レシピの一部（画風／品質／仕上げ）だけを今の調合に読み込む。他の層は変えない */
+  const loadPart = async (r: Recipe) => {
+    const a = await dialog.ask(
+      `「${r.name}」の一部だけ読み込む`,
+      <p>選んだ層だけを今の調合と入れ替えます。ほかの層はそのまま残ります。直後なら「元に戻す」で戻せます。</p>,
+      [
+        { value: 'cancel', label: 'やめる', tone: 'plain' },
+        { value: 'style', label: `画風だけ（年・複雑度を含む）` },
+        { value: 'quality', label: `品質だけ（${r.quality.filter(isActive).length}件）` },
+        { value: 'detail', label: `仕上げだけ（${r.detail.filter(isActive).length}件）` },
+      ],
+    );
+    if (!a || a === 'cancel') return;
+    if (a === 'style') {
+      const groups = cloneGroups(r.groups.length ? r.groups : [{ id: newId('grp'), name: '調合グループ1', enabled: true, items: [] }]);
+      store.updateWorkspace((w) => ({ ...w, groups, activeGroupId: groups[0].id, dedupeRule: r.dedupeRule, years: r.years.map((y) => ({ ...y })), complexity: r.complexity }));
+    } else {
+      const layer = a as 'quality' | 'detail';
+      store.updateWorkspace((w) => ({ ...w, [layer]: cloneItems(r[layer]) }));
+    }
+    store.toast(`「${r.name}」の${LAYER_LABEL[a as keyof typeof LAYER_LABEL]}を読み込みました`, 'ok', { label: '元に戻す', onClick: store.undo });
     onLoaded();
   };
   const renameRecipe = async (r: Recipe) => {
@@ -70,7 +99,7 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
   };
   const dupRecipe = (r: Recipe) => {
     const now = new Date().toISOString();
-    const copy: Recipe = { ...r, id: newId('rcp'), name: `${r.name}のコピー`, groups: cloneGroups(r.groups), createdAt: now, updatedAt: now };
+    const copy: Recipe = { ...r, id: newId('rcp'), name: `${r.name}のコピー`, groups: cloneGroups(r.groups), quality: cloneItems(r.quality), detail: cloneItems(r.detail), createdAt: now, updatedAt: now };
     store.update((s) => {
       const i = s.recipes.findIndex((x) => x.id === r.id);
       const recipes = s.recipes.slice();
@@ -85,7 +114,11 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
   };
 
   // ── グループ ──
-  const insertGroup = (g: SavedGroup) => {
+  const insertGroup = async (g: SavedGroup) => {
+    if (g.layer === 'quality' || g.layer === 'detail') {
+      if (await applyItemsToLayer(store, dialog, g.layer, g.name, g.items)) onLoaded();
+      return;
+    }
     store.updateWorkspace((w) => addGroup(w, g.name, dedupeWithin(g.items)));
     store.toast(`「${g.name}」を調合に加えました`);
     onLoaded();
@@ -142,7 +175,7 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
       {/* レシピ */}
       <div className="shelf-sec">
         <h3>画風レシピ</h3>
-        <p className="small muted">調合中のグループ構成・強度・出力先をまとめて保存します。</p>
+        <p className="small muted">画風・品質・仕上げディテールの3層と、強度・ON/OFF・年タグ・複雑度・出力先をまとめて保存します。「一部だけ読み込む」で、ひとつの層だけを再利用できます。</p>
         {editing && <p className="small editing">編集中：「{editing.name}」</p>}
         <div className="row-actions">
           <button className="btn btn-primary" onClick={saveNew} disabled={wsEmpty}>新しいレシピとして保存</button>
@@ -154,16 +187,19 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
           <ul className="shelf-list">
             {state.recipes.map((r) => {
               const n = new Set(r.groups.filter((g) => g.enabled).flatMap((g) => g.items.filter(isActive).map((i) => i.tagId))).size;
+              const nq = r.quality.filter(isActive).length;
+              const nd = r.detail.filter(isActive).length;
               return (
                 <li key={r.id} className={ws.sourceRecipeId === r.id ? 'is-current' : ''}>
                   <div className="shelf-item-head">
                     <b>{r.name}</b>
                     <span className="small muted">
-                      {n}タグ／{r.groups.length}グループ／{profileMeta(r.profile).short}／{fmtDate(r.updatedAt)}
+                      画風{n}・品質{nq}・仕上げ{nd}／{r.groups.length}グループ／{profileMeta(r.profile).short}／{fmtDate(r.updatedAt)}
                     </span>
                   </div>
                   <div className="row-actions">
                     <button className="btn btn-small btn-primary" onClick={() => loadRecipe(r)}>読み込んで編集</button>
+                    <button className="btn btn-small" onClick={() => loadPart(r)}>一部だけ読み込む</button>
                     <button className="btn btn-small" onClick={() => renameRecipe(r)}>名前変更</button>
                     <button className="btn btn-small" onClick={() => dupRecipe(r)}>複製</button>
                     <button className="btn btn-small" onClick={() => downloadJson(exportRecipe(r, state.customTags), `recipe_${safeFilename(r.name)}_${stamp()}.json`)}>書き出し</button>
@@ -179,7 +215,7 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
       {/* グループ棚 */}
       <div className="shelf-sec">
         <h3>グループ棚</h3>
-        <p className="small muted">「繊細な茶色の線画」のような部品を保存して、別のレシピに組み込めます。保存は調合画面のグループメニュー（編集中のグループをもう一度タップ）から。</p>
+        <p className="small muted">「繊細な茶色の線画」のような画風の部品や、品質・仕上げディテールのセットを保存して、別のレシピに組み込めます。画風は調合画面のグループメニュー（編集中のグループをもう一度タップ）、品質・仕上げは各パネルの「グループ棚に保存」から保存します。</p>
         {state.groups.length === 0 ? (
           <p className="empty">保存したグループはまだありません。</p>
         ) : (
@@ -187,7 +223,10 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
             {state.groups.map((g) => (
               <li key={g.id}>
                 <div className="shelf-item-head">
-                  <b>{g.name}</b>
+                  <b>
+                    <span className={`layer-tag layer-tag-${g.layer}`}>{LAYER_LABEL[g.layer]}</span>
+                    {g.name}
+                  </b>
                   <span className="small muted">
                     {g.items
                       .filter(isActive)
@@ -196,7 +235,9 @@ export function ShelfPanel({ store, dialog, onLoaded }: { store: Store; dialog: 
                   </span>
                 </div>
                 <div className="row-actions">
-                  <button className="btn btn-small btn-primary" onClick={() => insertGroup(g)}>調合に加える</button>
+                  <button className="btn btn-small btn-primary" onClick={() => void insertGroup(g)}>
+                    {g.layer === 'style' ? '調合に加える' : `${LAYER_NAME[g.layer]}に入れる`}
+                  </button>
                   <button className="btn btn-small" onClick={() => renameSaved(g)}>名前変更</button>
                   <button className="btn btn-small" onClick={() => dupSaved(g)}>複製</button>
                   <button className="btn btn-small" onClick={() => downloadJson(exportGroup(g, state.customTags), `group_${safeFilename(g.name)}_${stamp()}.json`)}>書き出し</button>

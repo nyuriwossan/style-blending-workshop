@@ -1,0 +1,313 @@
+{
+ "schemaVersion": 1,
+ "origin": "layers_2026-10-24",
+ "note": "品質・仕上げディテールの関係。根拠のあるものだけ。",
+ "rules": [
+  {
+   "id": "LYR-CR-001",
+   "type": "synonym",
+   "tagIds": [
+    "QLT-AES-002",
+    "QLT-AES-001"
+   ],
+   "tagPrompts": [
+    "top aesthetic",
+    "masterpiece"
+   ],
+   "reason_JA": "NovelAI V4.5 のリリース告知で top aesthetic は masterpiece に改称と説明されている（Tagging ページは両方を記載）。",
+   "recommended_ui_action": "show_synonym_note",
+   "evidence": "official_rename",
+   "source_url": "https://blog.novelai.net/novelai-diffusion-v4-5-full-release-678318c86205",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-002",
+   "type": "similar",
+   "tagIds": [
+    "QLT-DEN-003",
+    "QLT-DEN-004"
+   ],
+   "tagPrompts": [
+    "ultra detailed",
+    "ultra-detailed"
+   ],
+   "reason_JA": "ハイフンの有無だけが違う表記揺れ。どちらが効くかは未確認のため両方残す。",
+   "recommended_ui_action": "show_variant_note",
+   "evidence": "spelling_variant",
+   "source_url": "",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-003",
+   "type": "similar",
+   "tagIds": [
+    "QLT-RES-004",
+    "QLT-RES-005"
+   ],
+   "tagPrompts": [
+    "8k",
+    "8k resolution"
+   ],
+   "reason_JA": "同じ「8K」を示す短い表記と説明的な表記。",
+   "recommended_ui_action": "show_variant_note",
+   "evidence": "spelling_variant",
+   "source_url": "",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-004",
+   "type": "similar",
+   "tagIds": [
+    "DTL-CLO-003",
+    "DTL-CLO-008"
+   ],
+   "tagPrompts": [
+    "detailed clothing",
+    "detailed clothes"
+   ],
+   "reason_JA": "clothing と clothes の単語違い。どちらが効くかは未確認のため両方残す。",
+   "recommended_ui_action": "show_variant_note",
+   "evidence": "spelling_variant",
+   "source_url": "",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-005",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-RAT-001",
+    "QLT-RAT-005"
+   ],
+   "tagPrompts": [
+    "best quality",
+    "bad quality"
+   ],
+   "reason_JA": "NovelAI公式の品質タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-006",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-RAT-001",
+    "QLT-RAT-006"
+   ],
+   "tagPrompts": [
+    "best quality",
+    "worst quality"
+   ],
+   "reason_JA": "NovelAI公式の品質タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-007",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-RAT-002",
+    "QLT-RAT-005"
+   ],
+   "tagPrompts": [
+    "amazing quality",
+    "bad quality"
+   ],
+   "reason_JA": "NovelAI公式の品質タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-008",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-RAT-002",
+    "QLT-RAT-006"
+   ],
+   "tagPrompts": [
+    "amazing quality",
+    "worst quality"
+   ],
+   "reason_JA": "NovelAI公式の品質タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-009",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-RAT-003",
+    "QLT-RAT-005"
+   ],
+   "tagPrompts": [
+    "great quality",
+    "bad quality"
+   ],
+   "reason_JA": "NovelAI公式の品質タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-010",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-RAT-003",
+    "QLT-RAT-006"
+   ],
+   "tagPrompts": [
+    "great quality",
+    "worst quality"
+   ],
+   "reason_JA": "NovelAI公式の品質タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-011",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-001",
+    "QLT-AES-005"
+   ],
+   "tagPrompts": [
+    "masterpiece",
+    "displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-012",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-001",
+    "QLT-AES-006"
+   ],
+   "tagPrompts": [
+    "masterpiece",
+    "very displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-013",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-002",
+    "QLT-AES-005"
+   ],
+   "tagPrompts": [
+    "top aesthetic",
+    "displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-014",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-002",
+    "QLT-AES-006"
+   ],
+   "tagPrompts": [
+    "top aesthetic",
+    "very displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-015",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-003",
+    "QLT-AES-005"
+   ],
+   "tagPrompts": [
+    "very aesthetic",
+    "displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-016",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-003",
+    "QLT-AES-006"
+   ],
+   "tagPrompts": [
+    "very aesthetic",
+    "very displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-017",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-004",
+    "QLT-AES-005"
+   ],
+   "tagPrompts": [
+    "aesthetic",
+    "displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  },
+  {
+   "id": "LYR-CR-018",
+   "type": "conflict",
+   "tagIds": [
+    "QLT-AES-004",
+    "QLT-AES-006"
+   ],
+   "tagPrompts": [
+    "aesthetic",
+    "very displeasing"
+   ],
+   "reason_JA": "NovelAI公式の美的タグの同じ尺度の、反対側の段階。比較実験以外で同時に使うと打ち消し合う可能性がある。",
+   "recommended_ui_action": "show_warning_keep_both",
+   "evidence": "official_scale_opposite",
+   "source_url": "https://docs.novelai.net/en/image/tags/",
+   "origin": "layers_2026-10-24"
+  }
+ ]
+}

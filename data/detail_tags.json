@@ -1,0 +1,2013 @@
+{
+ "schemaVersion": 1,
+ "checkedAt": "2026-10-24",
+ "layer": "detail",
+ "note": "仕上げディテールの辞書（目・髪・肌・唇・衣服・全体）。外見変更リスクは調査資料と本アプリの判断による暫定分類で、画像生成による実測ではない。",
+ "sourceClasses": {
+  "nai_special": "NovelAI公式の特殊タグ",
+  "official_example": "公式資料・テンプレートに同じ文字列の使用例",
+  "official_phrase": "公式の作例文の中に同じ語句（タグとしての掲載ではない）",
+  "community_usage": "公開作品などでの使用例（調査資料による。未確認）",
+  "research_candidate": "調査資料の候補（公式の使用例なし）"
+ },
+ "riskLevels": {
+  "low": {
+   "label": "低",
+   "detail": "主に描画表現・表面の仕上げの調整を意図する"
+  },
+  "medium": {
+   "label": "中",
+   "detail": "質感以外に外見へ影響する可能性がある"
+  },
+  "high": {
+   "label": "高",
+   "detail": "人物設定や形状そのものに強く影響する可能性がある（このアプリでは収録しない方針）"
+  }
+ },
+ "detailTypes": {
+  "density": "描き込み",
+  "texture": "質感",
+  "finish": "仕上げ"
+ },
+ "categories": [
+  {
+   "key": "eyes",
+   "label": "目・虹彩・まつ毛",
+   "short": "目",
+   "color": "#3f7f9f"
+  },
+  {
+   "key": "hair",
+   "label": "髪の描き込み・質感",
+   "short": "髪",
+   "color": "#56709a"
+  },
+  {
+   "key": "skin",
+   "label": "肌の質感",
+   "short": "肌",
+   "color": "#5f9a96"
+  },
+  {
+   "key": "lips",
+   "label": "唇・口元",
+   "short": "唇",
+   "color": "#6f8fbf"
+  },
+  {
+   "key": "clothing",
+   "label": "衣服・装飾・素材",
+   "short": "衣服",
+   "color": "#4a6a7a"
+  },
+  {
+   "key": "overall",
+   "label": "全体の細密さ",
+   "short": "全体",
+   "color": "#7a8aa8"
+  }
+ ],
+ "tsubakiModifiers": {
+  "note": "Tsubaki用の自然文テンプレートの {m} に入る語。数値との換算ではない（実験的）。",
+  "subtle": "subtle ",
+  "gentle": "light ",
+  "plain": "",
+  "pronounced": "pronounced ",
+  "intense": "strongly emphasized "
+ },
+ "sharedFromQuality": [
+  {
+   "ref": "QLT-DEN-001",
+   "detailCategory": "overall",
+   "basic": false
+  },
+  {
+   "ref": "QLT-DEN-002",
+   "detailCategory": "overall",
+   "basic": false
+  },
+  {
+   "ref": "QLT-DEN-005",
+   "detailCategory": "overall",
+   "basic": false
+  }
+ ],
+ "tags": [
+  {
+   "ID": "DTL-EYE-001",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "詳細な目",
+   "Prompt": "detailed eyes",
+   "Description_JA": "目の内部・輪郭・ハイライトの描き込み量を増やす。目の大きさや形を指定するタグではない（big eyes は外見変更のため収録しない）。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "描き込み量の調整が主。強すぎると目の印象が変わることがある。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}detailed rendering inside the eyes, keeping their shape and size unchanged",
+   "Aliases": [
+    "目の描き込み"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-EYE-002",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "詳細な虹彩",
+   "Prompt": "detailed irises",
+   "Description_JA": "虹彩の模様・線・色の重なりを増やす。detailed eyes より範囲を虹彩に絞った指定。虹彩の色を変えるタグではない。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "虹彩の内部の描き込みが主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の最優先候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「irises ... rendered with layered gradients and multiple soft highlights」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}detail in the irises with layered gradients, keeping the eye color unchanged",
+   "Aliases": [
+    "虹彩",
+    "瞳の模様"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-EYE-003",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "詳細な瞳孔",
+   "Prompt": "detailed pupils",
+   "Description_JA": "瞳孔の輪郭・中心・周辺を精密に描く。slit pupils のような瞳孔の形を変える指定とは別。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "瞳孔まわりの描き込みが主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の最優先候補"
+    },
+    {
+     "source": "PixAI Docs – Other Models（Haruka v2）",
+     "url": "https://docs.pixai.art/docs/models/other-models",
+     "note": "Haruka v2 の改善点「refined pupil highlights」（モデルの説明でタグではない）"
+    }
+   ],
+   "NL_Template": "{m}precise detail in the pupils",
+   "Aliases": [
+    "瞳孔"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-EYE-004",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "詳細なまつ毛",
+   "Prompt": "detailed eyelashes",
+   "Description_JA": "まつ毛の本数・線・重なりを細かく描く。defined eyelashes が「くっきりさ」なのに対し、こちらは「描き込み量」寄り。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "まつ毛の描き込みが主。強すぎるとまつ毛が濃く長く見えることがある。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の最優先候補"
+    },
+    {
+     "source": "PixAI Docs – Other Models（Haruka v2）",
+     "url": "https://docs.pixai.art/docs/models/other-models",
+     "note": "Haruka v2 の改善点「eyelash layering」（モデルの説明でタグではない）"
+    }
+   ],
+   "NL_Template": "{m}detailed, layered eyelashes",
+   "Aliases": [
+    "まつ毛"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-EYE-005",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "輪郭のはっきりしたまつ毛",
+   "Prompt": "defined eyelashes",
+   "Description_JA": "まつ毛の線を明瞭にし、ぼやけを抑える。本数を増やすより、線のくっきりさを狙う。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "線の明瞭さの調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の次点候補"
+    }
+   ],
+   "NL_Template": "{m}clearly defined eyelash lines",
+   "Aliases": [
+    "くっきりまつ毛"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-EYE-006",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "目のハイライト",
+   "Prompt": "eye highlights",
+   "Description_JA": "瞳に光点・反射光を加える。glossy eyes が目全体のうるおい感なのに対し、こちらは光の点そのもの。数や位置を強く指定すると表情の印象が変わることがある。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "反射光の追加が主。強すぎると光点が増えすぎる。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の最優先候補"
+    },
+    {
+     "source": "PixAI Docs – Other Models（Haruka v2）",
+     "url": "https://docs.pixai.art/docs/models/other-models",
+     "note": "Haruka v2 の改善点「refined pupil highlights」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}soft highlights reflected in the eyes",
+   "Aliases": [
+    "瞳のハイライト",
+    "キャッチライト"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-EYE-007",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "光沢のある目",
+   "Prompt": "glossy eyes",
+   "Description_JA": "眼球・瞳にうるおいと光沢を加える。eye highlights より面としてのツヤ寄り。強すぎると涙ぐんだような濡れ表現になる。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "表面のツヤの調整が主。強いと涙目のように見えることがある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の次点候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「Her black eyes are large and glossy」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}glossy sheen on the eyes",
+   "Aliases": [
+    "うるうる"
+   ],
+   "Caution_JA": "強くすると涙目・濡れ表現に寄ることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-EYE-008",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "eyes",
+   "Name_JA": "グラデーションのある瞳",
+   "Prompt": "gradation eyes",
+   "Description_JA": "瞳を滑らかな色の濃淡で描く。PixAI Tsubaki.3 の公式テンプレートに同じ文字列の使用例がある。瞳の色味が変わることがあるので、目の色を固定したいときは弱めに使う。",
+   "Detail_Type": "texture",
+   "Risk": "medium",
+   "Risk_Note": "瞳の色の見え方が変わる可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "目の最優先候補"
+    },
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「vivid anime coloring, gradation eyes, official art style」"
+    }
+   ],
+   "NL_Template": "{m}smooth color gradation in the eyes, keeping the eye color unchanged",
+   "Aliases": [
+    "グラデ瞳"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "DTL-HAI-001",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "hair",
+   "Name_JA": "髪の細部描写",
+   "Prompt": "detailed hair",
+   "Description_JA": "髪全体の線・束・細部を増やす。髪型や髪色は指定しない。何を細かくするかが曖昧なので、毛筋を描きたいなら fine hair strands と比べる。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "描き込み量の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "髪の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}detailed hair rendering, keeping the hairstyle and hair color unchanged",
+   "Aliases": [
+    "髪の描き込み"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-HAI-002",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "hair",
+   "Name_JA": "精緻な髪の束・毛筋",
+   "Prompt": "intricate hair strands",
+   "Description_JA": "髪の束や毛筋を複雑かつ精密に描く。fine hair strands が「細い毛筋」なのに対し、こちらは束の入り組み方寄り。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "毛筋の描き込みが主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "髪の最優先候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「intricate details in ... hair strands」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}intricate detail in the hair strands, keeping the hairstyle unchanged",
+   "Aliases": [
+    "髪の束"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-HAI-003",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "hair",
+   "Name_JA": "細い髪の毛筋",
+   "Prompt": "fine hair strands",
+   "Description_JA": "一本一本の細い毛筋を見せて、線の密度を上げる。髪型・髪色は変えない前提で、毛筋の描き方だけを調整する。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "毛筋の描き方の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "髪の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}fine, individually rendered hair strands, keeping the hairstyle and hair color unchanged",
+   "Aliases": [
+    "毛筋",
+    "髪の毛一本一本"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-HAI-004",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "hair",
+   "Name_JA": "浮き毛・後れ毛",
+   "Prompt": "flyaway hairs",
+   "Description_JA": "顔まわりや髪の外側に、細い浮き毛を少し加える。描き込み量を増やすタグとは違い、髪の要素そのものを新しく足す可能性がある。PixAI Tsubaki.2 の作例文に「fine flyaway hairs」がある。",
+   "Detail_Type": "finish",
+   "Risk": "medium",
+   "Risk_Note": "新しい浮き毛を追加するため、シルエットが少し変わる可能性がある。",
+   "Adds_Elements": true,
+   "Detail_Basic": true,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "髪の最優先候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「fine flyaway hairs arc across the face」（タグではない）"
+    }
+   ],
+   "NL_Template": "a few {m}fine flyaway hairs",
+   "Aliases": [
+    "後れ毛",
+    "アホ毛"
+   ],
+   "Caution_JA": "新しい毛を描き足す可能性がある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-HAI-005",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "hair",
+   "Name_JA": "柔らかな髪の質感",
+   "Prompt": "soft hair texture",
+   "Description_JA": "硬い線や金属的な光沢を避けて、髪を柔らかな触感に見せる。タグより自然文向きの候補。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "質感の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "髪の次点候補"
+    }
+   ],
+   "NL_Template": "{m}soft texture in the hair",
+   "Aliases": [
+    "ふんわり髪"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-HAI-006",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "hair",
+   "Name_JA": "つやのある髪",
+   "Prompt": "glossy hair",
+   "Description_JA": "髪の表面に滑らかな反射を加える。hair sheen より光沢がはっきりした方向。強いと濡れ髪に見える。PixAI Tsubaki.2 の作例文に「glossy hair strands」がある。",
+   "Detail_Type": "finish",
+   "Risk": "medium",
+   "Risk_Note": "強いと濡れ髪・油っぽさに寄る。shiny hair は光が拡散しやすいため収録していない。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "髪の次点候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「glossy hair strands」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}glossy highlights on the hair",
+   "Aliases": [
+    "ツヤ髪"
+   ],
+   "Caution_JA": "強くすると濡れ髪のように見えることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-HAI-007",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "hair",
+   "Name_JA": "髪の光沢感",
+   "Prompt": "hair sheen",
+   "Description_JA": "髪の表面の反射の滑らかな移り変わりを示す。glossy hair より控えめで、天使の輪のような光の帯を整える方向。Haruka v2 の説明に「hair sheen transitions」の改善がある。",
+   "Detail_Type": "finish",
+   "Risk": "medium",
+   "Risk_Note": "光沢の帯が増えると髪色の見え方が変わる可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "髪の最優先候補"
+    },
+    {
+     "source": "PixAI Docs – Other Models（Haruka v2）",
+     "url": "https://docs.pixai.art/docs/models/other-models",
+     "note": "Haruka v2 の改善点「better hair sheen transitions」（モデルの説明でタグではない）"
+    }
+   ],
+   "NL_Template": "{m}sheen on the hair with smooth light transitions",
+   "Aliases": [
+    "天使の輪"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-SKN-001",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "なめらかな肌",
+   "Prompt": "smooth skin",
+   "Description_JA": "肌の表面を均一で滑らかにする。PixAI Tsubaki.3 の公式テンプレートに同じ文字列の使用例がある。肌の色や顔立ちは指定しない。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "表面の滑らかさの調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の最優先候補"
+    },
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「delicate facial features, smooth skin, masterpiece」"
+    }
+   ],
+   "NL_Template": "{m}smooth skin surface",
+   "Aliases": [
+    "すべすべ肌"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "DTL-SKN-002",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "柔らかな肌",
+   "Prompt": "soft skin",
+   "Description_JA": "肌の陰影や境界を柔らかくする。soft lighting（光）ではなく肌そのものへの指定。smooth skin が表面の均一さなのに対し、こちらは陰影の柔らかさ寄り。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "陰影の柔らかさの調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の次点候補"
+    }
+   ],
+   "NL_Template": "{m}soft shading on the skin",
+   "Aliases": [
+    "もち肌"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-SKN-003",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "描き込まれた肌",
+   "Prompt": "detailed skin",
+   "Description_JA": "肌の陰影・微細な面・ハイライトを増やす。アニメ調では写実寄りに見えることがある。",
+   "Detail_Type": "density",
+   "Risk": "medium",
+   "Risk_Note": "写実化や肌の凹凸が強調される可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の次点候補"
+    }
+   ],
+   "NL_Template": "{m}fine detail in the skin shading",
+   "Aliases": [],
+   "Caution_JA": "写実寄りに見えることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-SKN-004",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "肌のテクスチャ",
+   "Prompt": "skin texture",
+   "Description_JA": "肌の表面に微細な質感を加える。detailed skin より表面の手触り寄り。強いと毛穴や凹凸のような写実表現になる。",
+   "Detail_Type": "density",
+   "Risk": "medium",
+   "Risk_Note": "写実化・ざらつきに寄る可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}subtle texture on the skin surface",
+   "Aliases": [
+    "肌の質感"
+   ],
+   "Caution_JA": "強くすると写実的な毛穴・凹凸に寄ることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-SKN-005",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "みずみずしい肌",
+   "Prompt": "dewy skin",
+   "Description_JA": "薄い水分感と控えめな光沢を加える。skin sheen より「うるおい」寄り。強いと汗や濡れに見える。",
+   "Detail_Type": "finish",
+   "Risk": "medium",
+   "Risk_Note": "汗・濡れ・プラスチックのような質感に寄る可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}dewy, lightly moisturized look on the skin",
+   "Aliases": [
+    "うるおい肌"
+   ],
+   "Caution_JA": "光沢を強くすると汗・濡れ・プラスチックのような質感に寄ることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-SKN-006",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "ほのかに光る肌",
+   "Prompt": "luminous skin",
+   "Description_JA": "肌の内側から明るく見えるような控えめなハイライト。肌以外まで発光しやすいので弱めに使う。PixAI Tsubaki.2 の作例文に「luminous skin reflections」がある。",
+   "Detail_Type": "finish",
+   "Risk": "medium",
+   "Risk_Note": "肌の明るさが変わり、発光表現に寄る可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の次点候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「luminous skin reflections」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}luminous reflections on the skin",
+   "Aliases": [
+    "透明感のある肌"
+   ],
+   "Caution_JA": "強くすると肌が発光しているように見えることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-SKN-007",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "光沢のある肌",
+   "Prompt": "shiny skin",
+   "Description_JA": "はっきりした反射光（スペキュラー）を肌に置く。PixAI Tsubaki.3 の公式テンプレートに使用例があるが、そこでは :1.3 の強い指定と一緒に使われている。通常は弱めから。",
+   "Detail_Type": "finish",
+   "Risk": "medium",
+   "Risk_Note": "汗・濡れ・プラスチックのような質感に寄る可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の最優先候補"
+    },
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「(chromatic aberration, film_grain, bloom, overexposure, 3D, shiny skin :1.3)」"
+    }
+   ],
+   "NL_Template": "{m}specular highlights on the skin",
+   "Aliases": [
+    "テカリ"
+   ],
+   "Caution_JA": "光沢を強くすると汗・濡れ・プラスチックのような質感に寄ることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "DTL-SKN-008",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "skin",
+   "Name_JA": "肌の薄いツヤ",
+   "Prompt": "skin sheen",
+   "Description_JA": "水滴より弱い、薄い反射としっとり感。肌のツヤを足す候補の中ではいちばん控えめで、小さな差分を試す最初の候補。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "薄いツヤの調整が主。強くすると濡れ感に寄る。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "肌の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}sheen on the skin",
+   "Aliases": [
+    "しっとり肌"
+   ],
+   "Caution_JA": "強くすると汗・濡れのように見えることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-001",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "艶やかな唇",
+   "Prompt": "glossy lips",
+   "Description_JA": "唇の表面に明確な光沢を加える。リップグロスを塗ったような見た目になりやすい。唇の厚みや形を変えるタグではない（plump lips は外見変更のため収録しない）。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "表面の光沢の調整が主。強いと化粧をした印象になる。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}glossy finish on the lips",
+   "Aliases": [
+    "グロス"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-002",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "光沢のある唇",
+   "Prompt": "shiny lips",
+   "Description_JA": "唇に小さな反射光を置く。glossy lips が面のツヤなのに対し、こちらは光の点寄り。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "反射光の追加が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の候補"
+    }
+   ],
+   "NL_Template": "{m}small specular highlight on the lips",
+   "Aliases": [],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-003",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "柔らかな質感の唇",
+   "Prompt": "soft lips",
+   "Description_JA": "唇の陰影・輪郭・色の移り変わりを柔らかくする。光沢ではなく柔らかさの指定。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "質感の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}soft texture on the lips",
+   "Aliases": [
+    "ぷるっとした質感"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-004",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "控えめな唇の質感",
+   "Prompt": "subtle lip texture",
+   "Description_JA": "唇に細かな陰影や縦の質感を弱く加える。強くすると乾燥やひび割れに見えるので、名前どおり控えめに使う。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "描き込みの調整が主。強いと荒れた唇に見える。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}fine natural texture on the lips",
+   "Aliases": [],
+   "Caution_JA": "強くすると乾燥・ひび割れのように見えることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-005",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "うるおいのある唇",
+   "Prompt": "hydrated lips",
+   "Description_JA": "薄い水分の光沢と滑らかな表面を加える。glossy lips より自然寄りで、moist lips より扱いやすいとされる候補。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "質感の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}hydrated, smooth surface on the lips",
+   "Aliases": [
+    "うるおい"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-006",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "自然な唇のツヤ",
+   "Prompt": "natural lip sheen",
+   "Description_JA": "唇本来のごく薄い光沢だけを加える。唇の光沢系では glossy lips より控えめで、化粧感を出したくないときの候補。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "薄いツヤの調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}natural sheen on the lips",
+   "Aliases": [
+    "ナチュラルなツヤ"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-007",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "滑らかな唇",
+   "Prompt": "smooth lips",
+   "Description_JA": "唇のざらつきや余計な線を抑える。subtle lip texture と逆方向に働く可能性がある。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "質感の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の次点候補"
+    }
+   ],
+   "NL_Template": "{m}smooth surface on the lips",
+   "Aliases": [],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-LIP-008",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "lips",
+   "Name_JA": "控えめな唇ハイライト",
+   "Prompt": "subtle lip highlight",
+   "Description_JA": "唇の一部に小さく淡い反射光を置く。shiny lips より弱い仕上げ。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "反射光の追加が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "唇の次点候補"
+    }
+   ],
+   "NL_Template": "a {m}small highlight on the lips",
+   "Aliases": [],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-CLO-001",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "細部まで描かれた布地",
+   "Prompt": "detailed fabric",
+   "Description_JA": "織り目・折り目・縫い目など、布の面の細部を増やす。衣服の種類や色は指定しない。fabric texture が表面の手触りなのに対し、こちらは描き込み量寄り。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "既存の布の描き込みが主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "衣服の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}detailed fabric with visible weave and folds, keeping the outfit design unchanged",
+   "Aliases": [
+    "布の描き込み"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-CLO-002",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "布地の質感",
+   "Prompt": "fabric texture",
+   "Description_JA": "布の表面感（織り・柔らかさ・粗さ）を見せる。PixAI Tsubaki.2 の作例文に「subtle fabric textures」がある。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "質感の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "衣服の最優先候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「subtle fabric textures」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}fabric texture on the clothing",
+   "Aliases": [
+    "生地感"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-CLO-003",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "衣服の細密描写",
+   "Prompt": "detailed clothing",
+   "Description_JA": "既存の衣服の皺・縫製・重なり・端部を細かく描く。描き込みが増えると装飾が足されたように見えることがある。detailed clothes は単語違いの近い表現。",
+   "Detail_Type": "density",
+   "Risk": "medium",
+   "Risk_Note": "装飾が増えたように見え、衣服の印象が変わる可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "衣服の次点候補"
+    }
+   ],
+   "NL_Template": "{m}detailed rendering of the existing clothing, keeping its design unchanged",
+   "Aliases": [
+    "服の描き込み"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-CLO-004",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "精緻な刺繍",
+   "Prompt": "intricate embroidery",
+   "Description_JA": "細かな刺繍糸とステッチを描く。もともと刺繍のない服に刺繍が足される可能性があるため、「要素を追加」として扱う。",
+   "Detail_Type": "density",
+   "Risk": "medium",
+   "Risk_Note": "刺繍という新しい装飾を足す可能性がある。図柄や色の指定はしない。",
+   "Adds_Elements": true,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "衣服の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}intricate embroidery stitches",
+   "Aliases": [
+    "刺繍"
+   ],
+   "Caution_JA": "刺繍のない衣服に刺繍を描き足す可能性がある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-CLO-005",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "レースの細部",
+   "Prompt": "lace detail",
+   "Description_JA": "既存のレースの編み目・透かし・縁を強調する。レースのない服にレースが足される可能性がある。",
+   "Detail_Type": "density",
+   "Risk": "medium",
+   "Risk_Note": "レースという新しい装飾を足す可能性がある。",
+   "Adds_Elements": true,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "衣服の次点候補"
+    }
+   ],
+   "NL_Template": "{m}fine detail in the lace",
+   "Aliases": [
+    "レース"
+   ],
+   "Caution_JA": "レースのない衣服にレースを描き足す可能性がある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-CLO-006",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "金属の質感",
+   "Prompt": "metallic texture",
+   "Description_JA": "金属部分の硬さ・反射・細かな表面感を加える。金属以外の部分まで金属的に見えることがある。画風側の「金属的な光沢」(metallic sheen) とは別のタグ。",
+   "Detail_Type": "texture",
+   "Risk": "medium",
+   "Risk_Note": "金属でない部分まで金属的に見える可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "衣服の次点候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「glossy metallic finish」（タグではない）"
+    }
+   ],
+   "NL_Template": "{m}metallic texture on the metal parts only",
+   "Aliases": [
+    "メタル"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-CLO-007",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "水滴",
+   "Prompt": "water droplets",
+   "Description_JA": "素材の表面に小さな水滴とハイライトを加える。水滴という新しい要素を足すタグで、濡れた場面に見えることがある。PixAI Tsubaki.2 の作例文に「water droplets」がある。",
+   "Detail_Type": "finish",
+   "Risk": "medium",
+   "Risk_Note": "水滴を新しく足し、濡れた状況に見える可能性がある。",
+   "Adds_Elements": true,
+   "Detail_Basic": false,
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "衣服の次点候補"
+    },
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "作例文「Tiny water droplets / dewdrops cling to hair strands」（タグではない）"
+    }
+   ],
+   "NL_Template": "a few {m}small water droplets on the surface",
+   "Aliases": [
+    "しずく"
+   ],
+   "Caution_JA": "水滴を描き足し、濡れた場面に見えることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "DTL-CLO-008",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "clothing",
+   "Name_JA": "衣服の描き込み",
+   "Prompt": "detailed clothes",
+   "Description_JA": "detailed clothing とほぼ同じ意味の単語違い。どちらの表記が効くかはモデル次第で、片方ずつ比べるのが安全。",
+   "Detail_Type": "density",
+   "Risk": "medium",
+   "Risk_Note": "装飾が増えたように見える可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "community_usage",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "NL_Template": "{m}detailed clothes, keeping the outfit design unchanged",
+   "Aliases": [],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公開作品などでの使用例（調査資料による。未確認）"
+  },
+  {
+   "ID": "DTL-ALL-001",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "overall",
+   "Name_JA": "細部のディテール",
+   "Prompt": "fine details",
+   "Description_JA": "小さな線・装飾・髪の束・布の折り・ハイライトなど、細部をまんべんなく増やす。high detail と方向が近いため、同時に入れず比べる。",
+   "Detail_Type": "density",
+   "Risk": "low",
+   "Risk_Note": "描き込み量の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "全体の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}fine details throughout",
+   "Aliases": [
+    "細部"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-ALL-002",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "overall",
+   "Name_JA": "細密な質感",
+   "Prompt": "detailed textures",
+   "Description_JA": "肌・髪・布・金属などの表面感を細かく見せる。描き込み量よりも素材感寄り。写実寄りになることがある。",
+   "Detail_Type": "texture",
+   "Risk": "low",
+   "Risk_Note": "質感の調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": true,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "全体の最優先候補"
+    }
+   ],
+   "NL_Template": "{m}detailed surface textures on hair, skin and fabric",
+   "Aliases": [
+    "質感"
+   ],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-ALL-003",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "overall",
+   "Name_JA": "洗練された細部",
+   "Prompt": "refined details",
+   "Description_JA": "線・陰影・装飾を整理された細部にする。量を増やすより、まとまりを良くする方向の候補。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "仕上げの調整が主。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "全体の次点候補"
+    }
+   ],
+   "NL_Template": "{m}refined, well-organized details",
+   "Aliases": [],
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-ALL-004",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "overall",
+   "Name_JA": "磨き込まれたレンダリング",
+   "Prompt": "polished rendering",
+   "Description_JA": "線・陰影・色・質感を整えた完成度を狙う。画風が写実寄り・CG寄りに変わることがある。",
+   "Detail_Type": "finish",
+   "Risk": "low",
+   "Risk_Note": "仕上げの調整が主。画風が動く可能性がある。",
+   "Adds_Elements": false,
+   "Detail_Basic": false,
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "全体の次点候補"
+    }
+   ],
+   "NL_Template": "{m}polished rendering",
+   "Aliases": [],
+   "Caution_JA": "画風が写実・CG寄りに変わることがある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "DTL-ALL-005",
+   "Layer": "detail",
+   "Layers": [
+    "detail"
+   ],
+   "Category": "overall",
+   "Name_JA": "描き込まれた背景",
+   "Prompt": "detailed background",
+   "Description_JA": "背景の描き込みを増やす。人物の細部ではなく背景が対象で、背景のない絵に背景が加わる可能性がある。",
+   "Detail_Type": "density",
+   "Risk": "medium",
+   "Risk_Note": "背景という新しい要素を足し、構図の印象が変わる可能性がある。",
+   "Adds_Elements": true,
+   "Detail_Basic": false,
+   "Source_Class": "community_usage",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "NL_Template": "{m}detailed background",
+   "Aliases": [
+    "背景の描き込み"
+   ],
+   "Caution_JA": "背景のない絵に背景を描き足す可能性がある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公開作品などでの使用例（調査資料による。未確認）"
+  }
+ ]
+}

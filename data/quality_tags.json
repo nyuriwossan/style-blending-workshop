@@ -1,0 +1,1278 @@
+{
+ "schemaVersion": 1,
+ "checkedAt": "2026-10-24",
+ "layer": "quality",
+ "note": "品質調合の辞書。公式資料への掲載・使用例と、画像生成での効果検証は別の情報として扱う（効果検証はすべて未実施）。",
+ "sourceClasses": {
+  "nai_special": "NovelAI公式の特殊タグ",
+  "official_example": "公式資料・テンプレートに同じ文字列の使用例",
+  "official_phrase": "公式の作例文の中に同じ語句（タグとしての掲載ではない）",
+  "community_usage": "公開作品などでの使用例（調査資料による。未確認）",
+  "research_candidate": "調査資料の候補（公式の使用例なし）"
+ },
+ "categories": [
+  {
+   "key": "quality_rating",
+   "label": "品質評価",
+   "short": "品質",
+   "color": "#a8823a",
+   "note": "NovelAI公式の6段階。画像全体の出来の評価。"
+  },
+  {
+   "key": "aesthetic_rating",
+   "label": "美的評価",
+   "short": "美的",
+   "color": "#c9a24a",
+   "note": "見栄え・美しさの傾向。品質評価とは別の軸。"
+  },
+  {
+   "key": "resolution",
+   "label": "解像感・鮮明さ",
+   "short": "解像",
+   "color": "#9a8a5a",
+   "note": "高解像度らしさ・くっきりさ。出力解像度は変わらない。"
+  },
+  {
+   "key": "detail_density",
+   "label": "描き込み密度",
+   "short": "密度",
+   "color": "#8a7440",
+   "note": "細部の量・入り組み方。品質評価ではない。"
+  },
+  {
+   "key": "general_quality",
+   "label": "一般的な高品質語",
+   "short": "一般",
+   "color": "#b8a77a",
+   "note": "公式の品質タグではない一般語。"
+  },
+  {
+   "key": "auxiliary",
+   "label": "補助（品質評価ではない）",
+   "short": "補助",
+   "color": "#a0a090",
+   "note": "不要な文字の抑制など。"
+  }
+ ],
+ "quickIds": [
+  "QLT-RAT-001",
+  "QLT-RAT-002",
+  "QLT-AES-001",
+  "QLT-AES-003",
+  "QLT-RES-001",
+  "QLT-DEN-001"
+ ],
+ "tags": [
+  {
+   "ID": "QLT-RAT-001",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "quality_rating",
+   "Name_JA": "最高の品質",
+   "Prompt": "best quality",
+   "Description_JA": "NovelAI公式の品質タグ6段階の最上位。画像全体の出来の良さを上げる方向に働くとされる。amazing quality とは同じ尺度の別段階で、統合しない。PixAIでも公式の定番セットに含まれる。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "example",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "品質タグ（Quality Tags）に掲載"
+    },
+    {
+     "source": "NovelAI Docs – 品質タグ追加の切替え",
+     "url": "https://docs.novelai.net/en/image/qualitytags/",
+     "note": "V4 Full・Anime V3 の自動品質タグに含まれる"
+    },
+    {
+     "source": "PixAI公式ブログ – プロンプトの書き方",
+     "url": "https://blog.pixai.art/ja/how-to-write-pixai-prompts-formula-ja/",
+     "note": "定番セット masterpiece, best quality, high detail"
+    },
+    {
+     "source": "PixAI Docs – 生成ページガイド（品質タグ）",
+     "url": "https://docs.pixai.art/ja/docs/tools/panel-tools",
+     "note": "品質タグの代表例"
+    },
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "テンプレートの品質ブロックに使用例"
+    }
+   ],
+   "Aliases": [
+    "最高品質",
+    "ベストクオリティ"
+   ],
+   "Quick": true,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-RAT-002",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "quality_rating",
+   "Name_JA": "素晴らしい品質",
+   "Prompt": "amazing quality",
+   "Description_JA": "NovelAI公式の品質タグで、best quality の次の段階。NovelAI V5 の自動品質タグ（Light）に含まれるため、自動品質タグを使っている場合は重複に注意。best quality と併用しても必ず良くなるとは限らない。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "品質タグに掲載"
+    },
+    {
+     "source": "NovelAI Docs – 品質タグ追加の切替え",
+     "url": "https://docs.novelai.net/en/image/qualitytags/",
+     "note": "V5 Light・V4 Curated・Anime V3 の自動品質タグに含まれる"
+    },
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "テンプレートの品質ブロックに使用例"
+    }
+   ],
+   "Aliases": [
+    "アメージング"
+   ],
+   "Quick": true,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-RAT-003",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "quality_rating",
+   "Name_JA": "優良な品質",
+   "Prompt": "great quality",
+   "Description_JA": "NovelAI公式の品質タグで、6段階の3番目。最上位より控えめな品質指定として、比較実験に使いやすい。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "品質タグに掲載"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-RAT-004",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "quality_rating",
+   "Name_JA": "普通の品質",
+   "Prompt": "normal quality",
+   "Description_JA": "NovelAI公式の品質タグで、中間の段階。品質を上げるためではなく、品質タグの効き方を比べる基準点として使うためのタグ。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "品質タグに掲載"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "出力に加えると品質を上げる方向には働かない可能性がある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-RAT-005",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "quality_rating",
+   "Name_JA": "悪い品質",
+   "Prompt": "bad quality",
+   "Description_JA": "NovelAI公式の品質タグで、低品質側。通常のプロンプトに入れると品質を下げる方向に働くとされる。意図的に崩した比較画像を作るとき以外は使わない。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "品質タグに掲載"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "品質を下げる方向のタグ。このアプリはネガティブプロンプトを作らないので、通常欄に出力される。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-RAT-006",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "quality_rating",
+   "Name_JA": "最悪の品質",
+   "Prompt": "worst quality",
+   "Description_JA": "NovelAI公式の品質タグの最下位。PixAIでは初期ネガティブプロンプトにも入っている語。通常欄に出すと品質を下げる方向に働くため、比較実験以外では使わない。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "品質タグに掲載"
+    },
+    {
+     "source": "PixAI Docs – 生成ページガイド（品質タグ）",
+     "url": "https://docs.pixai.art/ja/docs/tools/panel-tools",
+     "note": "初期ネガティブプロンプトに含まれる（ネガティブ用途）"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "品質を下げる方向のタグ。このアプリはネガティブプロンプトを作らない。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-AES-001",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "aesthetic_rating",
+   "Name_JA": "マスターピース",
+   "Prompt": "masterpiece",
+   "Description_JA": "美的評価の最上位。NovelAIでは V4.5 以上の公式タグ（V4.5 で top aesthetic から改称と告知）。V5 の自動品質タグ（Standard）に含まれる。PixAIでも定番セットの先頭に置かれる。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "example",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unsupported",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "unsupported"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "「masterpiece (V4.5 or higher only)」"
+    },
+    {
+     "source": "NovelAI Diffusion V4.5 Full Release（公式ブログ）",
+     "url": "https://blog.novelai.net/novelai-diffusion-v4-5-full-release-678318c86205",
+     "note": "「top aesthetic は masterpiece に改称」"
+    },
+    {
+     "source": "NovelAI Docs – 品質タグ追加の切替え",
+     "url": "https://docs.novelai.net/en/image/qualitytags/",
+     "note": "V5 Standard・V4.5 の自動品質タグに含まれる"
+    },
+    {
+     "source": "PixAI公式ブログ – プロンプトの書き方",
+     "url": "https://blog.pixai.art/ja/how-to-write-pixai-prompts-formula-ja/",
+     "note": "定番セット"
+    },
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "テンプレートの品質ブロックに使用例"
+    }
+   ],
+   "Aliases": [
+    "傑作",
+    "マスターピース"
+   ],
+   "Quick": true,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-AES-002",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "aesthetic_rating",
+   "Name_JA": "トップエステティック",
+   "Prompt": "top aesthetic",
+   "Description_JA": "NovelAI V4 で導入された美的評価の最上位タグ。Tagging ページは「V4以上」と記載する一方、V4.5 のリリース告知は masterpiece に改称したと説明しており、公式資料の間で食い違いがある。V4.5 以降では masterpiece を使うのが安全。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unsupported"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "「top aesthetic (V4 or higher only)」"
+    },
+    {
+     "source": "NovelAI Diffusion V4.5 Full Release（公式ブログ）",
+     "url": "https://blog.novelai.net/novelai-diffusion-v4-5-full-release-678318c86205",
+     "note": "「renamed to the familiar masterpiece tag」"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "V4.5・V5 での扱いは公式資料間で食い違うため「未検証」として出力する。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-AES-003",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "aesthetic_rating",
+   "Name_JA": "とても美的",
+   "Prompt": "very aesthetic",
+   "Description_JA": "画面全体の美しさ・見栄えの傾向を上げる NovelAI 公式の美的タグ。品質タグ（best quality など）とは別の軸。V5 の自動品質タグ（Light・Standard とも）に含まれる。画風タグと一緒に使うと狙った画風を弱めることがあると公式が注意している。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "美的タグに掲載"
+    },
+    {
+     "source": "NovelAI Docs – 品質タグ追加の切替え",
+     "url": "https://docs.novelai.net/en/image/qualitytags/",
+     "note": "V5 Light/Standard・V4.5 Full・V4・Anime V3 の自動品質タグに含まれる"
+    },
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "テンプレートに使用例"
+    }
+   ],
+   "Aliases": [
+    "ベリーエステティック"
+   ],
+   "Quick": true,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "公式の画風チュートリアルは、画風タグと併用する場合に [ ] で弱めることを勧めている。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-AES-004",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "aesthetic_rating",
+   "Name_JA": "美的",
+   "Prompt": "aesthetic",
+   "Description_JA": "very aesthetic より一段控えめな NovelAI 公式の美的タグ。美的傾向を強く押し出したくないときや、very aesthetic との比較に使う。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "美的タグに掲載"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-AES-005",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "aesthetic_rating",
+   "Name_JA": "好ましくない",
+   "Prompt": "displeasing",
+   "Description_JA": "NovelAI 公式の美的タグで、美しさを下げる側。意図的に崩した比較画像を作るとき以外は使わない。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "美的タグに掲載"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "見栄えを下げる方向のタグ。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-AES-006",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "aesthetic_rating",
+   "Name_JA": "とても好ましくない",
+   "Prompt": "very displeasing",
+   "Description_JA": "NovelAI 公式の美的タグの最下位。displeasing よりさらに美しさを下げる方向。比較実験用。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – Tagging（品質タグ・美的タグ）",
+     "url": "https://docs.novelai.net/en/image/tags/",
+     "note": "美的タグに掲載"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "見栄えを下げる方向のタグ。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-RES-001",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "resolution",
+   "Name_JA": "高解像度",
+   "Prompt": "highres",
+   "Description_JA": "高解像度の画像として扱わせるタグ。実際の出力解像度は変わらず、細部の描き込みや鮮明さの傾向に作用するとされる。PixAI Tsubaki.3 の公式テンプレートに使用例がある。",
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「masterpiece, best quality, very aesthetic, highres, best illustration」"
+    },
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "Aliases": [
+    "ハイレゾ",
+    "高解像度"
+   ],
+   "Quick": true,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "出力される画像の解像度は変わらない。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "QLT-RES-002",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "resolution",
+   "Name_JA": "超高解像度",
+   "Prompt": "absurdres",
+   "Description_JA": "highres よりさらに高い解像度を示すタグ。NovelAI V4・Anime V3 では公式の自動品質タグに含まれていた。V4.5 以降の自動品質タグには含まれない。highres と同時に使うと効きが重なるかは未検証。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "official"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Docs – 品質タグ追加の切替え",
+     "url": "https://docs.novelai.net/en/image/qualitytags/",
+     "note": "V4 Full/Curated・Anime V3 の自動品質タグに含まれる"
+    },
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例（absundres という誤記の例もある）"
+    }
+   ],
+   "Aliases": [
+    "アブサードレス",
+    "absundres"
+   ],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "出力される画像の解像度は変わらない。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  },
+  {
+   "ID": "QLT-RES-003",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "resolution",
+   "Name_JA": "高精細",
+   "Prompt": "high definition",
+   "Description_JA": "映像の「HD」に近い、くっきりした精細さを示す一般的な語。品質評価タグではなく、解像感の方向づけ。モデルの学習タグとして認識されるかは未確認。",
+   "Source_Class": "community_usage",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "Aliases": [
+    "HD"
+   ],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公開作品などでの使用例（調査資料による。未確認）"
+  },
+  {
+   "ID": "QLT-RES-004",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "resolution",
+   "Name_JA": "8K",
+   "Prompt": "8k",
+   "Description_JA": "8K画質の写真・映像のような高精細さを示す語。実際の出力が8Kになることはない。写実寄りの質感に引っ張られる可能性がある。PixAI Tsubaki.3 の公式テンプレートに「in 8K」の作例がある。",
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「Hyper-detailed anime illustration in 8K」"
+    },
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "出力解像度は8Kにならない。写実化に寄る可能性がある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "QLT-RES-005",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "resolution",
+   "Name_JA": "8K解像度",
+   "Prompt": "8k resolution",
+   "Description_JA": "PixAI公式が品質タグの代表例として挙げる語。8k より説明的な表記。実際の出力が8Kになることはない。",
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "example",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI Docs – 生成ページガイド（品質タグ）",
+     "url": "https://docs.pixai.art/ja/docs/tools/panel-tools",
+     "note": "品質タグの代表例「8k resolution（超高画質）」"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "出力解像度は8Kにならない。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "QLT-RES-006",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "resolution",
+   "Name_JA": "くっきりした焦点",
+   "Prompt": "sharp focus",
+   "Description_JA": "ピントの合った、輪郭のはっきりした画面を狙う語。ボケ（被写界深度）系のタグと逆方向に働く可能性がある。PixAI Tsubaki.3 の公式テンプレートに使用例がある。",
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「sharp focus, anime screencap and game CG style」"
+    }
+   ],
+   "Aliases": [
+    "シャープ",
+    "ピント"
+   ],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "QLT-DEN-001",
+   "Layer": "quality",
+   "Layers": [
+    "quality",
+    "detail"
+   ],
+   "Category": "detail_density",
+   "Name_JA": "高ディテール",
+   "Prompt": "high detail",
+   "Description_JA": "画面全体の情報量・細部の描き込みを増やす方向の語。PixAI公式の定番セットに含まれる。品質評価ではなく描き込み量の指定。highly detailed とは表現が違うため統合していない。",
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "example",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI公式ブログ – プロンプトの書き方",
+     "url": "https://blog.pixai.art/ja/how-to-write-pixai-prompts-formula-ja/",
+     "note": "定番セット masterpiece, best quality, high detail"
+    },
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "全体的な人物ディテールの最優先候補"
+    }
+   ],
+   "Aliases": [
+    "ハイディテール",
+    "描き込み"
+   ],
+   "Quick": true,
+   "Detail_Category": "overall",
+   "Detail_Basic": false,
+   "NL_Template": "{m}fine detail across the whole illustration",
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "QLT-DEN-002",
+   "Layer": "quality",
+   "Layers": [
+    "quality",
+    "detail"
+   ],
+   "Category": "detail_density",
+   "Name_JA": "非常に高密度な描き込み",
+   "Prompt": "highly detailed",
+   "Description_JA": "high detail より強めの「非常に細密」を示す語。髪・衣服・背景などが全体的に細かくなる方向。high detail と同時に入れると効きが重なるかは未検証なので、まずどちらか一方で比べる。",
+   "Source_Class": "research_candidate",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "全体的な人物ディテールの次点候補。high detail と同時投入せず比較するよう注記"
+    }
+   ],
+   "Aliases": [
+    "細密"
+   ],
+   "Quick": false,
+   "Detail_Category": "overall",
+   "Detail_Basic": false,
+   "NL_Template": "{m}highly detailed rendering across the illustration",
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "調査資料の候補（公式の使用例なし）"
+  },
+  {
+   "ID": "QLT-DEN-003",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "detail_density",
+   "Name_JA": "超細密",
+   "Prompt": "ultra detailed",
+   "Description_JA": "描き込みの量を最大限まで上げる方向の語。ultra-detailed はハイフンの有無だけが違う表記揺れで、どちらが学習タグとして効くかは未確認のため両方残している。",
+   "Source_Class": "community_usage",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "Aliases": [
+    "ultra-detailed",
+    "超細密"
+   ],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公開作品などでの使用例（調査資料による。未確認）"
+  },
+  {
+   "ID": "QLT-DEN-004",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "detail_density",
+   "Name_JA": "超細密（ハイフン表記）",
+   "Prompt": "ultra-detailed",
+   "Description_JA": "ultra detailed のハイフン付き表記。意味は同じだが、モデルがどちらの表記で学習しているかで効き方が変わる可能性がある。片方ずつ比べるのが安全。",
+   "Source_Class": "community_usage",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "Aliases": [
+    "ultra detailed"
+   ],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公開作品などでの使用例（調査資料による。未確認）"
+  },
+  {
+   "ID": "QLT-DEN-005",
+   "Layer": "quality",
+   "Layers": [
+    "quality",
+    "detail"
+   ],
+   "Category": "detail_density",
+   "Name_JA": "精緻なディテール",
+   "Prompt": "intricate details",
+   "Description_JA": "装飾・線・模様などの細かな要素を精密に描き込む方向。high detail が「量」寄りなのに対し、こちらは「入り組んだ細かさ」寄り。PixAI Tsubaki.2 の作例文に「intricate details in ... hair strands, fabric folds」という使い方がある。",
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "example",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI – Tsubaki.2 Guide",
+     "url": "https://pixai.art/en/tsubaki-2/guide",
+     "note": "「intricate details in the whales' textured skin, fish scales, hair strands, fabric folds」"
+    },
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    },
+    {
+     "source": "資料B：人物ディテール・質感タグ調査レポート（Manus）",
+     "url": "",
+     "note": "全体的な人物ディテールの最優先候補"
+    }
+   ],
+   "Aliases": [
+    "精緻",
+    "イントリケート"
+   ],
+   "Quick": false,
+   "Detail_Category": "overall",
+   "Detail_Basic": false,
+   "NL_Template": "{m}intricate details in the linework, hair strands and fabric folds",
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "QLT-DEN-006",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "detail_density",
+   "Name_JA": "非常に入り組んだ細部",
+   "Prompt": "highly intricate",
+   "Description_JA": "画面全体に入り組んだ細かな要素を増やす方向。intricate details より強い言い方。PixAI Tsubaki.3 の公式テンプレートに「highly intricate elements throughout the entire scene」の作例がある。",
+   "Source_Class": "official_phrase",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「highly intricate elements throughout the entire scene」"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "背景や小物が増える可能性がある。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式の作例文の中に同じ語句（タグとしての掲載ではない）"
+  },
+  {
+   "ID": "QLT-GEN-001",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "general_quality",
+   "Name_JA": "高品質",
+   "Prompt": "high quality",
+   "Description_JA": "「高品質」を一般的な英語で示す語。NovelAI公式の品質タグ（best quality 等）ではない。モデルの学習タグとして効くかは未確認。",
+   "Source_Class": "community_usage",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "Aliases": [
+    "ハイクオリティ"
+   ],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公開作品などでの使用例（調査資料による。未確認）"
+  },
+  {
+   "ID": "QLT-GEN-002",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "general_quality",
+   "Name_JA": "超高品質",
+   "Prompt": "ultra-high quality",
+   "Description_JA": "high quality を強めた一般的な語。公式の品質タグではない。high quality と同時に使っても効果が足し算になるとは限らない。",
+   "Source_Class": "community_usage",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "資料A：PIXAI／NovelAI 品質タグ調査（Manus, 2026-10-24）",
+     "url": "",
+     "note": "PixAI公開作品での使用例"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公開作品などでの使用例（調査資料による。未確認）"
+  },
+  {
+   "ID": "QLT-GEN-003",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "general_quality",
+   "Name_JA": "最良のイラスト",
+   "Prompt": "best illustration",
+   "Description_JA": "イラストとしての完成度を高く指定する語。PixAI Tsubaki.3 の公式テンプレートの品質ブロックに使用例がある。NovelAIの公式品質タグではない。",
+   "Source_Class": "official_example",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "example",
+    "nai_v4": "unverified",
+    "nai_v45": "unverified",
+    "nai_v5": "unverified",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "PixAI Docs – Tsubaki.3 Prompt Templates",
+     "url": "https://docs.pixai.art/docs/models/tsubaki3-prompts",
+     "note": "「masterpiece, best quality, very aesthetic, highres, best illustration」"
+    }
+   ],
+   "Aliases": [],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": null,
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "未確認（NovelAIのタグ知識表示での確認は未実施）",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "公式資料・テンプレートに同じ文字列の使用例"
+  },
+  {
+   "ID": "QLT-AUX-001",
+   "Layer": "quality",
+   "Layers": [
+    "quality"
+   ],
+   "Category": "auxiliary",
+   "Name_JA": "文字なし",
+   "Prompt": "no text",
+   "Description_JA": "画像内の不要な文字・ロゴを避けるための補助タグ。品質評価タグではない。NovelAI V4 以降の自動品質タグに含まれ、V4.5 のリリース告知でも文字やロゴを避ける用途として紹介されている。",
+   "Source_Class": "nai_special",
+   "Model_Support": {
+    "pixai_sdxl": "unverified",
+    "pixai_tsubaki2": "unverified",
+    "pixai_tsubaki3": "unverified",
+    "nai_v4": "official",
+    "nai_v45": "official",
+    "nai_v5": "official",
+    "nai_v3": "unverified"
+   },
+   "Evidence": [
+    {
+     "source": "NovelAI Diffusion V4.5 Full Release（公式ブログ）",
+     "url": "https://blog.novelai.net/novelai-diffusion-v4-5-full-release-678318c86205",
+     "note": "「no text to avoid unwanted texts and logos」"
+    },
+    {
+     "source": "NovelAI Docs – 品質タグ追加の切替え",
+     "url": "https://docs.novelai.net/en/image/qualitytags/",
+     "note": "V5 Light/Standard・V4.5・V4 Full の自動品質タグに含まれる"
+    }
+   ],
+   "Aliases": [
+    "文字を消す",
+    "ノーテキスト"
+   ],
+   "Quick": false,
+   "Detail_Category": null,
+   "Detail_Basic": false,
+   "NL_Template": null,
+   "Caution_JA": "品質を上げるタグではなく、文字の抑制を狙う補助設定。",
+   "Validation_Status": "画像生成による効果検証は未実施",
+   "NAI_Tag_Knowledge": "NovelAI公式の特殊タグ",
+   "Checked_At": "2026-10-24",
+   "Source_Class_Label": "NovelAI公式の特殊タグ"
+  }
+ ]
+}

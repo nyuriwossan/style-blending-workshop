@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 2,
+  "workspace": {
+    "groups": [
+      {
+        "id": "grp-a54d1825ec3b",
+        "name": "王道アニメ塗り",
+        "enabled": true,
+        "items": [
+          {
+            "tagId": "REC-STY-001",
+            "strength": 1,
+            "on": true
+          },
+          {
+            "tagId": "REC-LIN-002",
+            "strength": 1.1,
+            "on": true
+          },
+          {
+            "tagId": "REC-COL-001",
+            "strength": 1.2,
+            "on": true
+          },
+          {
+            "tagId": "REC-COL-002",
+            "strength": 1,
+            "on": true
+          },
+          {
+            "tagId": "NAI-TEX-018",
+            "strength": 1.2,
+            "on": true
+          },
+          {
+            "tagId": "NAI-SHA-101",
+            "strength": 1,
+            "on": true
+          },
+          {
+            "tagId": "USR-c27f8b69e170",
+            "strength": 1.3,
+            "on": true
+          }
+        ]
+      }
+    ],
+    "activeGroupId": "grp-a54d1825ec3b",
+    "dedupeRule": "first",
+    "sourceRecipeId": "rcp-2ccf82ab30f2",
+    "years": [
+      {
+        "year": 2024,
+        "strength": 1.5,
+        "on": true
+      }
+    ],
+    "complexity": "high"
+  },
+  "recipes": [
+    {
+      "id": "rcp-2ccf82ab30f2",
+      "name": "v1.1のレシピ",
+      "note": "",
+      "createdAt": "2026-10-24T14:08:21.969Z",
+      "updatedAt": "2026-10-24T14:08:21.969Z",
+      "groups": [
+        {
+          "id": "grp-5a3be03a9831",
+          "name": "王道アニメ塗り",
+          "enabled": true,
+          "items": [
+            {
+              "tagId": "REC-STY-001",
+              "strength": 1,
+              "on": true
+            },
+            {
+              "tagId": "REC-LIN-002",
+              "strength": 1.1,
+              "on": true
+            },
+            {
+              "tagId": "REC-COL-001",
+              "strength": 1.2,
+              "on": true
+            },
+            {
+              "tagId": "REC-COL-002",
+              "strength": 1,
+              "on": true
+            },
+            {
+              "tagId": "NAI-TEX-018",
+              "strength": 1.2,
+              "on": true
+            },
+            {
+              "tagId": "NAI-SHA-101",
+              "strength": 1,
+              "on": true
+            },
+            {
+              "tagId": "USR-c27f8b69e170",
+              "strength": 1.3,
+              "on": true
+            }
+          ]
+        }
+      ],
+      "dedupeRule": "first",
+      "profile": "nai_v5",
+      "years": [
+        {
+          "year": 2024,
+          "strength": 1.5,
+          "on": true
+        }
+      ],
+      "complexity": "high"
+    }
+  ],
+  "groups": [
+    {
+      "id": "sgp-3800b0cf0c7f",
+      "name": "v1.1の画風グループ",
+      "createdAt": "2026-10-24T14:08:21.623Z",
+      "updatedAt": "2026-10-24T14:08:21.623Z",
+      "items": [
+        {
+          "tagId": "REC-STY-001",
+          "strength": 1,
+          "on": true
+        },
+        {
+          "tagId": "REC-LIN-002",
+          "strength": 1.1,
+          "on": true
+        },
+        {
+          "tagId": "REC-COL-001",
+          "strength": 1.2,
+          "on": true
+        },
+        {
+          "tagId": "REC-COL-002",
+          "strength": 1,
+          "on": true
+        },
+        {
+          "tagId": "NAI-TEX-018",
+          "strength": 1.2,
+          "on": true
+        },
+        {
+          "tagId": "NAI-SHA-101",
+          "strength": 1,
+          "on": true
+        },
+        {
+          "tagId": "USR-c27f8b69e170",
+          "strength": 1.3,
+          "on": true
+        }
+      ]
+    }
+  ],
+  "customTags": [
+    {
+      "id": "USR-c27f8b69e170",
+      "category": "linework",
+      "prompt": "thin brown colored outlines",
+      "nameJa": "細い茶色の色付き輪郭線",
+      "note": "",
+      "createdAt": "2026-10-24T14:08:20.320Z",
+      "updatedAt": "2026-10-24T14:08:20.320Z"
+    }
+  ],
+  "settings": {
+    "profile": "nai_v5",
+    "view": "basic",
+    "order": "category",
+    "sdxlClamp": true,
+    "tsubakiNumeric": false,
+    "personPrompt": "",
+    "personPosition": "before",
+    "officialOnly": false,
+    "pixaiYears": false
+  }
+}

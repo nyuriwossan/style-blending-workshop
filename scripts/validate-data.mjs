@@ -96,6 +96,43 @@ for (const t of naiFile.tags) {
   desc.set(t.Description_JA, t.ID);
 }
 
+// ── v1.2：品質調合・仕上げディテール ──
+const quality = load('quality_tags.json');
+const detail = load('detail_tags.json');
+const qPresets = load('quality_presets.json');
+const dPresets = load('detail_presets.json');
+const layerRules = load('layer_relations.json').rules;
+const layerTags = [...quality.tags, ...detail.tags];
+const layerIds = new Map();
+const LAYER_ID = /^(QLT|DTL)-[A-Z]{3}-\d{3}$/;
+const allPrompts = new Map(tags.map((t) => [t.Prompt.toLowerCase(), t.ID]));
+for (const t of layerTags) {
+  if (!LAYER_ID.test(t.ID)) errors.push(`${t.ID}: ID形式が QLT/DTL-XXX-000 でない`);
+  if (layerIds.has(t.ID) || byId.has(t.ID)) errors.push(`${t.ID}: ID重複`);
+  layerIds.set(t.ID, t);
+  const k = t.Prompt.toLowerCase();
+  if (allPrompts.has(k)) errors.push(`${t.ID}: 英語プロンプト「${t.Prompt}」が ${allPrompts.get(k)} と重複（1つのIDで管理すること）`);
+  allPrompts.set(k, t.ID);
+  if (!/^[a-z0-9 \-]+$/.test(t.Prompt)) errors.push(`${t.ID}: Prompt に使えない文字`);
+  if (/adult|bust/i.test(`${t.Prompt} ${t.NL_Template ?? ''}`)) errors.push(`${t.ID}: PIXAI 禁止語を含む`);
+  if (!/未実施/.test(t.Validation_Status)) errors.push(`${t.ID}: 画像検証は「未実施」であること`);
+  if (!t.Evidence?.length) errors.push(`${t.ID}: 根拠がない`);
+  if (!quality.sourceClasses[t.Source_Class]) errors.push(`${t.ID}: 未知の出典区分 ${t.Source_Class}`);
+  if (t.Layer === 'detail' && !['low', 'medium', 'high'].includes(t.Risk)) errors.push(`${t.ID}: 外見変更リスクがない`);
+  if (t.NL_Template && !t.NL_Template.includes('{m}')) errors.push(`${t.ID}: 自然文テンプレートに {m} がない`);
+  if (!t.Description_JA || t.Description_JA.length < 30) errors.push(`${t.ID}: 説明文が短すぎる`);
+  for (const p of Object.keys(t.Model_Support)) if (!['official', 'example', 'unsupported', 'unverified'].includes(t.Model_Support[p])) errors.push(`${t.ID}: 未知の対応状態 ${p}`);
+}
+const ld = new Map();
+for (const t of layerTags) {
+  if (ld.has(t.Description_JA)) errors.push(`${t.ID}: 説明文が ${ld.get(t.Description_JA)} と同一（使い回し）`);
+  ld.set(t.Description_JA, t.ID);
+}
+for (const r of detail.sharedFromQuality) if (!quality.tags.some((t) => t.ID === r.ref && t.Layers.includes('detail'))) errors.push(`仕上げの共有参照 ${r.ref} が不正`);
+for (const p of [...qPresets.presets, ...dPresets.presets]) for (const i of p.items) if (!layerIds.has(i.tagId)) errors.push(`${p.id}: タグ ${i.tagId} がない`);
+for (const r of layerRules) for (const id of r.tagIds) if (!layerIds.has(id)) errors.push(`${r.id}: タグ ${id} がない`);
+for (const id of quality.quickIds) if (!layerIds.has(id)) errors.push(`クイック選択 ${id} がない`);
+
 const mvp = originalTags.filter((t) => t.MVP_Core).length;
 const exp = tagsFile.claimedHistoricalAggregates;
 if (exp) {
@@ -106,6 +143,7 @@ if (exp) {
 }
 
 console.log(`tags=${tags.length} (original ${originalTags.length} + NAI official ${naiFile.tags.length}) mvp=${mvp} presets=${presets.length} rules=${rules.length} recon=${recon.entries.length}`);
+console.log(`quality=${quality.tags.length} detail=${detail.tags.length}+shared ${detail.sharedFromQuality.length} qPresets=${qPresets.presets.length} dPresets=${dPresets.presets.length} layerRules=${layerRules.length}`);
 for (const w of warn) console.warn('WARN', w);
 if (errors.length) {
   for (const e of errors) console.error('ERROR', e);

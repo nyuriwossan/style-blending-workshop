@@ -3,8 +3,8 @@
 // 根拠：data/model_output_rules.json と NovelAI公式「Strengthening & Weakening」
 // 強度の見た目上の等価性はモデル間で保証しない。
 // ───────────────────────────────────────────────
-import { CATEGORY_KEYS, type CategoryKey, type Complexity, type ProfileId, type Settings, type YearItem } from './types';
-import { META, MODEL_RULES, isSupported, profileMeta } from './dictionary';
+import { type Complexity, type Layer, type ProfileId, type Settings, type Tag, type TagCategory, type YearItem } from './types';
+import { CATEGORY_ORDER, DETAIL_DATA, META, MODEL_RULES, isSupported, profileMeta } from './dictionary';
 import type { EffectiveItem } from './mix';
 
 export const SDXL_MAX = Number((MODEL_RULES.profiles.pixai_sdxl as { defaultMax?: number }).defaultMax ?? 1.5);
@@ -113,11 +113,19 @@ export function renderTag(prompt: string, w: number, profile: ProfileId, opt: Re
 }
 
 export interface RenderResult {
-  /** スタイル部分のみ（人物プロンプトなし） */
+  /** 画風の層（年タグ・複雑度を含む）。v1.1 の style と同じ */
   style: string;
-  /** 人物プロンプトと結合したもの（未入力ならstyleと同じ） */
+  /** v1.2：品質調合の層 */
+  quality: string;
+  /** v1.2：仕上げディテールの層 */
+  detail: string;
+  /** v1.2：3層をモデル別の順に結合（人物プロンプトなし） */
+  combined: string;
+  /** 結合の順序 */
+  order: Layer[];
+  /** 人物プロンプトと結合したもの（未入力なら combined と同じ） */
   full: string;
-  byCategory: { category: CategoryKey | 'special'; text: string; count: number }[];
+  byCategory: { category: TagCategory | 'special'; layer: Layer; text: string; count: number }[];
   tags: RenderedTag[];
   warnings: string[];
   /** 現在の出力先では出力しなかった項目（設定は保持） */
@@ -138,19 +146,47 @@ export function yearTag(y: number): string {
 
 export const JOINER = ', ';
 
-/** 実効リスト全体を変換する */
-export function renderPrompt(
-  items: EffectiveItem[],
-  settings: Pick<Settings, 'profile' | 'sdxlClamp' | 'tsubakiNumeric' | 'personPrompt' | 'personPosition'> & { pixaiYears?: boolean },
-  extras: RenderExtras = {},
-): RenderResult {
+export type RenderSettings = Pick<Settings, 'profile' | 'sdxlClamp' | 'tsubakiNumeric' | 'personPrompt' | 'personPosition'> & {
+  pixaiYears?: boolean;
+  qualityPosition?: Settings['qualityPosition'];
+  tsubakiDetailNL?: boolean;
+};
+
+/** 品質タグの位置：auto は PIXAI＝先頭（公式の定番の書き方）、NovelAI＝末尾（NovelAI の自動品質タグと同じ位置） */
+export function layerOrder(profile: ProfileId, pos: Settings['qualityPosition'] = 'auto'): Layer[] {
+  const start = pos === 'start' || (pos === 'auto' && isPixai(profile));
+  return start ? ['quality', 'style', 'detail'] : ['style', 'detail', 'quality'];
+}
+
+/** Tsubaki 向けの仕上げディテール自然文（実験的）。{m} に強度の語を入れる */
+export function detailNaturalText(template: string, w: number, profile: 'pixai_tsubaki2' | 'pixai_tsubaki3'): string {
+  const m = DETAIL_DATA.tsubakiModifiers[tsubakiBin(w, profile)];
+  return template.replace('{m}', m).replace(/\s+/g, ' ').trim();
+}
+
+/** 層ごとの1タグの変換 */
+export function renderLayerTag(tag: Tag, w: number, layer: Layer, profile: ProfileId, s: RenderSettings): { text: string; notes: string[]; mode: 'tag' | 'plain' | 'nl' } {
+  const opt: RenderOptions = { sdxlClamp: s.sdxlClamp, tsubakiNumeric: s.tsubakiNumeric };
+  if (isTsubaki(profile) && !s.tsubakiNumeric) {
+    if (layer === 'quality') return { text: tag.prompt, notes: [], mode: 'plain' };
+    if (layer === 'detail' && s.tsubakiDetailNL !== false && tag.nlTemplate) return { text: detailNaturalText(tag.nlTemplate, w, profile), notes: [], mode: 'nl' };
+  }
+  const r = renderTag(tag.prompt, w, profile, opt);
+  return { ...r, mode: 'tag' };
+}
+
+/** 実効リスト全体を変換する（v1.2：品質・画風・仕上げの3層） */
+export function renderPrompt(items: EffectiveItem[], settings: RenderSettings, extras: RenderExtras = {}): RenderResult {
   const profile = settings.profile;
   const unsupported: RenderResult['unsupported'] = { tagIds: [], years: 0, complexity: false };
   let parenNoted = false;
-  const opt: RenderOptions = { sdxlClamp: settings.sdxlClamp, tsubakiNumeric: settings.tsubakiNumeric };
   const warnings: string[] = [];
   const tags: RenderedTag[] = [];
-  const perCat = new Map<CategoryKey, string[]>();
+  const blocks: Record<Layer, string[]> = { quality: [], style: [], detail: [] };
+  const perCat = new Map<string, { layer: Layer; texts: string[] }>();
+  const tsubakiQualityWeight: string[] = [];
+  const unsupportedNames: string[] = [];
+  let nlUsed = false;
   let unknown = 0;
 
   for (const it of items) {
@@ -162,33 +198,41 @@ export function renderPrompt(
     }
     if (!isSupported(it.tag, profile)) {
       unsupported.tagIds.push(it.tagId);
-      tags.push({ tagId: it.tagId, text: '', excluded: true, notes: ['この出力先には非対応（公式にV5専用と記載）。設定は保持'] });
+      unsupportedNames.push(it.tag.prompt);
+      tags.push({ tagId: it.tagId, text: '', excluded: true, notes: ['この出力先には非対応（公式に対応モデルの記載あり）。設定は保持'] });
       continue;
     }
     if (isPixai(profile) && !parenNoted && /[()]/.test(it.tag.prompt)) {
       parenNoted = true;
       warnings.push('（medium）など括弧を含むNovelAI表記のタグがあります。PIXAIでの解釈は未確認です' + (profile === 'pixai_sdxl' || settings.tsubakiNumeric ? '（重み構文と衝突しないよう括弧を \\( \\) にしています）' : ''));
     }
+    const r = renderLayerTag(it.tag, it.strength, it.layer, profile, settings);
     if (isPixai(profile)) {
-      const hit = containsBanned(it.tag.prompt);
+      const hit = containsBanned(`${it.tag.prompt} ${r.text}`);
       if (hit.length) {
         tags.push({ tagId: it.tagId, text: '', excluded: true, notes: [`PIXAI向けでは「${hit.join('・')}」を含む表現を使わないため除外`] });
         warnings.push(`「${it.tag.prompt}」は PIXAI 向け出力から除外しました（${hit.join('・')} を含むため）`);
         continue;
       }
     }
-    const r = renderTag(it.tag.prompt, it.strength, profile, opt);
+    if (r.mode === 'plain' && !isStandard(it.strength)) tsubakiQualityWeight.push(it.tag.prompt);
+    if (r.mode === 'nl') nlUsed = true;
     tags.push({ tagId: it.tagId, text: r.text, excluded: false, notes: r.notes });
     for (const n of r.notes) warnings.push(`${it.tag.nameJa}：${n}`);
-    const arr = perCat.get(it.tag.category) ?? [];
-    arr.push(r.text);
-    perCat.set(it.tag.category, arr);
+    blocks[it.layer].push(r.text);
+    const key = it.tag.category;
+    const c = perCat.get(key) ?? { layer: it.layer, texts: [] };
+    c.texts.push(r.text);
+    perCat.set(key, c);
   }
   if (unknown) warnings.push(`辞書にないタグが ${unknown} 件あり、出力から外しています（データは保持）`);
   if (unsupported.tagIds.length)
-    warnings.push(`V5専用のタグ ${unsupported.tagIds.length} 件は、この出力先では出力していません（選択は保持。V5に戻すと出力されます）`);
+    warnings.push(`この出力先に非対応のタグ ${unsupported.tagIds.length} 件（${unsupportedNames.join('、')}）は出力していません。公式資料で対応モデルが限られているものです（選択は保持し、対応するモデルに戻すと出力されます）`);
+  if (tsubakiQualityWeight.length)
+    warnings.push(`Tsubaki の自然言語方式では品質タグの強度を表現しないため、${tsubakiQualityWeight.join('・')} は強度なしで出力しています`);
+  if (nlUsed) warnings.push('【実験的】仕上げディテールを Tsubaki 向けの自然文テンプレートで出力しています。効き方は未検証です（「出力の設定」で短いタグ形式に切り替えられます）');
 
-  // ── 年タグ・複雑度（スタイル部分の末尾） ──
+  // ── 年タグ・複雑度（画風の層の末尾。v1.1 と同じ） ──
   const special: string[] = [];
   const years = (extras.years ?? []).filter((y) => y.on && y.strength > 0);
   if (years.length) {
@@ -217,13 +261,22 @@ export function renderPrompt(
     }
   }
 
-  const style = [...tags.filter((t) => !t.excluded).map((t) => t.text), ...special].join(JOINER);
-  const byCategory: RenderResult['byCategory'] = CATEGORY_KEYS.filter((c) => perCat.has(c)).map((c) => ({
-    category: c,
-    text: perCat.get(c)!.join(JOINER),
-    count: perCat.get(c)!.length,
-  }));
-  if (special.length) byCategory.push({ category: 'special', text: special.join(JOINER), count: special.length });
+  const style = [...blocks.style, ...special].join(JOINER);
+  const quality = blocks.quality.join(JOINER);
+  const detail = blocks.detail.join(JOINER);
+  const order = layerOrder(profile, settings.qualityPosition);
+  const texts: Record<Layer, string> = { quality, style, detail };
+  const combined = order.map((l) => texts[l]).filter(Boolean).join(JOINER);
+
+  const catKeys = [...perCat.keys()].sort((a, b) => CATEGORY_ORDER[a as TagCategory] - CATEGORY_ORDER[b as TagCategory]);
+  const byCategory: RenderResult['byCategory'] = [];
+  for (const l of order) {
+    for (const k of catKeys) {
+      const c = perCat.get(k)!;
+      if (c.layer === l) byCategory.push({ category: k as TagCategory, layer: l, text: c.texts.join(JOINER), count: c.texts.length });
+    }
+    if (l === 'style' && special.length) byCategory.push({ category: 'special', layer: 'style', text: special.join(JOINER), count: special.length });
+  }
 
   const person = settings.personPrompt.trim().replace(/[,\s]+$/, '').replace(/^[,\s]+/, '');
   if (person && isPixai(profile)) {
@@ -231,12 +284,12 @@ export function renderPrompt(
     if (hit.length)
       warnings.push(`人物プロンプトに「${hit.join('・')}」を含む語があります。PIXAI向けでは使わない方針なので、手で見直してください（自動では書き換えません）`);
   }
-  let full = style;
+  let full = combined;
   if (person) {
-    if (!style) full = person;
-    else full = settings.personPosition === 'before' ? `${person}${JOINER}${style}` : `${style}${JOINER}${person}`;
+    if (!combined) full = person;
+    else full = settings.personPosition === 'before' ? `${person}${JOINER}${combined}` : `${combined}${JOINER}${person}`;
   }
-  return { style, full, byCategory, tags, warnings, unsupported };
+  return { style, quality, detail, combined, order, full, byCategory, tags, warnings, unsupported };
 }
 
 /** 出力形式の説明（UI表示用） */

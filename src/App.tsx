@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { profileMeta } from './core/dictionary';
-import { countActive, effectiveItems, unknownTagIds } from './core/mix';
+import { countAll, effectiveItems, unknownTagIds } from './core/mix';
 import { evaluateRelations } from './core/relations';
 import { renderPrompt } from './core/render';
 import { useDialog } from './ui/Dialog';
@@ -42,7 +42,7 @@ export default function App() {
     [effective, state.settings, state.workspace.years, state.workspace.complexity],
   );
   const unknownIds = useMemo(() => unknownTagIds(state.workspace, index), [state.workspace, index]);
-  const activeCount = countActive(state.workspace);
+  const activeCount = countAll(state.workspace);
   const copy = useCopy(store);
 
   const go = (t: TabKey) => {
@@ -98,7 +98,7 @@ export default function App() {
               {profileMeta(state.settings.profile).short}・{activeCount}タグ
               {relations.some((r) => r.bothActive && (r.level === 'strong' || r.level === 'warn')) && <b className="dock-warn">注意あり</b>}
             </span>
-            <span className="dock-prompt">{result.style || 'タグを選ぶとプロンプトがここに出ます'}</span>
+            <span className="dock-prompt">{result.combined || 'タグを選ぶとプロンプトがここに出ます'}</span>
           </button>
           <button className="btn btn-primary" onClick={() => copy(result.full, 'プロンプト')} disabled={!result.full}>
             コピー

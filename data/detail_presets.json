@@ -1,0 +1,104 @@
+{
+ "schemaVersion": 1,
+ "note": "仕上げディテールのプリセット。強度は出発点で、効果は未検証。",
+ "presets": [
+  {
+   "id": "DPR-01",
+   "name_ja": "瞳の細密描写",
+   "description_ja": "虹彩・まつ毛・ハイライトの描き込みを整える。目の形や色は指定しない。",
+   "items": [
+    {
+     "tagId": "DTL-EYE-002",
+     "strength": 1.2
+    },
+    {
+     "tagId": "DTL-EYE-004",
+     "strength": 1.1
+    },
+    {
+     "tagId": "DTL-EYE-006",
+     "strength": 1.0
+    }
+   ]
+  },
+  {
+   "id": "DPR-02",
+   "name_ja": "繊細な髪の毛筋",
+   "description_ja": "毛筋の細さと束の描き込み、控えめな光沢。髪型・髪色は指定しない。",
+   "items": [
+    {
+     "tagId": "DTL-HAI-003",
+     "strength": 1.2
+    },
+    {
+     "tagId": "DTL-HAI-002",
+     "strength": 1.0
+    },
+    {
+     "tagId": "DTL-HAI-007",
+     "strength": 0.8
+    }
+   ]
+  },
+  {
+   "id": "DPR-03",
+   "name_ja": "自然な肌の光沢",
+   "description_ja": "滑らかさと薄いツヤ。光沢を強くすると汗・濡れに見えるため弱めから。",
+   "items": [
+    {
+     "tagId": "DTL-SKN-001",
+     "strength": 1.0
+    },
+    {
+     "tagId": "DTL-SKN-008",
+     "strength": 0.8
+    }
+   ]
+  },
+  {
+   "id": "DPR-04",
+   "name_ja": "唇の控えめなツヤ",
+   "description_ja": "唇本来の薄いツヤと小さなハイライト。唇の形は指定しない。",
+   "items": [
+    {
+     "tagId": "DTL-LIP-006",
+     "strength": 0.9
+    },
+    {
+     "tagId": "DTL-LIP-008",
+     "strength": 0.8
+    }
+   ]
+  },
+  {
+   "id": "DPR-05",
+   "name_ja": "布地の細密描写",
+   "description_ja": "既存の衣服の織り目・折り目と布の質感。衣服の種類は指定しない。",
+   "items": [
+    {
+     "tagId": "DTL-CLO-001",
+     "strength": 1.1
+    },
+    {
+     "tagId": "DTL-CLO-002",
+     "strength": 1.0
+    }
+   ]
+  },
+  {
+   "id": "DPR-06",
+   "name_ja": "全体を細密に",
+   "description_ja": "細部の量と素材感を全体的に上げる。",
+   "items": [
+    {
+     "tagId": "DTL-ALL-001",
+     "strength": 1.1
+    },
+    {
+     "tagId": "DTL-ALL-002",
+     "strength": 1.0
+    }
+   ]
+  }
+ ]
+}
